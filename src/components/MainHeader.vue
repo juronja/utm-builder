@@ -9,4 +9,8 @@
     margin-right: 1rem;
 }
 
+h1 {
+    color: var(--color-heading);
+}
+
 </style>
