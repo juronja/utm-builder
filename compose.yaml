@@ -1,0 +1,8 @@
+name: utm-builder # Will be used for network auto naming and image names
+services:
+  app:
+    image: 'juronja/utm-builder:latest'
+    container_name: utm-builder
+    restart: unless-stopped
+    ports:
+      - '151515:80' # These ports are in format <host-port>:<container-port>
