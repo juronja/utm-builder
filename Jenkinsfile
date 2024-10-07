@@ -28,6 +28,7 @@ pipeline {
             steps {
                 nodejs ('NodeJS_v20') {
                     echo "Building App with Vite ..."
+                    sh "npm install"    
                     sh "npm run build"
                 }
             }
