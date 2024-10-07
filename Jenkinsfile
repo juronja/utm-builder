@@ -13,7 +13,7 @@ pipeline {
         CONTAINER_NAME = "utm-builder"
         DEV = "$JOB_BASE_NAME"
         DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
-        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $DOCKERH_REPO/$IMAGE_TAG-$DEV:latest"
+        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
     }
         
     stages {
@@ -66,8 +66,8 @@ pipeline {
                         echo "Stopping and removing existing container $CONTAINER_NAME-$DEV ..."
                         sh "docker stop $CONTAINER_NAME-$DEV"
                         sh "docker rm $CONTAINER_NAME-$DEV"
-                        sh "docker rmi $DOCKERH_REPO/$IMAGE_TAG-$DEV:latest" // Remove leftover image if needed
-                        sh "docker rmi $DOCKERH_REPO/$IMAGE_TAG-$DEV:$BUILD_VERSION" // Remove leftover image if needed
+                        sh "docker rmi $NEXUS_REPO/$IMAGE_TAG-$DEV:latest" // Remove leftover image if needed
+                        sh "docker rmi $NEXUS_REPO/$IMAGE_TAG-$DEV:$BUILD_VERSION" // Remove leftover image if needed
                     }
 
                     // Always run the container regardless of previous existence
