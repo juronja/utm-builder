@@ -27,7 +27,7 @@ pipeline {
             }
             steps {
                 echo "Building App with Vite ..."
-                npm run build
+                sh "npm run build"
             }
         }
         stage('Build Docker image for Docker Hub') {
