@@ -26,8 +26,10 @@ pipeline {
                 }
             }
             steps {
-                echo "Building App with Vite ..."
-                sh "npm run build"
+                nodejs ('NodeJS_v20') {
+                    echo "Building App with Vite ..."
+                    sh "npm run build"
+                }
             }
         }
         stage('Build Docker image for Docker Hub') {
