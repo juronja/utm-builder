@@ -9,11 +9,11 @@ pipeline {
         BUILD_VERSION = VersionNumber (versionNumberString: '${BUILD_YEAR}.${BUILD_MONTH}.${BUILDS_THIS_MONTH}')
         DOCKERH_REPO = "juronja"
         NEXUS_REPO = "192.168.84.16:8082"
-        IMAGE_TAG = "$JOB_BASE_NAME"
-        IMAGE_TAG_DEV = "$JOB_BASE_NAME-dev"
-        CONTAINER_NAME = "$JOB_BASE_NAME"
-        CONTAINER_NAME_DEV = "$JOB_BASE_NAME-dev"
+        IMAGE_TAG = "utm-builder"
+        CONTAINER_NAME = "utm-builder"
+        DEV = "$JOB_BASE_NAME"
         DOCKER_RUN = "docker run -d -p 151515:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
+        DOCKER_RUN_DEV = "docker run -d -p 151515:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $DOCKERH_REPO/$IMAGE_TAG-$DEV:latest"
     }
         
     stages {
@@ -41,12 +41,12 @@ pipeline {
                 }
             }
             steps {
-                echo "Building Docker image for Nexus ..."
-                sh "docker build -t $NEXUS_REPO/$IMAGE_TAG_DEV:latest -t $NEXUS_REPO/$IMAGE_TAG_DEV:$BUILD_VERSION ."
+                echo "Building DEV Docker image for Nexus ..."
+                sh "docker build -t $NEXUS_REPO/$IMAGE_TAG-$DEV:latest -t $NEXUS_REPO/$IMAGE_TAG-$DEV:$BUILD_VERSION ."
                 // Next line in single quotes for security
                 sh 'echo $NEXUS_CREDS_PSW | docker login -u $NEXUS_CREDS_USR --password-stdin 192.168.84.16:8082'
-                sh "docker push $NEXUS_REPO/$IMAGE_TAG_DEV:latest"
-                sh "docker push $NEXUS_REPO/$IMAGE_TAG_DEV:$BUILD_VERSION"
+                sh "docker push $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
+                sh "docker push $NEXUS_REPO/$IMAGE_TAG-$DEV:$BUILD_VERSION"
             }
         }
         stage('Deploy DEV Docker container on HOST') {
@@ -58,21 +58,21 @@ pipeline {
             steps {
                 script {
                     // Check if container exists
-                    def containerId = sh(script: "docker ps --quiet --filter name=$CONTAINER_NAME", returnStdout: true).trim()
+                    def containerId = sh(script: "docker ps --quiet --filter name=$CONTAINER_NAME-$DEV", returnStdout: true).trim()
 
                     if (containerId.isEmpty()) {
-                        echo "Container $CONTAINER_NAME not found. Skipping stop/remove steps."
+                        echo "Container $CONTAINER_NAME-$DEV not found. Skipping stop/remove steps."
                     } else {
-                        echo "Stopping and removing existing container $CONTAINER_NAME ..."
-                        sh "docker stop $CONTAINER_NAME"
-                        sh "docker rm $CONTAINER_NAME"
-                        sh "docker rmi $DOCKERH_REPO/$IMAGE_TAG:latest" // Remove leftover image if needed
-                        sh "docker rmi $DOCKERH_REPO/$IMAGE_TAG:$BUILD_VERSION" // Remove leftover image if needed
+                        echo "Stopping and removing existing container $CONTAINER_NAME-$DEV ..."
+                        sh "docker stop $CONTAINER_NAME-$DEV"
+                        sh "docker rm $CONTAINER_NAME-$DEV"
+                        sh "docker rmi $DOCKERH_REPO/$IMAGE_TAG-$DEV:latest" // Remove leftover image if needed
+                        sh "docker rmi $DOCKERH_REPO/$IMAGE_TAG-$DEV:$BUILD_VERSION" // Remove leftover image if needed
                     }
 
                     // Always run the container regardless of previous existence
-                    echo "Starting container $CONTAINER_NAME ..."
-                    sh "$DOCKER_RUN"
+                    echo "Starting container $CONTAINER_NAME-$DEV ..."
+                    sh "$DOCKER_RUN_DEV"
                     sh "docker image prune --force"
                 }
             }
