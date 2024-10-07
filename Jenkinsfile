@@ -25,8 +25,9 @@ pipeline {
         stage('Build app with Vite') {
             steps {
                 echo "Building App with Vite ..."
-                sh "npm install"    
-                sh "npm run build"
+                node {
+                    sh "npm install"    
+                    sh "npm run build"
                 }
             }
         }
