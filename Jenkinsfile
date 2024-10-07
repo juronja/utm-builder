@@ -20,11 +20,6 @@ pipeline {
 //            }
 //        }
         stage('Build app with Vite') {
-            when {
-                expression {
-                    BRANCH_NAME ==  "dev"
-                }
-            }
             steps {
                 nodejs ('NodeJS_v20') {
                     echo "Building App with Vite ..."
@@ -36,6 +31,11 @@ pipeline {
         stage('Build Docker image for Docker Hub') {
             environment {
                 DOCKERHUB_CREDS = credentials('dockerhub-creds')
+            }
+            when {
+                expression {
+                    BRANCH_NAME ==  "dev"
+                }
             }
             steps {
                 echo "Building Docker image for Docker Hub ..."
