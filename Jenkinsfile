@@ -25,10 +25,8 @@ pipeline {
         stage('Build app with Vite') {
             steps {
                 echo "Building App with Vite ..."
-                node {
-                    sh "npm install"    
-                    sh "npm run build"
-                }
+                sh "npm install"    
+                sh "npm run build"
             }
         }
         stage('Build Docker image for Docker Hub') {
