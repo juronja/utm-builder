@@ -19,6 +19,17 @@ pipeline {
 //                }
 //            }
 //        }
+        stage('Build app with Vite') {
+            when {
+                expression {
+                    BRANCH_NAME ==  "dev"
+                }
+            }
+            steps {
+                echo "Building App with Vite ..."
+                npm run build
+            }
+        }
         stage('Build Docker image for Docker Hub') {
             environment {
                 DOCKERHUB_CREDS = credentials('dockerhub-creds')
