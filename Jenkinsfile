@@ -2,6 +2,9 @@
 
 pipeline {
     agent any
+    tools {
+        nodejs 'NodeJS_v20'
+    }
     environment {
         BUILD_VERSION = VersionNumber (versionNumberString: '${BUILD_YEAR}.${BUILD_MONTH}.${BUILDS_THIS_MONTH}')
         DOCKERH_REPO = "juronja"
@@ -21,10 +24,9 @@ pipeline {
 //        }
         stage('Build app with Vite') {
             steps {
-                nodejs ('NodeJS_v20') {
-                    echo "Building App with Vite ..."
-                    sh "npm install"    
-                    sh "npm run build"
+                echo "Building App with Vite ..."
+                sh "npm install"    
+                sh "npm run build"
                 }
             }
         }
@@ -34,7 +36,7 @@ pipeline {
             }
             when {
                 expression {
-                    BRANCH_NAME ==  "dev"
+                    BRANCH_NAME == "dev"
                 }
             }
             steps {
