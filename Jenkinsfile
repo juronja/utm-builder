@@ -37,7 +37,7 @@ pipeline {
             }
             when {
                 expression {
-                    BRANCH_NAME == "dev" or BRANCH_NAME == "main" or
+                    BRANCH_NAME == "dev" or BRANCH_NAME == "main"
                 }
             }
             steps {
@@ -52,7 +52,7 @@ pipeline {
         stage('Deploy DEV Docker container on HOST') {
             when {
                 expression {
-                    BRANCH_NAME == "dev" or BRANCH_NAME == "main" or
+                    BRANCH_NAME == "dev" or BRANCH_NAME == "main"
                 }
             }
             steps {
