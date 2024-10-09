@@ -2,20 +2,18 @@
 :root {
   --color-white: #ffffff;
   --color-white-soft: #888888;
-  --color-white-mute: #f2f2f2;
 
   --color-black: #202020;
   --color-black-soft: #303030;
-  --color-black-mute: #282828;
 
-  --color-indigo: #2c3e50;
+  --color-primary: hsla(160, 100%, 37%, 1);
 
   --color-divider-light-1: rgba(13, 110, 253, 0.25);
   --color-divider-light-2: rgba(60, 60, 60, 0.12);
   --color-divider-dark-1: rgba(84, 84, 84, 0.65);
   --color-divider-dark-2: rgba(84, 84, 84, 0.48);
 
-  --color-text-light-1: var(--color-indigo);
+  --color-text-light-1: var(--color-primary);
   --color-text-light-2: rgba(60, 60, 60, 0.66);
   --color-text-dark-1: var(--color-white);
   --color-text-dark-2: rgba(235, 235, 235, 0.64);
@@ -25,13 +23,12 @@
 :root {
   --color-background: var(--color-white);
   --color-background-soft: var(--color-white-soft);
-  --color-background-mute: var(--color-white-mute);
 
   --color-border: var(--color-divider-light-2);
   --color-border-hover: var(--color-divider-light-1);
-  --color-border-focus: var(--color-divider-light-1)
-
-  --color-heading: var(--color-text-light-1);
+  --color-border-focus: var(--color-divider-light-1);
+  
+  --color-heading: var(--color-white);
   --color-text: var(--color-text-light-1);
 
   --section-gap: 160px;
@@ -41,11 +38,10 @@
   :root {
     --color-background: var(--color-black-soft);
     --color-background-soft: var(--color-black-soft);
-    --color-background-mute: var(--color-black-mute);
 
     --color-border: var(--color-divider-dark-2);
     --color-border-hover: var(--color-divider-dark-1);
-    --color-border-focus: var(--color-divider-light-1)
+    --color-border-focus: var(--color-divider-light-1);
 
     --color-heading: var(--color-text-dark-1);
     --color-text: var(--color-text-dark-2);

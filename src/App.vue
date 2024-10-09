@@ -15,13 +15,13 @@ import MainHeader from './components/MainHeader.vue'
       <input type="text" placeholder="Content ..." />
       <!-- <input type="text" v-model="Content" placeholder="Campaign Name ..." /> -->
     </div>
+    <div class="btn-big-center">
+      <button>Tag 'em</button>
+    </div>
   </main>
 </template>
 
 <style scoped>
-
-
-
 #url {
   width: 100%;
 }
@@ -31,4 +31,15 @@ import MainHeader from './components/MainHeader.vue'
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
+.btn-big-center {
+  margin: 2rem 0 2rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  font-size: 1.2rem;
+}
+
 </style>
