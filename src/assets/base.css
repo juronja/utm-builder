@@ -7,6 +7,7 @@
   --color-black-soft: #303030;
 
   --color-primary: hsla(160, 100%, 37%, 1);
+  --color-primary-muted: rgb(1, 165, 110);
 
   --color-divider-light-1: rgba(13, 110, 253, 0.25);
   --color-divider-light-2: rgba(60, 60, 60, 0.12);
