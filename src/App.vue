@@ -16,7 +16,7 @@ import MainHeader from './components/MainHeader.vue'
       <!-- <input type="text" v-model="Content" placeholder="Campaign Name ..." /> -->
     </div>
     <div class="btn-big-center">
-      <button>Tag 'em</button>
+      <button>Tag 'em yo</button>
     </div>
   </main>
 </template>
