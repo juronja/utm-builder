@@ -18,7 +18,11 @@ const compMedium = computed(() => { if (medium.value == '') { return '' } else {
 const compSource = computed(() => { if (source.value == '') { return '' } else { return '&utm_source=' + source.value } })
 const compContent = computed(() => { if (content.value == '') { return '' } else { return '&utm_content=' + content.value } })
 const compTerm = computed(() => { if (term.value == '') { return '' } else { return '&utm_term=' + term.value } })
-const taggedUrl = computed(() => { return url.value + compParam.value + compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value })
+const tags = computed(() => { return (compParam.value + compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value).replace(/\s+/g, '+').replace(/š/g, 's').replace(/ž/g, 'z').replace(/č/g, 'c').replace(/ć/g, 'c').replace(/_/g, '-').replace(/\./g, '-') })
+const taggedUrl = computed(() => { return url.value + tags.value })
+
+
+
 
 // Copy and save tagged URL
 function copyToClipboard() {
