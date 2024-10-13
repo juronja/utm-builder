@@ -1,9 +1,39 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+
 const url = ref('') 
 const campaign = ref('')
+const medium = ref('')
 const source = ref('')
 const content = ref('')
+const term = ref('')
+
+const dbHasEntries = ref(true)
+const isCopied = ref(false)
+
+// Make UTM tags logic
+const compParam = computed(() => { if (campaign.value == '') { return '' } else { if (url.value.includes('?')) { return '&' } else { return '?' } } })
+const compCampaign = computed(() => { if (campaign.value == '') { return '' } else { return 'utm_campaign=' + campaign.value } })
+const compMedium = computed(() => { if (medium.value == '') { return '' } else { return '&utm_medium=' + medium.value } })
+const compSource = computed(() => { if (source.value == '') { return '' } else { return '&utm_source=' + source.value } })
+const compContent = computed(() => { if (content.value == '') { return '' } else { return '&utm_content=' + content.value } })
+const compTerm = computed(() => { if (term.value == '') { return '' } else { return '&utm_term=' + term.value } })
+const taggedUrl = computed(() => { return url.value + compParam.value + compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value })
+
+// Copy and save tagged URL
+function copyToClipboard() {
+  navigator.clipboard.writeText(taggedUrl.value)
+  .then(() => {
+      console.log('Text copied to clipboard');
+      isCopied.value = true
+      setTimeout(() => {
+        isCopied.value = false
+      }, 1000 )
+    })
+    .catch(err => {
+      console.error('Failed to copy text:', err);
+    })
+}
 
 defineProps({
   h1_text: {
@@ -30,18 +60,19 @@ defineProps({
     </select>
     <input type="text" v-model="source" placeholder="Source ..." />
     <input type="text" v-model="content" placeholder="Content ..." />
+    <input type="text" v-model="term" placeholder="Term ..." />
     <!-- <input type="text" v-model="Content" placeholder="Campaign Name ..." /> -->
   </div>
   <div class="btn-big-center">
-    <button>Tag 'em</button>
+    <!--<button>Tag 'em</button>-->
   </div>
   <hr>
-  <div v-show="!dbHasEntries">
-    <p>No tagged URLs just yet, go make some ...</p>
+  <div v-show="!dbHasEntries" class="url-output">
+    <p>No tagged URLs just yet, fill the fields above ...</p>
   </div>
   <div v-show="dbHasEntries" class="url-output">
-    <p>{{ url }}{{ '?'.concat('utm_campaign=',campaign,'&utm_medium=',medium,'&utm_source=',source,'&utm_content=',content) }}</p>
-    <button>Copy</button>
+    <p>{{ taggedUrl }}</p>
+    <button @click="copyToClipboard"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
   </div>
 </template>
 
@@ -67,6 +98,9 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 4rem;
+  max-height: 8rem;
+  overflow-y: auto; /* adds scrollbar */
   padding: 0.375rem 0.75rem 0.375rem 0.75rem;
   margin: 0 0 0.5rem 0;
   color: var(--color-text);
@@ -77,7 +111,10 @@ defineProps({
 }
 
 .url-output p {
+  box-sizing: border-box;
+  width: 100%;
   margin-right: 0.75rem;
+  
 }
 
 button {
@@ -85,20 +122,3 @@ button {
 }
 
 </style>
-
-<script>
-export default {
-  data() {
-    return {
-      url: "",
-      campaign: "",
-      dbHasEntries: true
-    }
-  },
-  methods: {
-    makeUtmLinks() {
-  
-    }
-  }
-}
-</script>
