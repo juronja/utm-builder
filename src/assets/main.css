@@ -11,13 +11,24 @@ header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin: 1rem 0 1rem 0;
+  margin: 1rem 0 2rem 0;
 
 }
 
+h1 {
+  color: var(--color-heading);
+  padding: 0 calc(var(--gutter-x)* .2);
+}
+
+h2 {
+  margin-bottom: calc(var(--gutter-y)* .5);
+  padding: 0 calc(var(--gutter-x)* .2);
+}
+
 input, select {
-  padding: 0.375rem 0.75rem 0.375rem 0.75rem;
-  margin: 0 0 0.5rem 0;
+  padding: var(--input-padding);
+  margin: 0.25rem 0 0 0;
+  min-height: 2.1rem;
   color: var(--color-text);
   background-color: var(--color-black);
   border: 1px solid var(--color-border);
@@ -34,11 +45,13 @@ input:focus {
 }
 
 button {
-  padding: 0.375rem 0.75rem 0.375rem 0.75rem;
+  padding: var(--input-padding);
+  margin: 0 0 0 0.5rem;
   color: var(--color-heading);
   background-color: var(--color-primary);
   border: 1px solid var(--color-border);
   border-radius: 0.25rem;
+  font-size: 1rem;
 }
 
 button:hover {
@@ -53,7 +66,7 @@ button:focus {
 }
 
 hr {
-  margin: 0.5em 0 0.5em 0;
+  margin: 1rem calc(var(--gutter-x)* .2);
   background-color: var(--color-border);
   border: none;
   height: 0.1em;

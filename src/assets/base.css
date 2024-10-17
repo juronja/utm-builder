@@ -1,4 +1,4 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* color palette */
 :root {
   --color-white: #ffffff;
   --color-white-soft: #888888;
@@ -31,8 +31,12 @@
   
   --color-heading: var(--color-white);
   --color-text: var(--color-text-light-1);
+}
 
-  --section-gap: 160px;
+:root {
+  --gutter-x: 1.5rem;
+  --gutter-y: 1.5rem;
+  --input-padding: 0.375rem 0.75rem 0.375rem 0.75rem;
 }
 
 @media (prefers-color-scheme: dark) {
