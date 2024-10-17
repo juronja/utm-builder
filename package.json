@@ -11,6 +11,9 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "express": "^4.21.1",
+    "mongodb": "^6.9.0",
+    "uuid": "^10.0.0",
     "vue": "^3.4.29"
   },
   "devDependencies": {
