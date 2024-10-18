@@ -63,7 +63,7 @@ pipeline {
                 script {
                     sshagent(['ssh-homelab']) {
                         echo "Deploying Docker container on Homelab  ..."
-                        sh "ssh -o StrictHostKeyChecking=no $HOMELAB_CREDS_USR@$HOMELAB_ENDPOINT 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/DiluteRight/refs/heads/main/compose-dev-commands.sh)\"'"
+                        sh "ssh -o StrictHostKeyChecking=no $HOMELAB_CREDS_USR@$HOMELAB_ENDPOINT 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose-dev-commands.sh)\"'"
                     }
                 }
                 // script {
