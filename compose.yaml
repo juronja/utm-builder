@@ -1,8 +1,10 @@
 name: utm-builder # Will be used for network auto naming and image names
 services:
   app:
-    image: '192.168.84.16:8082/utm-builder-dev:latest'
+    image: 192.168.84.16:8082/utm-builder-dev:latest
     container_name: utm-builder-dev
     restart: unless-stopped
     ports:
       - '3131:80' # These ports are in format <host-port>:<container-port>
+  db:
+    image: mongo
