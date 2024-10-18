@@ -14,7 +14,7 @@ let mongo = undefined
 if (ENV_LOCAL) { // Local environment
     mongo = new MongoClient(`mongodb://127.0.0.1:27017`)
 } else { // Docker compose dev
-    //mongo = new MongoClient(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASS}@127.0.0.1:27017`)
+    mongo = new MongoClient(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASS}@mongo`)
 }
 const db = mongo.db('utm-builder')
 
