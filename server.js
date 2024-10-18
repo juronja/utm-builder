@@ -2,13 +2,23 @@ import express from 'express'
 import { MongoClient, MongoServerError } from 'mongodb'
 
 // Definitions
-const MONGO_ADMIN_USER = 'see-notepad'
-const MONGO_ADMIN_PASS = 'see-notepad'
 const ISODate = new Date().toISOString()
+const { MONGO_ADMIN_USER, MONGO_ADMIN_PASS, ENV_LOCAL } = process.env // Import user and pass from SYSTEM environments
+// add LINUX variables with "export MONGO_ADMIN_USER=username"
+// add WINDOWS variables with "setx ENV_LOCAL true"
+// OR in docker compose environment
 
-//const mongoEndpoint = new MongoClient(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASS}@localhost:27017`)
-const mongo = new MongoClient(`mongodb://localhost:27017`)
+
+// Database endpoint check and connect
+let mongo = undefined
+if (ENV_LOCAL) { // Local environment
+    mongo = new MongoClient(`mongodb://127.0.0.1:27017`)
+} else { // Docker compose dev
+    //mongo = new MongoClient(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASS}@127.0.0.1:27017`)
+}
 const db = mongo.db('utm-builder')
+
+
 
 // Start express server
 const app = express()
@@ -17,7 +27,6 @@ app.listen(3000, () => { console.log('Server is listening on port 3000') }) // d
 // Middleware
 app.use(express.json()) // needed to parse the JSON to JS first, otherwise you gat an error!
 //app.use(express.static('dist')) // serves the index.html file on load from the dist folder, so you can use the frontend app on the express app port (e.g. - localhost:3000). This is actually not needed if you configure the vite.config server.proxy!
-
 
 // GET method
 app.get('/users/:clientId/get-tagged-urls', async (req, res) => {
@@ -31,9 +40,9 @@ app.get('/users/:clientId/get-tagged-urls', async (req, res) => {
     const getUrls = await db.collection('taggedUrls')
         .find({ clientId: clientId })
         .sort({_id: -1}) // Sort by _id in descending order to get the latest items first
-        .project({ taggedUrl: 1, _id: 0 })
+        .limit(10) // Limit the results to the last 10 items
+        .project({ taggedUrl: 1 })
         .toArray()
-    // const filteredUrls = getUrls.map(getUrls => getUrls.taggedUrl)
     console.log('Got this URLs: ', getUrls)
     
     // Send a response to frontend
@@ -63,7 +72,7 @@ app.post('/users/:clientId/save-tagged-url', async (req, res) => {
 
     } catch(err) {
         if (err instanceof MongoServerError) {
-            console.error(`Error worth logging: ${err}`)
+            console.error(`There is an error: ${err}`)
         }
         throw err
     }
