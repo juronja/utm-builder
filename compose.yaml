@@ -5,4 +5,4 @@ services:
     container_name: utm-builder
     restart: unless-stopped
     ports:
-      - '151515:80' # These ports are in format <host-port>:<container-port>
+      - '3131:80' # These ports are in format <host-port>:<container-port>
