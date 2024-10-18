@@ -2,6 +2,7 @@
 import { ref, computed, onBeforeMount } from 'vue'
 import { v4 as uuid } from 'uuid'
 
+// States
 const url = ref('') 
 const campaign = ref('')
 const medium = ref('')
@@ -10,9 +11,13 @@ const content = ref('')
 const term = ref('')
 
 const isCopied = ref(false)
+const isCopiedRecent = ref(false)
 const isCleared = ref(false)
-const isCopied2 = ref(false)
 const loadedUrls = ref([])
+const tagState = ref('convention')
+
+
+
 let clientId = localStorage.getItem('clientId')
 
 // Make UTM tags logic
@@ -58,8 +63,8 @@ function clearAll() {
 async function toClipboardOnly(li_text_value) {
   try {
     await navigator.clipboard.writeText(li_text_value)
-    isCopied2.value = true
-    setTimeout(() => { isCopied2.value = false }, 1000)
+    isCopiedRecent.value = true
+    setTimeout(() => { isCopiedRecent.value = false }, 1000)
     console.log('Text copied!')
     console.log(li_text_value)
   } catch(err) {
@@ -111,7 +116,13 @@ async function toClipboardAndSave() {
       <input type="text" v-model="campaign" id="utm-campaign" />
     </div>
     <div class="row col-25">
-      <label for="utm-medium">Medium</label>
+      <div class="tag">
+        <label for="utm-medium">Medium</label>
+        <Transition mode="out-in" name="slide-up">
+          <button v-if="tagState === 'convention'" @click="tagState = 'manual'" class="btn-tag">convention</button>
+          <button v-else-if="tagState === 'manual'" @click="tagState = 'convention'" class="btn-tag">manual</button>
+        </Transition>
+      </div>
       <select v-model="medium" id="utm-medium">
         <option value="cpc">cpc</option>
         <option value="display">display</option>
@@ -156,7 +167,7 @@ async function toClipboardAndSave() {
       <ul v-if="loadedUrls.length > 0">
         <li v-for="item in loadedUrls" :key="item.taggedUrl">
           {{ item.taggedUrl }}
-          <button @click="toClipboardOnly(item.taggedUrl)"> {{ isCopied2 ? 'Copied!' : 'Copy' }} </button>
+          <button @click="toClipboardOnly(item.taggedUrl)"> {{ isCopiedRecent ? 'Copied!' : 'Copy' }} </button>
         </li>
       </ul>
     </div>
@@ -201,6 +212,12 @@ async function toClipboardAndSave() {
 .col-25 {
   flex: 0 0 auto;
   width: 25%;
+}
+
+.tag {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 /* Responsive layout */
