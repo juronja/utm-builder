@@ -1,5 +1,6 @@
 **/node_modules/
 **/src
+.env*
 Dockerfile
 npm-debug.log
 compose.yaml
