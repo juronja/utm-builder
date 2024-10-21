@@ -136,7 +136,7 @@ pipeline {
         stage('Deploy Docker container on EC2') {
             when {
                 expression {
-                    BRANCH_NAME == "dev"
+                    BRANCH_NAME == "main"
                 }
             }
             steps {
