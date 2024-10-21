@@ -4,7 +4,7 @@ import { MongoClient, MongoServerError } from 'mongodb'
 // Definitions
 const ISODate = new Date().toISOString()
 const { MONGO_ADMIN_USER, MONGO_ADMIN_PASS, ENV_LOCAL } = process.env // Import user and pass from SYSTEM environments
-// add LINUX variables with "export MONGO_ADMIN_USER=username"
+// add LINUX variables by editing "nano ~/.profile" and adding "export MONGO_ADMIN_USER=username"
 // add WINDOWS variables with "setx ENV_LOCAL true"
 // OR in docker compose environment
 
