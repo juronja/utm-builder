@@ -41,7 +41,7 @@ app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
         .limit(10) // Limit the results to the last 10 items
         .project({ taggedUrl: 1 })
         .toArray()
-    console.log('Got this URLs: ', getUrls)
+    console.log('Got this info: ', getUrls)
     
     // Send a response to frontend
     res.json(getUrls)
