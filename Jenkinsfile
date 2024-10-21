@@ -136,14 +136,14 @@ pipeline {
         stage('Deploy Docker container on EC2') {
             when {
                 expression {
-                    BRANCH_NAME == "main"
+                    BRANCH_NAME == "dev"
                 }
             }
             steps {
                 script {
                     sshagent(['ssh-aws']) {
                         echo "Deploying Docker container on EC2  ..."
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@35.157.110.150 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/DiluteRight/refs/heads/main/ec2-commands.sh)\"'"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@35.157.110.150 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose-dev-commands.sh)\"'"
                     }
                 }
             }
