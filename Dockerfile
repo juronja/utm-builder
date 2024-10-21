@@ -4,6 +4,7 @@ COPY . .
 RUN npm install
 #RUN npm run build
 
-EXPOSE 80
+# Its running a express backend so you have to expose 3000
+EXPOSE 3000
 
 CMD npm run start
