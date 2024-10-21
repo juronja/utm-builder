@@ -27,12 +27,6 @@ app.use(express.json()) // needed to parse the JSON to JS first, otherwise you g
 //app.use(express.static('dist')) // serves the index.html file on load from the dist folder, so you can use the frontend app on the express app port (e.g. - localhost:3000). This is actually not needed if you configure the vite.config server.proxy!
 
 // GET method
-
-app.get('/api/hello', (req, res) => {
-    res.send('hello world')
-  })
-
-
 app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
     const clientId = req.params.clientId
     
