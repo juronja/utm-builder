@@ -12,11 +12,7 @@ const { MONGO_ADMIN_USER, MONGO_ADMIN_PASS, ENV_LOCAL } = process.env // Import 
 
 // Database endpoint check and connect
 let mongo = undefined
-if (ENV_LOCAL) { // Local environment
-    mongo = new MongoClient(`mongodb://127.0.0.1:27017`)
-} else { // // use container name when starting application as docker container, part of docker-compose
     mongo = new MongoClient(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASS}@mongodb`)
-}
 const db = mongo.db('utm-builder')
 
 const app = express() // Initialize the express server
@@ -29,8 +25,6 @@ app.use(express.json()) // needed to parse the JSON to JS first, otherwise you g
 // GET method
 app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
     const clientId = req.params.clientId
-    console.log(MONGO_ADMIN_USER)
-
 
     // Connect to DB
     await mongo.connect()
