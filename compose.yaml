@@ -21,8 +21,8 @@ services:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       start_period: 5s
-    # ports:
-    #   - 27017:27017
+    ports:
+      - 27017:27017
     volumes:
       - mongodb:/data/db #Volume mapping for persistency
 
