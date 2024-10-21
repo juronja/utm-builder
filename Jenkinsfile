@@ -143,7 +143,7 @@ pipeline {
                 script {
                     sshagent(['ssh-aws']) {
                         echo "Deploying Docker container on EC2  ..."
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@35.157.110.150 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose-dev-commands.sh)\"'"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@35.157.110.150 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose-dev-e2c-commands.sh)\"'"
                     }
                 }
             }
