@@ -85,7 +85,7 @@ async function toClipboardAndSave() {
       taggedUrl: compTaggedUrl.value,
       clientId: clientId
     }
-    const response = await fetch(`api/users/${clientId}/save-tagged-url`, {
+    await fetch(`api/users/${clientId}/save-tagged-url`, {
       method: 'POST', // Specify the HTTP method (POST in this case)
       body: JSON.stringify(payload),
       headers: {
