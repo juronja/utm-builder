@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon server.js -w server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/test-utils": "^2.4.6",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
     "jsdom": "^24.1.0",
