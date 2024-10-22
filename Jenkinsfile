@@ -13,6 +13,8 @@ pipeline {
         IMAGE_TAG = "utm-builder"
         CONTAINER_NAME = "utm-builder"
         DEV = "$JOB_BASE_NAME"
+        MONGO_ADMIN_USER = "admin_user"
+        MONGO_ADMIN_PASS = 
         // DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
 //        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
     }
