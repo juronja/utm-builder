@@ -27,13 +27,13 @@ pipeline {
 //                }
 //            }
 //        }
-        stage('Build app with Vite') {
-            steps {
-                echo "Building App with Vite ..."
-                sh "npm install"    
-                sh "npm run build"
-            }
-        }
+        // stage('Build app with Vite') {
+        //     steps {
+        //         echo "Building App with Vite ..."
+        //         sh "npm install"    
+        //         sh "npm run build"
+        //     }
+        // }
         stage('Build DEV Docker image for Nexus') {
             environment {
                 NEXUS_CREDS = credentials('nexus-creds')
@@ -71,6 +71,7 @@ pipeline {
                 script {
                     sh "docker compose down"
                     sh "docker image prune --force"
+                    sh "rm compose.yaml"
                     sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose.yaml > compose.yaml 2>&1"
                     echo "Starting container $CONTAINER_NAME-$DEV ..."
                     sh "docker compose up -d"
