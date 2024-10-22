@@ -13,8 +13,9 @@ pipeline {
         IMAGE_TAG = "utm-builder"
         CONTAINER_NAME = "utm-builder"
         DEV = "$JOB_BASE_NAME"
-        MONGO_ADMIN_USER = "admin_user"
-        MONGO_ADMIN_PASS = "0"
+        HOMELAB_CREDS = credentials('creds-homelab')
+        MONGO_ADMIN_USER = "$HOMELAB_CREDS_USR"
+        MONGO_ADMIN_PASS = "$HOMELAB_CREDS_PSW"
         // DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
 //        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
     }
@@ -72,6 +73,7 @@ pipeline {
                     sh "docker compose down"
                     sh "docker image prune --force"
                     sh "rm compose.yaml"
+                    sh "printenv"
                     sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose.yaml > compose.yaml"
                     echo "Starting container $CONTAINER_NAME-$DEV ..."
                     sh "docker compose up -d"
