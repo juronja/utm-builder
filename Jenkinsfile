@@ -25,6 +25,16 @@ pipeline {
 //                }
 //            }
 //        }
+       stage('Verify tooling') {
+           steps {
+                sh '''
+                    docker version
+                    docker info
+                    docker compose version
+                    curl --version
+                '''
+           }
+       }
         stage('Build app with Vite') {
             steps {
                 echo "Building App with Vite ..."
