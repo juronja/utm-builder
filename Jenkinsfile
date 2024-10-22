@@ -79,7 +79,7 @@ pipeline {
                 script {
 
                     sh "docker compose down"
-                    sh "wget -O compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose.yaml"
+                    sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose.yaml"
                     echo "Starting container $CONTAINER_NAME-$DEV ..."
                     sh "docker compose up -d"
                 }
