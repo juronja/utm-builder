@@ -60,31 +60,19 @@ pipeline {
                 }
             }
             steps {
-                script {
-                    sshagent(['ssh-homelab']) {
-                        echo "Deploying Docker container on Homelab  ..."
-                        sh "ssh -o StrictHostKeyChecking=no $HOMELAB_CREDS_USR@$HOMELAB_ENDPOINT 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose-dev-commands.sh)\"'"
-                    }
-                }
                 // script {
-                //     // Check if container exists
-                //     def containerId = sh(script: "docker ps --quiet --filter name=$CONTAINER_NAME-$DEV", returnStdout: true).trim()
-
-                //     if (containerId.isEmpty()) {
-                //         echo "Container $CONTAINER_NAME-$DEV not found. Skipping stop/remove steps."
-                //     } else {
-                //         echo "Stopping and removing existing container $CONTAINER_NAME-$DEV ..."
-                //         sh "docker stop $CONTAINER_NAME-$DEV"
-                //         sh "docker rm $CONTAINER_NAME-$DEV"
-                //         sh "docker rmi $NEXUS_REPO/$IMAGE_TAG-$DEV:latest" // Remove leftover image if needed
-                //         sh "docker rmi $NEXUS_REPO/$IMAGE_TAG-$DEV:$BUILD_VERSION" // Remove leftover image if needed
+                //     sshagent(['ssh-homelab']) {
+                //         echo "Deploying Docker container on Homelab  ..."
+                //         sh "ssh -o StrictHostKeyChecking=no $HOMELAB_CREDS_USR@$HOMELAB_ENDPOINT 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose-dev-commands.sh)\"'"
                 //     }
-
-                //     // Always run the container regardless of previous existence
-                //     echo "Starting container $CONTAINER_NAME-$DEV ..."
-                //     sh "$DOCKER_RUN_DEV"
-                //     sh "docker image prune --force"
                 // }
+                script {
+
+                    sh "docker compose down"
+                    sh "wget -O compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose.yaml"
+                    echo "Starting container $CONTAINER_NAME-$DEV ..."
+                    sh "docker compose up -d"
+                }
             }
         }
         stage('Build Docker image for Docker Hub') {
