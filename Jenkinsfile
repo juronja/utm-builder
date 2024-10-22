@@ -13,7 +13,7 @@ pipeline {
         IMAGE_TAG = "utm-builder"
         CONTAINER_NAME = "utm-builder"
         DEV = "$JOB_BASE_NAME"
-        DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
+        // DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
 //        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
     }
     options { buildDiscarder(logRotator(numToKeepStr: '10')) } 
@@ -25,16 +25,6 @@ pipeline {
 //                }
 //            }
 //        }
-       stage('Verify tooling') {
-           steps {
-                sh '''
-                    docker version
-                    docker info
-                    docker compose version
-                    curl --version
-                '''
-           }
-       }
         stage('Build app with Vite') {
             steps {
                 echo "Building App with Vite ..."
@@ -61,9 +51,9 @@ pipeline {
             }
         }
         stage('Deploy DEV Docker container on HOMELAB (Host)') {
-            environment {
-                HOMELAB_CREDS = credentials('creds-homelab')
-            }
+            // environment {
+            //     HOMELAB_CREDS = credentials('creds-homelab')
+            // }
             when {
                 expression {
                     BRANCH_NAME == "dev" || BRANCH_NAME == "main"
@@ -77,8 +67,8 @@ pipeline {
                 //     }
                 // }
                 script {
-
                     sh "docker compose down"
+                    sh "docker image prune --force"
                     sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose.yaml"
                     echo "Starting container $CONTAINER_NAME-$DEV ..."
                     sh "docker compose up -d"
@@ -111,23 +101,12 @@ pipeline {
             }
             steps {
                 script {
-                    // Check if container exists
-                    def containerId = sh(script: "docker ps --quiet --filter name=$CONTAINER_NAME", returnStdout: true).trim()
-
-                    if (containerId.isEmpty()) {
-                        echo "Container $CONTAINER_NAME not found. Skipping stop/remove steps."
-                    } else {
-                        echo "Stopping and removing existing container $CONTAINER_NAME ..."
-                        sh "docker stop $CONTAINER_NAME"
-                        sh "docker rm $CONTAINER_NAME"
-                        sh "docker rmi $DOCKERH_REPO/$IMAGE_TAG:latest" // Remove leftover image if needed
-                        sh "docker rmi $DOCKERH_REPO/$IMAGE_TAG:$BUILD_VERSION" // Remove leftover image if needed
-                    }
-
-                    // Always run the container regardless of previous existence
-                    echo "Starting container $CONTAINER_NAME ..."
-                    sh "$DOCKER_RUN"
+                    sh "docker compose down"
                     sh "docker image prune --force"
+                    // sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose.yaml"
+                    echo "Starting container $CONTAINER_NAME ..."
+                    sh "docker compose up -d"
+
                 }
             }
         }
