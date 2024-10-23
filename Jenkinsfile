@@ -13,9 +13,9 @@ pipeline {
         IMAGE_TAG = "utm-builder"
         CONTAINER_NAME = "utm-builder"
         DEV = "$JOB_BASE_NAME"
-        // HOMELAB_CREDS = credentials('creds-homelab')
-        // MONGO_ADMIN_USER = "$HOMELAB_CREDS_USR"
-        // MONGO_ADMIN_PASS = "$HOMELAB_CREDS_PSW"
+        HOMELAB_CREDS = credentials('creds-homelab') // essential for bringing the variables to jenkins container
+        MONGO_ADMIN_USER = "$HOMELAB_CREDS_USR" // essential for bringing the variables to jenkins container
+        MONGO_ADMIN_PASS = "$HOMELAB_CREDS_PSW" // essential for bringing the variables to jenkins container
         // DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
 //        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
     }
