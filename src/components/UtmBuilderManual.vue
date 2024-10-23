@@ -1,6 +1,5 @@
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue'
-import { v4 as uuid } from 'uuid'
+import { ref, computed } from 'vue'
 
 // States
 const url = ref('') 
@@ -11,9 +10,7 @@ const content = ref('')
 const term = ref('')
 
 const isCopied = ref(false)
-const isCopiedRecent = ref(false)
 const isCleared = ref(false)
-const loadedUrls = ref([])
 const tagState = ref('convention')
 
 
@@ -30,22 +27,6 @@ const compTerm = computed(() => { if (term.value == '') { return '' } else { ret
 const compTags = computed(() => { return (compParam.value + compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value).replace(/\s+/g, '+').replace(/š/g, 's').replace(/ž/g, 'z').replace(/č/g, 'c').replace(/ć/g, 'c').replace(/_/g, '-').replace(/\./g, '-') })
 const compTaggedUrl = computed(() => { return url.value + compTags.value })
 
-// Get URLs from DB
-onBeforeMount( async () => {
-  try {
-    if (!clientId) {
-      clientId = uuid()
-      localStorage.setItem('clientId', clientId)
-    }
-    const response = await fetch(`api/users/${clientId}/get-tagged-urls`)
-    const data = await response.json()
-    loadedUrls.value = data
-    console.log(loadedUrls.value)
-  } catch(err) {
-    console.log(err)
-  }
-})
-
 // Clear content
 function clearAll() {
   url.value = ''
@@ -57,19 +38,6 @@ function clearAll() {
   isCleared.value = true
   console.log('Text cleared')
   setTimeout(() => { isCleared.value = false }, 1000)
-}
-
-// Copy content
-async function toClipboardOnly(li_text_value) {
-  try {
-    await navigator.clipboard.writeText(li_text_value)
-    isCopiedRecent.value = true
-    setTimeout(() => { isCopiedRecent.value = false }, 1000)
-    console.log('Text copied!')
-    console.log(li_text_value)
-  } catch(err) {
-    console.log('Cannot copy')
-  }
 }
 
 // Copy and save tagged URL
@@ -158,20 +126,6 @@ async function toClipboardAndSave() {
       <button @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
     </div>
   </div>
-  <div>
-    <h2>Recently tagged URLs</h2>
-    <div class="recent-box">
-      <div v-if="loadedUrls.length <= 0" class="url-recent">
-        <p>No tagged URLs just yet, make some ...</p>
-      </div>
-      <ul v-if="loadedUrls.length > 0">
-        <li v-for="item in loadedUrls" :key="item.taggedUrl">
-          {{ item.taggedUrl }}
-          <button @click="toClipboardOnly(item.taggedUrl)"> {{ isCopiedRecent ? 'Copied!' : 'Copy' }} </button>
-        </li>
-      </ul>
-    </div>
-  </div>
 </template>
 
 <style scoped>
@@ -233,12 +187,6 @@ label {
   padding: 0 calc(var(--gutter-x)* .1);
 }
 
-.btn-copy {
-  margin: 2rem 0 2rem 0;
-  display: flex;
-  justify-content: center;
-}
-
 .output-box {
   padding: 0 calc(var(--gutter-x)* .2);
 }
@@ -256,51 +204,6 @@ label {
   border: 1px solid var(--color-border);
   border-radius: 0.25rem;
   font-size: 0.75rem;
-}
-
-.recent-box {
-  padding: 0 calc(var(--gutter-x)* .2);
-}
-
-.url-recent {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 3rem;
-  max-height: 6rem;
-  padding: var(--input-padding);
-  margin: 0.5rem 0 0 0;
-  color: var(--color-text);
-  background-color: var(--color-black);
-  border: 1px solid var(--color-border);
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-}
-
-.url-recent-listing button {
-  align-content: flex-start;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-  font-size: 0.75rem;
-  
-}
-
-ul li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 3rem;
-  max-height: 6rem;
-  overflow-x: auto; /* adds scrollbar */
-  padding: var(--input-padding);
-  margin: 0.5rem 0 0 0;
-  color: var(--color-text);
-  background-color: var(--color-black);
-  border: 1px solid var(--color-border);
-  border-radius: 0.25rem;
 }
 
 .url-output p {

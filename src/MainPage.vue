@@ -1,6 +1,24 @@
 <script setup>
 import MainHeader from './components/MainHeader.vue'
-import UtmBuilder from './components/UtmBuilder.vue'
+import UtmBuilderManual from './components/UtmBuilderManual.vue'
+import UtmRecent from './components/UtmRecent.vue'
+
+import { onBeforeMount } from 'vue'
+import { v4 as uuid } from 'uuid'
+
+let clientId = localStorage.getItem('clientId')
+
+// Set ClientID
+onBeforeMount( async () => {
+  try {
+    if (!clientId) {
+      clientId = uuid()
+      localStorage.setItem('clientId', clientId)
+    }
+  } catch(err) {
+    console.log(err)
+  }
+})
 
 </script>
 
@@ -9,7 +27,8 @@ import UtmBuilder from './components/UtmBuilder.vue'
     <MainHeader h1_text="UTM Builder App"/>
   </header>
   <main>
-    <UtmBuilder />
+    <UtmBuilderManual />
+    <UtmRecent />
   </main>
 </template>
 
