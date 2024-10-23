@@ -88,5 +88,5 @@ app.post('/api/users/:clientId/save-tagged-url', async (req, res) => {
 
 // app.listen(3000, () => { console.log('Server is listening on port 3000') }) // replaced by ViteExpress
 ViteExpress.listen(app, 3000, () =>
-    console.log("Server is listening on http://localhost:3000"),
+    console.log("Server is listening on:\n\nhttp://localhost:3000\n\n"),
   );
