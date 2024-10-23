@@ -3,7 +3,7 @@
 pipeline {
     agent any
     tools {
-        nodejs 'NodeJS_v20' // ads NPM commands
+        nodejs 'NodeJS_v20' // adds NPM commands
     }
     environment {
         BUILD_VERSION = VersionNumber (versionNumberString: '${BUILD_YEAR}.${BUILD_MONTH}.${BUILDS_THIS_MONTH}')
@@ -16,7 +16,8 @@ pipeline {
         HOMELAB_CREDS = credentials('creds-homelab') // essential for bringing the variables to jenkins container
         MONGO_ADMIN_USER = "$HOMELAB_CREDS_USR" // essential for bringing the variables to jenkins container
         MONGO_ADMIN_PASS = "$HOMELAB_CREDS_PSW" // essential for bringing the variables to jenkins container
-        // DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
+
+//        DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
 //        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
     }
     options { buildDiscarder(logRotator(numToKeepStr: '10')) } 
