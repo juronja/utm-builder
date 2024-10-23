@@ -3,7 +3,6 @@ import { MongoClient, MongoServerError } from 'mongodb'
 import ViteExpress from "vite-express";
 
 // Definitions
-const ISODate = new Date().toISOString()
 const { MONGO_ADMIN_USER, MONGO_ADMIN_PASS, ENV_LOCAL } = process.env // Import user and pass from SYSTEM environments
 // add LINUX variables by editing "nano ~/.profile" and adding "export MONGO_ADMIN_USER=username"
 // add WINDOWS variables with "setx ENV_LOCAL true"
@@ -38,7 +37,7 @@ app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
     // get data from db
     const getUrls = await db.collection('taggedUrls')
         .find({ clientId: clientId })
-        .sort({_id: -1}) // Sort by _id in descending order to get the latest items first
+        .sort({createdAt: -1}) // Sort by _id in descending order to get the latest items first
         .limit(10) // Limit the results to the last 10 items
         .project({ taggedUrl: 1 })
         .toArray()
@@ -62,11 +61,11 @@ app.post('/api/users/:clientId/save-tagged-url', async (req, res) => {
     await mongo.connect()
     console.log('Connected to DB successfully')
 
-    // Save payload to DB
+    // Save payload to DB with expiration time
     try {
-        payload['created'] = ISODate
+        payload['createdAt'] = new Date()
         await db.collection('taggedUrls').insertOne(payload)
-
+        await db.collection('taggedUrls').createIndex({createdAt: 1}, { expireAfterSeconds: 86400 })
     } catch(err) {
         if (err instanceof MongoServerError) {
             console.error(`There is an error: ${err}`)
