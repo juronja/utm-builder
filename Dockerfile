@@ -7,4 +7,5 @@ RUN npm install
 # Its running a express backend so you have to expose 3000
 EXPOSE 3000
 
+# Runs the configured script in package.json
 CMD npm run start
