@@ -9,16 +9,15 @@ pipeline {
         BUILD_VERSION = VersionNumber (versionNumberString: '${BUILD_YEAR}.${BUILD_MONTH}.${BUILDS_THIS_MONTH}')
         DOCKERH_REPO = "juronja"
         NEXUS_REPO = "192.168.84.16:8082"
-        HOMELAB_ENDPOINT = "192.168.84.16"
         IMAGE_TAG = "utm-builder"
         CONTAINER_NAME = "utm-builder"
-        DEV = "$JOB_BASE_NAME"
-        HOMELAB_CREDS = credentials('creds-homelab') // essential for bringing the variables to jenkins container
-        MONGO_ADMIN_USER = "$HOMELAB_CREDS_USR" // essential for bringing the variables to jenkins container
-        MONGO_ADMIN_PASS = "$HOMELAB_CREDS_PSW" // essential for bringing the variables to jenkins container
+        // BRANCH = "$JOB_BASE_NAME"
+        MONGO_CREDS = credentials('creds-mongo-utm-builder') // essential for bringing the variables to jenkins container
+        MONGO_ADMIN_USER = "$MONGO_CREDS_USR" // essential for bringing the variables to jenkins container
+        MONGO_ADMIN_PASS = "$MONGO_CREDS_PSW" // essential for bringing the variables to jenkins container
 
 //        DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
-//        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
+//        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$BRANCH_NAME $NEXUS_REPO/$IMAGE_TAG-$BRANCH_NAME:latest"
     }
     options { buildDiscarder(logRotator(numToKeepStr: '10')) } 
     stages {
@@ -47,11 +46,10 @@ pipeline {
             }
             steps {
                 echo "Building DEV Docker image for Nexus ..."
-                sh "docker build -t $NEXUS_REPO/$IMAGE_TAG-$DEV:latest -t $NEXUS_REPO/$IMAGE_TAG-$DEV:$BUILD_VERSION ."
+                sh "docker build -t $NEXUS_REPO/$IMAGE_TAG-$BRANCH_NAME:latest ."
                 // Next line in single quotes for security
                 sh 'echo $NEXUS_CREDS_PSW | docker login -u $NEXUS_CREDS_USR --password-stdin $NEXUS_REPO'
-                sh "docker push $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
-                sh "docker push $NEXUS_REPO/$IMAGE_TAG-$DEV:$BUILD_VERSION"
+                sh "docker push $NEXUS_REPO/$IMAGE_TAG-$BRANCH_NAME:latest"
             }
         }
         stage('Deploy DEV Docker container on HOMELAB (Host)') {
@@ -67,7 +65,7 @@ pipeline {
                     // sh "rm compose.yaml"
                     sh "printenv"
                     sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose.yaml > compose.yaml"
-                    echo "Starting container $CONTAINER_NAME-$DEV ..."
+                    echo "Starting container $CONTAINER_NAME-$BRANCH_NAME ..."
                     sh "docker compose up -d"
                 }
             }
