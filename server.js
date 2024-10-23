@@ -7,18 +7,19 @@ const ISODate = new Date().toISOString()
 const { MONGO_ADMIN_USER, MONGO_ADMIN_PASS, ENV_LOCAL } = process.env // Import user and pass from SYSTEM environments
 // add LINUX variables by editing "nano ~/.profile" and adding "export MONGO_ADMIN_USER=username"
 // add WINDOWS variables with "setx ENV_LOCAL true"
+// add JENKINS variables with "credentials"
 // OR in docker compose environment
-// Start express server
 
 // Database endpoint check and connect
 let mongo = undefined
 if (ENV_LOCAL) { // Local environment
-    mongo = new MongoClient(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASS}@127.0.0.1:27017`)
+    mongo = new MongoClient(`mongodb://127.0.0.1:27017`)
 } else { // use container name when starting application as docker container, part of docker-compose
     mongo = new MongoClient(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASS}@mongodb`)
 }
 const db = mongo.db('utm-builder')
 
+// Start express server
 const app = express() // Initialize the express server
 
 
@@ -32,7 +33,7 @@ app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
 
     // Connect to DB
     await mongo.connect()
-    console.log('Connected successfully to database')
+    console.log('Connected to DB successfully')
 
     // get data from db
     const getUrls = await db.collection('taggedUrls')
@@ -41,14 +42,13 @@ app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
         .limit(10) // Limit the results to the last 10 items
         .project({ taggedUrl: 1 })
         .toArray()
-    console.log('Got this info: ', getUrls)
     
     // Send a response to frontend
     res.json(getUrls)
     
     // Disconnect
     await mongo.close()
-    console.log('Disconnected successfully')
+    console.log('Disconnected from DB successfully')
 
 })
 
@@ -56,17 +56,16 @@ app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
 // POST method endpoint + RequestHandler function to handle requests and responses (req, res).
 app.post('/api/users/:clientId/save-tagged-url', async (req, res) => {
     const payload = req.body
-    const clientId = req.params.clientId
+    // const clientId = req.params.clientId
     
     // Connect to DB
     await mongo.connect()
-    console.log('Connected successfully to database')
+    console.log('Connected to DB successfully')
 
     // Save payload to DB
     try {
         payload['created'] = ISODate
         await db.collection('taggedUrls').insertOne(payload)
-        console.log('Saved to DB: ', payload)
 
     } catch(err) {
         if (err instanceof MongoServerError) {
@@ -76,11 +75,11 @@ app.post('/api/users/:clientId/save-tagged-url', async (req, res) => {
     }
     
     // Send a response to frontend
-    res.json(payload.taggedUrl)
+    res.json(payload)
     
     // Disconnect
     await mongo.close()
-    console.log('Disconnected successfully')
+    console.log('Disconnected from DB successfully')
 
 })
 
