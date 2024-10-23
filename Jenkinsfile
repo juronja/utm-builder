@@ -2,9 +2,6 @@
 
 pipeline {
     agent any
-    tools {
-        nodejs 'NodeJS_v20' // adds NPM commands
-    }
     environment {
         BUILD_VERSION = VersionNumber (versionNumberString: '${BUILD_YEAR}.${BUILD_MONTH}.${BUILDS_THIS_MONTH}')
         DOCKERH_REPO = "juronja"
@@ -28,13 +25,6 @@ pipeline {
 //                }
 //            }
 //        }
-        // stage('Build app with Vite') {
-        //     steps {
-        //         echo "Building App with Vite ..."
-        //         sh "npm install"    
-        //         sh "npm run build"
-        //     }
-        // }
         stage('Build DEV Docker image for Nexus') {
             environment {
                 NEXUS_CREDS = credentials('nexus-creds')
