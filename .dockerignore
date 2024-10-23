@@ -1,5 +1,9 @@
+# Folders
 **/node_modules/
-.env*
+
+# Files
+.*
+*.md
 Dockerfile
 npm-debug.log
 compose.yaml
