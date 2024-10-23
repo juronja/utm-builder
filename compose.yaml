@@ -12,8 +12,6 @@ services:
     environment: # Add variables to this container
       MONGO_ADMIN_USER: ${MONGO_ADMIN_USER}
       MONGO_ADMIN_PASS: ${MONGO_ADMIN_PASS}
-    volumes:
-      - utm-app #Volume mapping for persistency
   db:
     image: mongo
     container_name: mongodb
@@ -31,7 +29,6 @@ services:
 
 volumes:
   mongodb: # It will prepend the project name
-  utm-app:
 #  nexus:
 
 
