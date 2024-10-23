@@ -3,7 +3,7 @@
 pipeline {
     agent any
     tools {
-        nodejs 'NodeJS_v20'
+        nodejs 'NodeJS_v20' // ads NPM commands
     }
     environment {
         BUILD_VERSION = VersionNumber (versionNumberString: '${BUILD_YEAR}.${BUILD_MONTH}.${BUILDS_THIS_MONTH}')
@@ -13,9 +13,9 @@ pipeline {
         IMAGE_TAG = "utm-builder"
         CONTAINER_NAME = "utm-builder"
         DEV = "$JOB_BASE_NAME"
-        HOMELAB_CREDS = credentials('creds-homelab')
-        MONGO_ADMIN_USER = "$HOMELAB_CREDS_USR"
-        MONGO_ADMIN_PASS = "$HOMELAB_CREDS_PSW"
+        // HOMELAB_CREDS = credentials('creds-homelab')
+        // MONGO_ADMIN_USER = "$HOMELAB_CREDS_USR"
+        // MONGO_ADMIN_PASS = "$HOMELAB_CREDS_PSW"
         // DOCKER_RUN = "docker run -d -p 3130:80 --restart unless-stopped --name $CONTAINER_NAME $DOCKERH_REPO/$IMAGE_TAG:latest"
 //        DOCKER_RUN_DEV = "docker run -d -p 3131:80 --restart unless-stopped --name $CONTAINER_NAME-$DEV $NEXUS_REPO/$IMAGE_TAG-$DEV:latest"
     }
@@ -54,25 +54,16 @@ pipeline {
             }
         }
         stage('Deploy DEV Docker container on HOMELAB (Host)') {
-            // environment {
-            //     HOMELAB_CREDS = credentials('creds-homelab')
-            // }
             when {
                 expression {
                     BRANCH_NAME == "dev" || BRANCH_NAME == "main"
                 }
             }
             steps {
-                // script {
-                //     sshagent(['ssh-homelab']) {
-                //         echo "Deploying Docker container on Homelab  ..."
-                //         sh "ssh -o StrictHostKeyChecking=no $HOMELAB_CREDS_USR@$HOMELAB_ENDPOINT 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose-dev-commands.sh)\"'"
-                //     }
-                // }
                 script {
                     sh "docker compose down"
                     sh "docker image prune --force"
-                    sh "rm compose.yaml"
+                    // sh "rm compose.yaml"
                     sh "printenv"
                     sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/dev/compose.yaml > compose.yaml"
                     echo "Starting container $CONTAINER_NAME-$DEV ..."
