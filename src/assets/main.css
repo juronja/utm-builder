@@ -87,7 +87,7 @@ button:hover {
 }
 
 hr {
-  margin: 1rem calc(var(--gutter-x)* .2);
+  margin: 1rem calc(var(--gutter-x)* .0);
   background-color: var(--color-border);
   border: none;
   height: 0.1em;
