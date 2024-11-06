@@ -1,10 +1,34 @@
 @import './base.css';
 
 #app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 1.75rem;
+  padding-top: 1.5rem;
   font-weight: normal;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0 2rem 0;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0 calc(var(--gutter-x)* .5);
+  border-radius: 0.25rem;
+  background-color: var(--color-background-footer);
+  width: 100% !important; /* Override max-width */
 }
 
 a {
@@ -17,13 +41,6 @@ a {
 i {
   color: var(--color-text);
 }
-
-header {
-  display: flex;
-  align-items: center;
-  margin: 1rem 0 2rem 0;
-}
-
 
 /* Fonts */
 h1 {
@@ -120,7 +137,6 @@ hr {
   transform: translateY(-5px);
 }
 
-
 @media (hover: hover) {
   a:hover {
     background-color: var(--color-primary-muted);
@@ -128,16 +144,16 @@ hr {
 }
 
 @media screen and (min-width: 1024px) {
-  body {
+  /* body {
     display: flex;
-  }
+  } */
 
   h2 {
     font-size: 2.2rem;
   }
 
   #app {
-    display: block;
+    display: flex;
     padding: 0 2rem;
   }
 }

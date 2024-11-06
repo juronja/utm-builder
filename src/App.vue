@@ -36,16 +36,16 @@ onBeforeMount( async () => {
     </Transition>
     </div> -->
     <nav>
-        <RouterLink to="/manual" title="You did it!">Manual</RouterLink>
-        <RouterLink to="/advanced">Advanced</RouterLink>
-        <RouterLink to="/settings"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
+        <RouterLink to="/manual" title="Manual">Manual</RouterLink>
+        <RouterLink to="/advanced" title="Advanced">Advanced</RouterLink>
+        <RouterLink to="/settings" title="Settings"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
     </nav>
   </header>
   <main>
     <RouterView />
   </main>
   <footer>
-    footer
+    <a href="https://github.com/juronja/utm-builder" target="_blank" class="github">GitHub <i class="bi bi-github"></i></a>
   </footer>
 </template>
 
@@ -57,7 +57,6 @@ onBeforeMount( async () => {
   align-items: center;
   width: 60%;
 }
-
 
 nav {
   display: flex;
@@ -83,6 +82,14 @@ nav a.router-link-exact-active:hover {
 
 nav a:first-of-type {
   border: 0;
+}
+
+.github {
+  background-color: grey;
+  padding: calc(var(--gutter-x)* .1) calc(var(--gutter-x)* .3);
+  color: var(--color-button-text);
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
 }
 
 /* .tag {

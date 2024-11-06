@@ -8,6 +8,7 @@ const medium = ref('')
 const source = ref('')
 const content = ref('')
 const term = ref('')
+const campaignId = ref('')
 
 const isCopied = ref(false)
 const isCleared = ref(false)
@@ -21,7 +22,8 @@ const compMedium = computed(() => { if (medium.value == '') { return '' } else {
 const compSource = computed(() => { if (source.value == '') { return '' } else { return '&utm_source=' + source.value } })
 const compContent = computed(() => { if (content.value == '') { return '' } else { return '&utm_content=' + content.value } })
 const compTerm = computed(() => { if (term.value == '') { return '' } else { return '&utm_term=' + term.value } })
-const compTags = computed(() => { return (compParam.value + compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value).replace(/\s+/g, '+').replace(/š/g, 's').replace(/ž/g, 'z').replace(/č/g, 'c').replace(/ć/g, 'c').replace(/_/g, '-').replace(/\./g, '-') })
+const compCampaignId = computed(() => { if (campaignId.value == '') { return '' } else { return 'utm_id=' + campaignId.value } })
+const compTags = computed(() => { return (compParam.value + compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value + compCampaignId.value).replace(/\s+/g, '+').replace(/š/g, 's').replace(/ž/g, 'z').replace(/č/g, 'c').replace(/ć/g, 'c').replace(/_/g, '-').replace(/\./g, '-') })
 const compTaggedUrl = computed(() => { return url.value + compTags.value })
 
 // Text variables
@@ -40,6 +42,7 @@ function clearAll() {
   source.value = ''
   content.value = ''
   term.value = ''
+  campaignId.value = ''
   isCleared.value = true
   console.log('Text cleared')
   setTimeout(() => { isCleared.value = false }, 1000)
@@ -81,15 +84,15 @@ async function toClipboardAndSave() {
   <h2>{{ title }}</h2>
   <div class="builder">
     <div class="row col-100">
-      <label for="utm-url">Destination URL</label>
+      <label for="utm-url">Destination URL*</label>
       <input type="text" v-model="url" id="utm-url">
     </div>
-    <div class="row col-75">
-      <label for="utm-campaign">Campaign name</label>
+    <div class="row col-40">
+      <label for="utm-campaign">Campaign name*</label>
       <input type="text" v-model="campaign" id="utm-campaign" />
     </div>
-    <div class="row col-25">
-      <label for="utm-medium">Medium</label>
+    <div class="row col-20">
+      <label for="utm-medium">Medium*</label>
       <select v-model="medium" id="utm-medium">
         <option value="cpc">cpc</option>
         <option value="display">display</option>
@@ -102,17 +105,21 @@ async function toClipboardAndSave() {
         <option value="social">social</option>
       </select>
     </div>
-    <div class="row col-33">
-      <label for="utm-source">Source</label>
+    <div class="row col-40">
+      <label for="utm-source">Source*</label>
       <input type="text" v-model="source" id="utm-source" />
     </div>
-    <div class="row col-33">
+    <div class="row col-40">
       <label for="utm-content">Content</label>
       <input type="text" v-model="content" id="utm-content" />
     </div>
-    <div class="row col-33">
+    <div class="row col-30">
       <label for="utm-term">Term</label>
       <input type="text" v-model="term" id="utm-term" />
+    </div>
+    <div class="row col-30">
+      <label for="utm-campaignId">Campaign ID</label>
+      <input type="text" v-model="campaignId" id="utm-campaignId" />
     </div>
     <!-- <input type="text" v-model="Content" placeholder="Campaign Name ..." /> -->
   </div>
@@ -146,29 +153,29 @@ async function toClipboardAndSave() {
   width: 100%;
 }
 
-.col-75 {
-  flex: 0 0 auto;
-  width: 75%;
-}
-
 .col-50 {
   flex: 0 0 auto;
   width: 50%;
 }
 
-.col-33 {
+.col-40 {
   flex: 0 0 auto;
-  width: 33.33%;
+  width: 40%;
 }
 
-.col-25 {
+.col-30 {
   flex: 0 0 auto;
-  width: 25%;
+  width: 30%;
+}
+
+.col-20 {
+  flex: 0 0 auto;
+  width: 20%;
 }
 
 /* Responsive layout */
 @media screen and (max-width: 480px) {
-  .col-75, .col-50, .col-33, .col-25 {
+  .col-50, .col-40, .col-30, .col-20 {
     width: 100%;
     margin-top: 0;
   }
