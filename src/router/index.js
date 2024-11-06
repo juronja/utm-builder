@@ -18,12 +18,12 @@ const router = createRouter({
       component: () => import('../views/AdvancedView.vue'),
     },
     {
-      path: '/advanced',
-      name: 'advanced',
+      path: '/settings',
+      name: 'settings',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AdvancedView.vue'),
+      component: () => import('../views/SettingsView.vue'),
     },
   ],
 })

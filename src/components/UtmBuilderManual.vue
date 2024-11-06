@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 
 // States
-const url = ref('') 
+const url = ref('')
 const campaign = ref('')
 const medium = ref('')
 const source = ref('')
@@ -31,7 +31,6 @@ defineProps({
     required: true
   }
 })
-
 
 // Clear content
 function clearAll() {
@@ -67,7 +66,7 @@ async function toClipboardAndSave() {
        'Accept': 'application/json'
       }
     })
-    // return await response.json() // not sure if I need this return 
+    // return await response.json() // not sure if I need this return
     } catch(err) {
       console.error('Oops error:', err);
     }
@@ -138,8 +137,7 @@ async function toClipboardAndSave() {
 .row {
   display: flex;
   flex-direction: column;
-  padding-right: calc(var(--gutter-x)* .2);
-  padding-left: calc(var(--gutter-x)* .2);
+  padding: 0 calc(var(--gutter-x)* .5);
   padding-bottom: calc(var(--gutter-y)* .5);
 }
 
@@ -182,7 +180,7 @@ label {
 }
 
 .output-box {
-  padding: 0 calc(var(--gutter-x)* .2);
+  padding: 0 calc(var(--gutter-x)* .5);
 }
 
 .url-output {
@@ -192,7 +190,7 @@ label {
   max-height: 8rem;
   overflow-x: auto; /* adds scrollbar */
   padding: var(--input-padding);
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   background-color: var(--color-input-background);
   border: 1px solid var(--color-border);
   border-radius: 0.25rem;
@@ -203,7 +201,7 @@ label {
   box-sizing: border-box;
   width: 100%;
   margin-right: 0.75rem;
-  
+
 }
 
 </style>

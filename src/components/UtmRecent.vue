@@ -26,23 +26,15 @@ async function toClipboardOnly(li_text, index) {
     setTimeout(() => { loadedUrls.value[index].isCopied = false }, 1000)
     console.log('Text copied:', li_text)
   } catch(err) {
-    console.log('Cannot copy')
+    console.log('Cannot copy', err)
   }
 }
-
-// Text variables
-defineProps({
-  title: {
-    type: String,
-    required: true
-  }
-})
 
 </script>
 
 <template>
   <div>
-    <h2>{{ title }}</h2>
+    <h2>Recently tagged URLs</h2>
     <div class="recent-box">
       <div v-if="loadedUrls.length <= 0" class="url-recent">
         <p>No tagged URLs just yet, make some ...</p>
@@ -59,9 +51,9 @@ defineProps({
 
 <style scoped>
 
-.recent-box {
+/* .recent-box {
   padding: 0 calc(var(--gutter-x)* .2);
-}
+} */
 
 .url-recent {
   display: flex;
@@ -85,7 +77,7 @@ ul {
   list-style-type: none;
   padding: 0;
   font-size: 0.75rem;
-  
+
 }
 
 ul li {

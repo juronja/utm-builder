@@ -4,8 +4,16 @@ import UtmRecent from '@/components/UtmRecent.vue';
 </script>
 
 <template>
-  <main>
-    <UtmBuilderManual />
+  <div class="section-box">
+    <UtmBuilderManual title="Manual tagging" />
+  </div>
+  <div class="section-gap">
     <UtmRecent />
-  </main>
+  </div>
+
 </template>
+
+<style scoped>
+
+
+</style>

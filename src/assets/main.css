@@ -15,7 +15,6 @@ a {
 }
 
 i {
-  font-size: 2rem;
   color: var(--color-text);
 }
 
@@ -25,19 +24,25 @@ header {
   margin: 1rem 0 2rem 0;
 }
 
+
 /* Fonts */
 h1 {
-  font-family: "Nunito", sans-serif;
+  /* font-family: "Asap", sans-serif; */
+  font-family: "Nunito", serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-size: 2.4rem;
+  font-size: 2.5rem;
   /* padding: 0 calc(var(--gutter-x)* .2); */
 }
 
 h2 {
+  font-family: "Asap", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
   margin-bottom: calc(var(--gutter-y)* .5);
-  padding: 0 calc(var(--gutter-x)* .2);
+  font-size: 1.5rem;
+  padding: 0 calc(var(--gutter-x)* .5);
 }
 
 input, select {
@@ -88,6 +93,16 @@ hr {
   height: 0.1em;
 }
 
+.section-box {
+  padding: 0.1rem 0;
+  background-color: var(--color-section-background);
+  border-radius: 0.25rem;
+}
+
+.section-gap {
+  margin-top: calc(var(--section-gap) / 2);
+}
+
 /* Transitions */
 
 .slide-up-enter-active,
@@ -112,9 +127,13 @@ hr {
   }
 }
 
-@media (min-width: 1024px) {
+@media screen and (min-width: 1024px) {
   body {
     display: flex;
+  }
+
+  h2 {
+    font-size: 2.2rem;
   }
 
   #app {
