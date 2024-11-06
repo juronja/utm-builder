@@ -22,7 +22,7 @@ const compMedium = computed(() => { if (medium.value == '') { return '' } else {
 const compSource = computed(() => { if (source.value == '') { return '' } else { return '&utm_source=' + source.value } })
 const compContent = computed(() => { if (content.value == '') { return '' } else { return '&utm_content=' + content.value } })
 const compTerm = computed(() => { if (term.value == '') { return '' } else { return '&utm_term=' + term.value } })
-const compCampaignId = computed(() => { if (campaignId.value == '') { return '' } else { return 'utm_id=' + campaignId.value } })
+const compCampaignId = computed(() => { if (campaignId.value == '') { return '' } else { return '&utm_id=' + campaignId.value } })
 const compTags = computed(() => { return (compParam.value + compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value + compCampaignId.value).replace(/\s+/g, '+').replace(/š/g, 's').replace(/ž/g, 'z').replace(/č/g, 'c').replace(/ć/g, 'c').replace(/_/g, '-').replace(/\./g, '-') })
 const compTaggedUrl = computed(() => { return url.value + compTags.value })
 
@@ -121,7 +121,7 @@ async function toClipboardAndSave() {
       <label for="utm-campaignId">Campaign ID</label>
       <input type="text" v-model="campaignId" id="utm-campaignId" />
     </div>
-    <!-- <input type="text" v-model="Content" placeholder="Campaign Name ..." /> -->
+    <p>* Required</p>
   </div>
   <hr>
   <div class="output-box">
@@ -139,6 +139,12 @@ async function toClipboardAndSave() {
 .builder {
   display: flex;
   flex-wrap: wrap;
+}
+
+.builder p {
+  display: block;
+  font-size: 0.75rem;
+  padding: 0 calc(var(--gutter-x)* .5);
 }
 
 .row {
