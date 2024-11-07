@@ -24,6 +24,7 @@ main {
 footer {
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 50px;
   padding: 0 calc(var(--gutter-x)* .5);
   border-radius: 0.25rem;
