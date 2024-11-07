@@ -1,8 +1,9 @@
 <script setup>
 import { ref, onBeforeMount } from 'vue'
+import { useURLRecentStore } from '@/stores/url-recent'
 
 // States
-const loadedUrls = ref([])
+const data = ref([])
 
 let clientId = localStorage.getItem('clientId')
 
@@ -11,8 +12,7 @@ let clientId = localStorage.getItem('clientId')
 onBeforeMount( async () => {
   try {
     const response = await fetch(`api/users/${clientId}/get-tagged-urls`)
-    const data = await response.json()
-    loadedUrls.value = data
+    data.value = await response.json()
   } catch(err) {
     console.log(err)
   }
@@ -22,8 +22,8 @@ onBeforeMount( async () => {
 async function toClipboardOnly(li_text, index) {
   try {
     await navigator.clipboard.writeText(li_text)
-    loadedUrls.value[index].isCopied = true
-    setTimeout(() => { loadedUrls.value[index].isCopied = false }, 1000)
+    data.value[index].isCopied = true
+    setTimeout(() => { data.value[index].isCopied = false }, 1000)
     console.log('Text copied:', li_text)
   } catch(err) {
     console.log('Cannot copy', err)
@@ -36,11 +36,11 @@ async function toClipboardOnly(li_text, index) {
   <div>
     <h2>Recently tagged URLs</h2>
     <div class="recent-box">
-      <div v-if="loadedUrls.length <= 0" class="url-recent">
+      <div v-if="data.length <= 0" class="url-recent">
         <p>No tagged URLs just yet, make some ...</p>
       </div>
-      <ul v-if="loadedUrls.length > 0">
-        <li v-for="(item, index) in loadedUrls" :key="item._id">
+      <ul v-if="data.length > 0">
+        <li v-for="(item, index) in data" :key="item._id">
           {{item.taggedUrl}}
           <button @click="toClipboardOnly(item.taggedUrl, index)"> {{ item.isCopied ? 'Copied!' : 'Copy' }} </button>
         </li>
