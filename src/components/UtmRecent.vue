@@ -3,7 +3,12 @@ import { ref, onBeforeMount } from 'vue'
 import { useURLRecentStore } from '@/stores/url-recent'
 
 // States
+const recentUrls = useURLRecentStore()
 const data = ref([])
+
+const test = ref([{ Urlz: 1 }, { Urlz: 2 }, { Urlz: 'tres' }, { Urlz: 4 }, { Urlz: 5 }])
+test.value[2].isLol = true
+const test2 = test.value[2]
 
 let clientId = localStorage.getItem('clientId')
 
@@ -19,12 +24,12 @@ onBeforeMount( async () => {
 })
 
 // Copy content
-async function toClipboardOnly(li_text, index) {
+async function toClipboardOnly(item, index) {
   try {
-    await navigator.clipboard.writeText(li_text)
+    await navigator.clipboard.writeText(item)
     data.value[index].isCopied = true
     setTimeout(() => { data.value[index].isCopied = false }, 1000)
-    console.log('Text copied:', li_text)
+    console.log('Text copied:', item)
   } catch(err) {
     console.log('Cannot copy', err)
   }
@@ -35,6 +40,7 @@ async function toClipboardOnly(li_text, index) {
 <template>
   <div>
     <h2>Recently tagged URLs</h2>
+    {{ test2.isLol ? 'Copied!' : 'Copy' }}
     <div class="recent-box">
       <div v-if="data.length <= 0" class="url-recent">
         <p>No tagged URLs just yet, make some ...</p>
