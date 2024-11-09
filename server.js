@@ -38,13 +38,13 @@ app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
     const getUrls = await db.collection('taggedUrls')
         .find({ clientId: clientId })
         .sort({createdAt: -1}) // Sort by _id in descending order to get the latest items first
-        .limit(10) // Limit the results to the last 10 items
+        .limit(15) // Limit the results to the last 10 items
         .project({ taggedUrl: 1 })
         .toArray()
-    
+
     // Send a response to frontend
     res.json(getUrls)
-    
+
     // Disconnect
     await mongo.close()
     console.log('Disconnected from DB successfully')
@@ -56,7 +56,7 @@ app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
 app.post('/api/users/:clientId/save-tagged-url', async (req, res) => {
     const payload = req.body
     // const clientId = req.params.clientId
-    
+
     // Connect to DB
     await mongo.connect()
     console.log('Connected to DB successfully')
@@ -72,10 +72,10 @@ app.post('/api/users/:clientId/save-tagged-url', async (req, res) => {
         }
         throw err
     }
-    
+
     // Send a response to frontend
     res.json(payload)
-    
+
     // Disconnect
     await mongo.close()
     console.log('Disconnected from DB successfully')
