@@ -64,6 +64,15 @@ h2 {
   padding: 0 calc(var(--gutter-x)* .5);
 }
 
+h3 {
+  font-family: "Asap", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  margin-bottom: calc(var(--gutter-y)* .5);
+  font-size: 1.2rem;
+  padding: 0 calc(var(--gutter-x)* .5);
+}
+
 input, select {
   padding: var(--input-padding);
   margin: 0.25rem 0 0 0;
