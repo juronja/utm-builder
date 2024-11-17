@@ -55,7 +55,6 @@ app.get('/api/users/:clientId/get-tagged-urls', async (req, res) => {
 // POST Tagged URLs endpoint (RequestHandler function to handle requests and responses (req, res))
 app.post('/api/users/:clientId/save-tagged-url', async (req, res) => {
     const payload = req.body
-    // const clientId = req.params.clientId
 
     // Connect to DB
     await mongo.connect()
@@ -63,24 +62,77 @@ app.post('/api/users/:clientId/save-tagged-url', async (req, res) => {
 
     // Save payload to DB with expiration time
     try {
-        payload['createdAt'] = new Date()
-        await db.collection('taggedUrls').insertOne(payload)
-        await db.collection('taggedUrls').createIndex({createdAt: 1}, { expireAfterSeconds: 86400 })
+      payload['createdAt'] = new Date()
+      await db.collection('taggedUrls').insertOne(payload)
+      await db.collection('taggedUrls').createIndex({createdAt: 1}, { expireAfterSeconds: 86400 })
     } catch(err) {
-        if (err instanceof MongoServerError) {
-            console.error(`There is an error: ${err}`)
-        }
-        throw err
-    }
+      if (err instanceof MongoServerError) {
+          console.error(`There is an error: ${err}`)
+      }
+      throw err
+    } finally {
+      // Send a response to frontend
+      res.json(payload)
 
+      // Disconnect
+      await mongo.close()
+      console.log('Disconnected from DB successfully')
+    }
+    })
+
+
+// POST Definitions endpoint
+app.post('/api/users/:clientId/save-definitions', async (req, res) => {
+  const payload = req.body
+
+  // Connect to DB
+  await mongo.connect()
+  console.log('Connected to DB successfully')
+
+  // Save payload to DB with expiration time
+  try {
+    payload['_id'] = 'all-definitions'
+    payload['createdAt'] = new Date()
+    await db.collection('definitions').updateOne({ _id: payload._id }, { $set: payload }, { upsert: true })
+    await db.collection('definitions').createIndex({createdAt: 1}, { expireAfterSeconds: 86400 })
+  } catch(err) {
+    if (err instanceof MongoServerError) {
+        console.error(`There is an error: ${err}`)
+    }
+    throw err
+  } finally {
     // Send a response to frontend
     res.json(payload)
 
     // Disconnect
     await mongo.close()
     console.log('Disconnected from DB successfully')
+  }
+})
+
+// GET Definitions endpoint
+app.get('/api/users/:clientId/get-definitions', async (req, res) => {
+  const clientId = req.params.clientId
+
+  // Connect to DB
+  await mongo.connect()
+  console.log('Connected to DB successfully')
+
+  // get data from db
+  const getDefinitions = await db.collection('definitions')
+      .find({ clientId: clientId })
+      .project({ _id: 0 })
+      .toArray()
+
+  // Send a response to frontend
+  res.json(getDefinitions)
+
+  // Disconnect
+  await mongo.close()
+  console.log('Disconnected from DB successfully')
 
 })
+
 
 
 
