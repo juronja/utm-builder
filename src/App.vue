@@ -17,7 +17,7 @@ onBeforeMount( async () => {
       localStorage.setItem('clientId', clientId)
     }
   } catch(err) {
-    console.log(err)
+    console.error(err)
   }
 })
 
