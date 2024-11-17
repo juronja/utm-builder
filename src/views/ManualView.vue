@@ -4,7 +4,7 @@ import UtmRecent from '@/components/UtmRecent.vue';
 import { useDefinitionsStore } from '@/stores/definitions'
 
 // States
-const options = useDefinitionsStore()
+const definitions = useDefinitionsStore()
 
 const url = ref('')
 const campaign = ref('')
@@ -80,7 +80,7 @@ async function toClipboardAndSave() {
     })
     // return await response.json() // not sure if I need this return
     } catch(err) {
-      console.error('Oops error:', err);
+      console.error(err)
     }
   } else {
     console.error('Nothing to copy, no tagged URLs');
@@ -104,8 +104,8 @@ async function toClipboardAndSave() {
       <div class="row col-20">
         <label for="utm-medium">Medium*</label>
         <select v-model="medium" id="utm-medium">
-          <option v-for="item in options.mediumOptions" :key="item.data">
-            {{ item.data }}
+          <option v-for="item in definitions.data[0].mediumDefinitions" :key="item">
+            {{ item }}
           </option>
         </select>
       </div>
@@ -144,6 +144,39 @@ async function toClipboardAndSave() {
 </template>
 
 <style scoped>
+
+input, select {
+  padding: var(--input-padding);
+  margin: 0.25rem 0 0 0;
+  min-height: 2.1rem;
+  color: var(--color-input-text);
+  background-color: var(--color-input-background);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  transition: 0.15s ease-in-out;
+}
+
+input:focus {
+  color: var(--color-input-text);
+  outline: 0;
+  border-color: var(--color-border-hover);
+  box-shadow: 0 0 0 .25rem var(--color-shadow-hover);
+}
+
+button {
+  margin: 0 0 0 0.5rem;
+}
+
+.section-box {
+  padding: 0.1rem 0;
+  background-color: var(--color-section-background);
+  border-radius: 0.25rem;
+}
+
+.section-box h2 {
+  padding: 0 calc(var(--gutter-x)* .5);
+}
 
 .builder {
   display: flex;
