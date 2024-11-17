@@ -2,11 +2,11 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useURLRecentStore = defineStore('url-recent', () => {
-  const data = ref([])
   let clientId = localStorage.getItem('clientId')
+  const data = ref([])
 
-  // Fetch recent urls
-  async function fetchTaggedUrls() {
+  // Get recent urls
+  async function getTaggedUrls() {
     try {
       const response = await fetch(`api/users/${clientId}/get-tagged-urls`)
       data.value = await response.json()
@@ -23,10 +23,10 @@ export const useURLRecentStore = defineStore('url-recent', () => {
       setTimeout(() => { data.value[index].isCopied = false }, 1000)
       console.log('Text copied:', item)
     } catch(err) {
-      console.log('Cannot copy', err)
+      console.error(err)
     }
   }
 
 
-  return { data, fetchTaggedUrls, toClipboard }
+  return { data, getTaggedUrls, toClipboard }
 })
