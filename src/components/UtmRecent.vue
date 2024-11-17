@@ -6,7 +6,7 @@ import { useURLRecentStore } from '@/stores/url-recent'
 const recentUrls = useURLRecentStore()
 
 onBeforeMount( () => {
-  recentUrls.fetchTaggedUrls()
+  recentUrls.getTaggedUrls()
 })
 
 </script>
