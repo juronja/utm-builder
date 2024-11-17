@@ -57,7 +57,8 @@
 :root {
   --gutter-x: 1.5rem;
   --gutter-y: 1.5rem;
-  --input-padding: 0.375rem 0.75rem 0.375rem 0.75rem;
+  --input-padding: 0.375rem 0.75rem;
+  --tag-padding: 0 0 0 0.4rem;
   font-size: 16px;
   --section-gap: 80px;
 
