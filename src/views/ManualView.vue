@@ -103,11 +103,7 @@ async function toClipboardAndSave() {
       </div>
       <div class="row col-20">
         <label for="utm-medium">Medium*</label>
-        <select v-model="medium" id="utm-medium">
-          <option v-for="item in definitions.data[0].mediumDefinitions" :key="item">
-            {{ item }}
-          </option>
-        </select>
+        <input type="text" v-model="medium" id="utm-medium" />
       </div>
       <div class="row col-40">
         <label for="utm-source">Source*</label>
@@ -129,7 +125,7 @@ async function toClipboardAndSave() {
     </div>
     <hr>
     <div class="output-box">
-      <div class="url-output">
+      <div class="output">
         <p> {{ compTaggedUrl ? compTaggedUrl : 'Fill the fields above to make a tagged URL here ...' }} </p>
         <!-- add copy validation on the button -->
         <button @click="clearAll"> {{ isCleared ? 'Cleared!' : 'Clear' }} </button>
@@ -196,31 +192,6 @@ button {
   padding-bottom: calc(var(--gutter-y)* .5);
 }
 
-.col-100 {
-  flex: 0 0 auto;
-  width: 100%;
-}
-
-.col-50 {
-  flex: 0 0 auto;
-  width: 50%;
-}
-
-.col-40 {
-  flex: 0 0 auto;
-  width: 40%;
-}
-
-.col-30 {
-  flex: 0 0 auto;
-  width: 30%;
-}
-
-.col-20 {
-  flex: 0 0 auto;
-  width: 20%;
-}
-
 /* Responsive layout */
 @media screen and (max-width: 480px) {
   .col-50, .col-40, .col-30, .col-20 {
@@ -238,7 +209,7 @@ label {
   padding: 0 calc(var(--gutter-x)* .5);
 }
 
-.url-output {
+.output {
   display: flex;
   align-items: center;
   min-height: 4rem;
@@ -252,7 +223,7 @@ label {
   font-size: 0.75rem;
 }
 
-.url-output p {
+.output p {
   box-sizing: border-box;
   width: 100%;
   margin-right: 0.75rem;
