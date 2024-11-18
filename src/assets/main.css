@@ -103,6 +103,47 @@ hr {
   margin-top: calc(var(--section-gap) / 2);
 }
 
+/* Layout defaults */
+.col-100 {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.col-80 {
+  flex: 0 0 auto;
+  width: 80%;
+}
+
+.col-70 {
+  flex: 0 0 auto;
+  width: 70%;
+}
+
+.col-60 {
+  flex: 0 0 auto;
+  width: 60%;
+}
+
+.col-50 {
+  flex: 0 0 auto;
+  width: 50%;
+}
+
+.col-40 {
+  flex: 0 0 auto;
+  width: 40%;
+}
+
+.col-30 {
+  flex: 0 0 auto;
+  width: 30%;
+}
+
+.col-20 {
+  flex: 0 0 auto;
+  width: 20%;
+}
+
 /* Transitions */
 
 .slide-up-enter-active,
