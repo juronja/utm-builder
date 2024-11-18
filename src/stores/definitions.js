@@ -5,12 +5,23 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   let clientId = localStorage.getItem('clientId')
   const isSaved = ref(false)
   const isLoading = ref(false)
-  const input = ref('')
+  const inputPlacementLong = ref('')
+  const inputPlacementShort = ref('')
+  const inputMedium = ref('')
+  const inputSource = ref('')
+
+  function toProperCase(string) {
+    return string.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase())
+  }
+
 
   // All definitions
   const data = ref([{ }])
   const dataDefault = ref([{
-    mediumDefinitions : ["affiliate", "banner", "content-text", "cpc", "direct", "display",  "email", "referral", "social"]
+    mediumDefinitions : ['affiliate', 'banner', 'content-text', 'cpc', 'direct', 'display', 'email', 'referral', 'social'],
+    placementDefinitions : ['Google Search', 'Google Banners', 'Google Gmail', 'Google YouTube', 'Facebook', 'Direct buy - banner', 'Direct buy - editorial', 'Email', 'Twitter', 'LinkedIn', 'Blog', 'Affiliate', 'Referral', 'Influencer', 'Offline print', 'Whitepaper', 'Retail', 'Facebook post', 'Instagram post', 'Twitter post', 'LinkedIn post', 'App'],
+    sourceDefinitions : ['google', 'facebook', 'twitter', 'linkedin', 'editorial', 'print', 'pdf', 'package', 'instagram', 'app'],
+    sourceDefinitions2 : ['google', 'facebook', 'twitter', 'linkedin', 'editorial', 'print', 'pdf', 'package', 'instagram', 'app']
 
   }])
 
@@ -42,6 +53,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     try {
     const payload = {
       mediumDefinitions: data.value[0].mediumDefinitions,
+      placementDefinitions: data.value[0].placementDefinitions,
       clientId: clientId
     }
     // Save to database
@@ -59,6 +71,25 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     }
   }
 
+
+  // Add Placement definition to list (pinia)
+  function addPlacementDefinition(longItem, shortItem) {
+    const normalizedLongItem = toProperCase(longItem)
+    const normalizedShortItem = shortItem.toUpperCase()
+    data.value[0].sourceDefinitions2.push( normalizedLongItem, normalizedShortItem )
+    inputPlacementLong.value = ''
+    inputPlacementShort.value = ''
+
+  }
+
+  // Remove Placement definition from list (pinia)
+  function removePlacementDefinition(item) {
+    const index = data.value[0].placementDefinitions.indexOf(item)
+    if (index !== -1) {
+      data.value[0].placementDefinitions.splice(index, 1)
+    }
+  }
+
   // Add medium definition to list (pinia)
   function addMediumDefinition(newItem) {
     const normalizedItem = newItem
@@ -72,8 +103,12 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       .replace(/\\/g, '-')
       .replace(/\./g, '-')
       .toLowerCase()
-    data.value[0].mediumDefinitions.push( normalizedItem )
-    input.value = ''
+    if (newItem.length !== 0) {
+      data.value[0].mediumDefinitions.push( normalizedItem )
+      inputMedium.value = ''
+    } else {
+      console.error('Cannot add an empty item')
+    }
   }
 
   // Remove medium definition from list (pinia)
@@ -84,7 +119,54 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     }
   }
 
+  // Add Source definition to list (pinia)
+  function addSourceDefinition(newItem) {
+    const normalizedItem = newItem
+      .replace(/\s+/g, '-')
+      .replace(/š/g, 's')
+      .replace(/ž/g, 'z')
+      .replace(/č/g, 'c')
+      .replace(/ć/g, 'c')
+      .replace(/_/g, '-')
+      .replace(/\//g, '-')
+      .replace(/\\/g, '-')
+      .replace(/\./g, '-')
+      .toLowerCase()
+    if (newItem.length !== 0) {
+      data.value[0].sourceDefinitions.push( normalizedItem )
+      inputSource.value = ''
+    } else {
+      console.error('Cannot add an empty item')
+    }
 
-    return { data, isSaved, isLoading, input, saveDefinitions, getDefinitions, addMediumDefinition, removeMediumDefinition }
+  }
+
+  // Remove Source definition from list (pinia)
+  function removeSourceDefinition(item) {
+    const index = data.value[0].sourceDefinitions.indexOf(item)
+    if (index !== -1) {
+      data.value[0].sourceDefinitions.splice(index, 1)
+    }
+  }
+
+
+
+    return {
+      data,
+      isSaved,
+      isLoading,
+      inputPlacementLong,
+      inputPlacementShort,
+      inputMedium,
+      inputSource,
+      saveDefinitions,
+      getDefinitions,
+      addMediumDefinition,
+      removeMediumDefinition,
+      addSourceDefinition,
+      removeSourceDefinition,
+      addPlacementDefinition,
+      removePlacementDefinition
+    }
   })
 
