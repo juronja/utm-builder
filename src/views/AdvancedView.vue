@@ -7,12 +7,15 @@ import { useDefinitionsStore } from '@/stores/definitions';
 const definitions = useDefinitionsStore()
 
 const url = ref('')
-const campaign = ref('')
-const medium = ref('')
+const placement = ref('')
+const country = ref('')
 const source = ref('')
+const campaignName = ref('')
+const campaignType = ref('')
+const campaignId = ref('')
 const content = ref('')
 const term = ref('')
-const campaignId = ref('')
+const medium = ref('')
 
 const isCopied = ref(false)
 const isCleared = ref(false)
@@ -20,8 +23,8 @@ const isCleared = ref(false)
 let clientId = localStorage.getItem('clientId')
 
 // Make UTM tags logic
-const compParam = computed(() => { if (campaign.value == '') { return '' } else { if (url.value.includes('?')) { return '&' } else { return '?' } } })
-const compCampaign = computed(() => { if (campaign.value == '') { return '' } else { return 'utm_campaign=' + campaign.value } })
+const compParam = computed(() => { if (campaignName.value == '') { return '' } else { if (url.value.includes('?')) { return '&' } else { return '?' } } })
+const compCampaign = computed(() => { if (campaignName.value == '') { return '' } else { return 'utm_campaign=' + campaign.value } })
 const compMedium = computed(() => { if (medium.value == '') { return '' } else { return '&utm_medium=' + medium.value } })
 const compSource = computed(() => { if (source.value == '') { return '' } else { return '&utm_source=' + source.value } })
 const compContent = computed(() => { if (content.value == '') { return '' } else { return '&utm_content=' + content.value } })
@@ -41,11 +44,13 @@ const compTags = computed(() => { return (compParam.value + compCampaign.value +
 })
 const compTaggedUrl = computed(() => { return url.value + compTags.value })
 
+// Make Name Syntax logic
+const compPlacement = computed(() => { return placement.value })
 
 // Clear content
 function clearAll() {
   url.value = ''
-  campaign.value = ''
+  campaignName.value = ''
   medium.value = ''
   source.value = ''
   content.value = ''
@@ -97,39 +102,55 @@ async function toClipboardAndSave() {
         <input type="url" name="Destination URL" v-model="url" id="utm-url">
       </div>
       <div class="row col-40">
+        <label for="utm-channel">Placement channel*</label>
+        <input type="text" v-model="source" id="utm-channel" />
+      </div>
+      <div class="row col-60">
         <label for="utm-campaign">Campaign name*</label>
         <input type="text" v-model="campaign" id="utm-campaign" />
       </div>
+      <div class="row col-40">
+        <label for="utm-source">Source*</label>
+        <input type="text" v-model="source" id="utm-source" />
+      </div>
       <div class="row col-20">
-        <label for="utm-medium">Medium*</label>
-        <select v-model="medium" id="utm-medium">
+        <label for="utm-campaign-type">Campaign Type</label>
+        <select v-model="medium" id="utm-campaign-type">
           <option v-for="item in definitions.data[0].mediumDefinitions" :key="item">
             {{ item }}
           </option>
         </select>
       </div>
-      <div class="row col-40">
-        <label for="utm-source">Placement channel*</label>
-        <input type="text" v-model="source" id="utm-source" />
+      <div class="row col-20">
+        <label for="utm-campaignId">Campaign ID</label>
+        <input type="text" v-model="campaignId" id="utm-campaignId" />
       </div>
-      <div class="row col-40">
+      <div class="row col-20">
+        <label for="utm-country">Country</label>
+        <input type="text" v-model="campaign" id="utm-country" />
+      </div>
+      <div class="row col-50">
         <label for="utm-content">Content</label>
         <input type="text" v-model="content" id="utm-content" />
       </div>
-      <div class="row col-30">
+      <div class="row col-50">
         <label for="utm-term">Term</label>
         <input type="text" v-model="term" id="utm-term" />
-      </div>
-      <div class="row col-30">
-        <label for="utm-campaignId">Campaign ID</label>
-        <input type="text" v-model="campaignId" id="utm-campaignId" />
       </div>
       <p>* Required</p>
     </div>
     <hr>
     <div class="output-box">
-      <div class="url-output">
+      <h3>Tagged URL</h3>
+      <div class="output">
         <p> {{ compTaggedUrl ? compTaggedUrl : 'Fill the fields above to make a tagged URL here ...' }} </p>
+        <!-- add copy validation on the button -->
+        <button @click="clearAll"> {{ isCleared ? 'Cleared!' : 'Clear' }} </button>
+        <button @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
+      </div>
+      <h3>Campaign name suggestion</h3>
+      <div class="output">
+        <p> {{ compTaggedUrl ? compPlacement : 'Fill the fields above to make a Campaign name suggestion ...' }} </p>
         <!-- add copy validation on the button -->
         <button @click="clearAll"> {{ isCleared ? 'Cleared!' : 'Clear' }} </button>
         <button @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
@@ -189,34 +210,9 @@ button {
   padding-bottom: calc(var(--gutter-y)* .5);
 }
 
-.col-100 {
-  flex: 0 0 auto;
-  width: 100%;
-}
-
-.col-50 {
-  flex: 0 0 auto;
-  width: 50%;
-}
-
-.col-40 {
-  flex: 0 0 auto;
-  width: 40%;
-}
-
-.col-30 {
-  flex: 0 0 auto;
-  width: 30%;
-}
-
-.col-20 {
-  flex: 0 0 auto;
-  width: 20%;
-}
-
 /* Responsive layout */
 @media screen and (max-width: 480px) {
-  .col-50, .col-40, .col-30, .col-20 {
+  .col-50, .col-60, .col-40, .col-30, .col-20 {
     width: 100%;
     margin-top: 0;
   }
@@ -231,7 +227,7 @@ label {
   padding: 0 calc(var(--gutter-x)* .5);
 }
 
-.url-output {
+.output {
   display: flex;
   align-items: center;
   min-height: 4rem;
@@ -245,7 +241,7 @@ label {
   font-size: 0.75rem;
 }
 
-.url-output p {
+.output p {
   box-sizing: border-box;
   width: 100%;
   margin-right: 0.75rem;
