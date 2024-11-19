@@ -8,11 +8,11 @@ const definitions = useDefinitionsStore()
 
 const url = ref('')
 const placement = ref('')
-const country = ref('')
-const source = ref('')
 const campaignName = ref('')
 const campaignType = ref('')
 const campaignId = ref('')
+const source = ref('')
+const country = ref('')
 const content = ref('')
 const term = ref('')
 const medium = ref('')
@@ -24,7 +24,7 @@ let clientId = localStorage.getItem('clientId')
 
 // Make UTM tags logic
 const compParam = computed(() => { if (campaignName.value == '') { return '' } else { if (url.value.includes('?')) { return '&' } else { return '?' } } })
-const compCampaign = computed(() => { if (campaignName.value == '') { return '' } else { return 'utm_campaign=' + campaign.value } })
+const compCampaign = computed(() => { if (campaignName.value == '') { return '' } else { return 'utm_campaign=' + campaignName.value } })
 const compMedium = computed(() => { if (medium.value == '') { return '' } else { return '&utm_medium=' + medium.value } })
 const compSource = computed(() => { if (source.value == '') { return '' } else { return '&utm_source=' + source.value } })
 const compContent = computed(() => { if (content.value == '') { return '' } else { return '&utm_content=' + content.value } })
@@ -95,7 +95,7 @@ async function toClipboardAndSave() {
 
 <template>
   <div class="section-box">
-      <h2>Advanced tagging</h2>
+      <h1>Advanced tagging</h1>
     <div class="builder">
       <div class="row col-100">
         <label for="utm-url">Destination URL*</label>
@@ -141,14 +141,14 @@ async function toClipboardAndSave() {
     </div>
     <hr>
     <div class="output-box">
-      <h3>Tagged URL</h3>
+      <h2>Tagged URL</h2>
       <div class="output">
         <p> {{ compTaggedUrl ? compTaggedUrl : 'Fill the fields above to make a tagged URL here ...' }} </p>
         <!-- add copy validation on the button -->
         <button @click="clearAll"> {{ isCleared ? 'Cleared!' : 'Clear' }} </button>
         <button @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
       </div>
-      <h3>Campaign name suggestion</h3>
+      <h2>Campaign name suggestion</h2>
       <div class="output">
         <p> {{ compTaggedUrl ? compPlacement : 'Fill the fields above to make a Campaign name suggestion ...' }} </p>
         <!-- add copy validation on the button -->
@@ -188,7 +188,7 @@ button {
   margin: 0 0 0 0.5rem;
 }
 
-.section-box h2 {
+.section-box h1 {
   padding: 0 calc(var(--gutter-x)* .5);
 }
 
