@@ -11,17 +11,14 @@ onBeforeMount( () => {
 </script>
 
 <template>
-  <h2>Settings</h2>
+  <h1>Settings</h1>
+  <h2>Definitions</h2>
   <div class="wrapper">
     <div class="column section-box placement">
-      <h3>Placement channel pairs</h3>
-      <div class="input-row multi-input">
-        <div class="input-box-placement">
-          <input class="input-col-60" v-model="definitions.inputPlacementLong" @keyup.enter="definitions.addPlacementDefinition(definitions.inputPlacementLong)" type="text" name="Add Placement Long Option" id="add-placement-long">
-          <i class="bi bi-link margin-left-right"></i>
-          <input class="input-col-30 margin-top" v-model="definitions.inputPlacementShort" @keyup.enter="definitions.addPlacementDefinition(definitions.inputPlacementShort)" type="text" name="Add Placement Short Option" id="add-placement-short">
-        </div>
-        <button class="add-item-placement margin-left" @click="definitions.addPlacementDefinition(definitions.inputPlacementLong, definitions.inputPlacementShort)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+      <h3>Placement channels</h3>
+      <div class="input-row">
+        <input class="input-box-normal" v-model="definitions.inputPlacementLong" @keyup.enter="definitions.addPlacementDefinition(definitions.inputPlacementLong)" type="text" name="Add Placement Long Option" id="add-placement-long">
+        <button class="add-item-normal margin-left" @click="definitions.addPlacementDefinition(definitions.inputPlacementLong, definitions.inputPlacementShort)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <!-- <hr> -->
       <div class="definitions-row">
@@ -30,7 +27,7 @@ onBeforeMount( () => {
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data[0].sourceDefinitions2.sort()" :key="item">
+            <li v-for="item in definitions.data[0].placementDefinitions.sort()" :key="item">
               {{ item }}
               <span class="tag-del" @click="definitions.removePlacementDefinition(item)">x</span>
             </li>
@@ -83,7 +80,18 @@ onBeforeMount( () => {
     </div>
   </div>
   <div class="save-btn section-gap">
-    <button @click="definitions.saveDefinitions">{{ definitions.isSaved ? 'Saved!' : 'Save' }}</button>
+    <button @click="definitions.saveDefinitions">{{ definitions.isSaved ? 'Saved!' : 'Save definitions' }}</button>
+  </div>
+  <h2 class="section-gap">Connection logic</h2>
+  <div class="connection-box section-box">
+    <h3>Your connections</h3>
+    <div class="connection-row">
+      <i class="bi bi-link margin-left-right"></i>
+      <input class="input-col-30" v-model="definitions.inputPlacementShort" type="text" name="Placement Short" id="placement-short">
+    </div>
+  </div>
+  <div class="save-btn section-gap">
+    <button @click="definitions.saveDefinitions">{{ definitions.isSaved ? 'Saved!' : 'Save connections' }}</button>
   </div>
 
 </template>
@@ -92,7 +100,7 @@ onBeforeMount( () => {
 
 .wrapper {
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto;
   grid-auto-rows: auto;
   gap: 0.75rem;
 
@@ -103,15 +111,15 @@ onBeforeMount( () => {
 
 /* Grid system */
 .placement {
-  grid-area: 1 / 1 / span 2 / span 2;
+  grid-area: 1 / 1 / span 2 / span 1;
 }
 
 .medium {
-  grid-area: 1 / 3 / span 1 / span 1;
+  grid-area: 1 / 2 / span 1 / span 1;
 }
 
 .source {
-  grid-area: 2 / 3 / span 1 / span 1;
+  grid-area: 2 / 2 / span 1 / span 1;
 }
 
 
@@ -121,6 +129,17 @@ onBeforeMount( () => {
   flex-wrap: wrap;
   flex: 0 0 auto;
   padding: calc(var(--gutter-x)* .5);
+}
+
+.connection-box {
+  padding: calc(var(--gutter-x)* .5);
+}
+
+.connection-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* flex: 0 0 auto; */
 }
 
 .input-row {
@@ -194,7 +213,8 @@ ul li {
 .tag-del {
   padding: 0.075rem 0.3rem;
   margin-left: 0.4rem;
-  background-color: var(--color-danger);
+  color: var(--color-danger);
+  background-color: var(--color-section-background);
   border-radius: 0.25rem;
 }
 
@@ -215,31 +235,12 @@ input, select {
 }
 
 .input-box-normal {
-  width: 80%;
+  width: 70%;
 }
 
 .add-item-normal {
-  width: 30%;
+  width: 35%;
 }
-
-.input-box-placement {
-  width: 84%;
-}
-
-.add-item-placement {
-  width: 16%;
-}
-
-.input-col-60 {
-  flex: 0 0 auto;
-  width: 65%;
-}
-
-.input-col-30 {
-  flex: 0 0 auto;
-  width: 30%;
-}
-
 
 /* Responsive layout */
 @media screen and (max-width: 480px) {
@@ -267,38 +268,11 @@ input, select {
     margin-left: 0.3rem;
   }
 
-
-  .input-col-60 {
-    flex: 0 0 auto;
-    width: 60%;
-  }
-
-  .input-col-30 {
-    flex: 0 0 auto;
-    width: 30%;
-  }
-
-  .multi-input {
-    display: flex;
-    flex-direction: column;
-  }
-
   .input-box-normal {
     width: 60%;
   }
   .add-item-normal {
     width: 45%;
-  }
-
-  .input-box-placement {
-    /* display: flex;
-    flex-direction: column; */
-    width: 100%;
-  }
-
-  .add-item-placement {
-    margin-top: 0.5rem;
-    width: 100%;
   }
 
 }
