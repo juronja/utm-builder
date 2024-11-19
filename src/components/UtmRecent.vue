@@ -13,7 +13,7 @@ onBeforeMount( () => {
 
 <template>
   <div>
-    <h2>Recently copied URLs</h2>
+    <h1>Recently copied URLs</h1>
     <div class="recent-box">
       <div v-if="recentUrls.data.length <= 0" class="url-recent">
         <p>No tagged URLs just yet, make some ...</p>

@@ -91,7 +91,7 @@ async function toClipboardAndSave() {
 
 <template>
   <div class="section-box">
-      <h2>Manual tagging</h2>
+      <h1>Manual tagging</h1>
     <div class="builder">
       <div class="row col-100">
         <label for="utm-url">Destination URL*</label>
@@ -170,7 +170,7 @@ button {
   border-radius: 0.25rem;
 }
 
-.section-box h2 {
+.section-box h1 {
   padding: 0 calc(var(--gutter-x)* .5);
 }
 

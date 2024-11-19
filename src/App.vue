@@ -26,8 +26,7 @@ onBeforeMount( async () => {
 <template>
   <header>
     <div class="logo">
-      <img alt="UTM Builder logo" src="@/assets/logo.svg" width="43" height="43" />
-      <h1>UTM Builder</h1>
+      <img alt="UTM Builder logo" src="@/assets/logo.svg" width="300" height="45" />
     </div>
   <!-- <div class="navbar">
     <Transition mode="out-in" name="slide-up">
@@ -35,11 +34,14 @@ onBeforeMount( async () => {
       <button v-else-if="tagState === 'manual'" @click="tagState = 'convention'" class="btn-tag">manual</button>
     </Transition>
     </div> -->
-    <nav>
+    <div class="navigation">
+      <i alt="Menu" class="bi bi-list"></i>
+      <nav>
         <RouterLink to="/manual" title="Manual">Manual</RouterLink>
         <RouterLink to="/advanced" title="Advanced">Advanced</RouterLink>
         <RouterLink to="/settings" title="Settings"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
-    </nav>
+      </nav>
+    </div>
   </header>
   <main>
     <RouterView />
@@ -53,17 +55,26 @@ onBeforeMount( async () => {
 
 .logo {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   width: 60%;
 }
 
-nav {
+.navigation {
   display: flex;
   justify-content: flex-end;
-  font-size: 1.5rem;
   align-items: center;
+  font-size: 2rem;
   width: 40%;
+}
+
+.bi-list {
+  display: none;
+  padding: 0 1rem;
+}
+
+nav {
+  display: flex;
+  font-size: 1.25rem;
 }
 
 nav a {
@@ -103,9 +114,19 @@ nav a:first-of-type {
   .logo {
     width: 80%;
   }
-  nav {
+
+  .navigation {
     width: 20%;
   }
+
+  nav {
+    display: none;
+  }
+
+  .bi-list {
+    display: flex;
+  }
+
 }
 
 
