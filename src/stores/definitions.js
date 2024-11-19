@@ -20,8 +20,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   const dataDefault = ref([{
     mediumDefinitions : ['affiliate', 'banner', 'content-text', 'cpc', 'direct', 'display', 'email', 'referral', 'social'],
     placementDefinitions : ['Google Search', 'Google Banners', 'Google Gmail', 'Google YouTube', 'Facebook', 'Direct buy - banner', 'Direct buy - editorial', 'Email', 'Twitter', 'LinkedIn', 'Blog', 'Affiliate', 'Referral', 'Influencer', 'Offline print', 'Whitepaper', 'Retail', 'Facebook post', 'Instagram post', 'Twitter post', 'LinkedIn post', 'App'],
-    sourceDefinitions : ['google', 'facebook', 'twitter', 'linkedin', 'editorial', 'print', 'pdf', 'package', 'instagram', 'app'],
-    sourceDefinitions2 : ['google', 'facebook', 'twitter', 'linkedin', 'editorial', 'print', 'pdf', 'package', 'instagram', 'app']
+    sourceDefinitions : ['google', 'facebook', 'twitter', 'linkedin', 'editorial', 'print', 'pdf', 'package', 'instagram', 'app']
 
   }])
 
