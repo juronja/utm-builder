@@ -1,18 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import UtmRecent from '@/components/UtmRecent.vue'
 import { useDefinitionsStore } from '@/stores/definitions';
 
 // States
 const definitions = useDefinitionsStore()
 
-const url = ref('')
-const placement = ref('')
-const campaignName = ref('')
-const campaignType = ref('')
 const campaignId = ref('')
-const source = ref('')
-const country = ref('')
 const content = ref('')
 const term = ref('')
 const medium = ref('')
@@ -22,11 +16,12 @@ const isCleared = ref(false)
 
 let clientId = localStorage.getItem('clientId')
 
+
 // Make UTM tags logic
-const compParam = computed(() => { if (campaignName.value == '') { return '' } else { if (url.value.includes('?')) { return '&' } else { return '?' } } })
-const compCampaign = computed(() => { if (campaignName.value == '') { return '' } else { return 'utm_campaign=' + campaignName.value } })
+const compParam = computed(() => { if (definitions.inputPlacementLong !== '') { if (definitions.inputUrl.includes('?')) { return '&' } else { return '?' } } else { return '' } })
+const compCampaign = computed(() => { if (definitions.inputPlacementLong !== '' && definitions.inputCampaignName !== '' && definitions.inputCampaignType !== '' ) { return 'utm_campaign=' + definitions.inputCampaignName } else { return '' } })
 const compMedium = computed(() => { if (medium.value == '') { return '' } else { return '&utm_medium=' + medium.value } })
-const compSource = computed(() => { if (source.value == '') { return '' } else { return '&utm_source=' + source.value } })
+const compSource = computed(() => { if (definitions.inputSource == '') { return '' } else { return '&utm_source=' + definitions.inputSource } })
 const compContent = computed(() => { if (content.value == '') { return '' } else { return '&utm_content=' + content.value } })
 const compTerm = computed(() => { if (term.value == '') { return '' } else { return '&utm_term=' + term.value } })
 const compCampaignId = computed(() => { if (campaignId.value == '') { return '' } else { return '&utm_id=' + campaignId.value } })
@@ -42,10 +37,8 @@ const compTags = computed(() => { return (compParam.value + compCampaign.value +
   .replace(/\./g, '-')
   .toLowerCase()
 })
-const compTaggedUrl = computed(() => { return url.value + compTags.value })
+const compTaggedUrl = computed(() => { return definitions.inputUrl + compTags.value })
 
-// Make Name Syntax logic
-const compPlacement = computed(() => { return placement.value })
 
 // Clear content
 function clearAll() {
@@ -60,6 +53,12 @@ function clearAll() {
   console.log('Text cleared')
   setTimeout(() => { isCleared.value = false }, 1000)
 }
+
+// Get definitions on load
+// onBeforeMount( () => {
+//   definitions.getDefinitions()
+// })
+
 
 // Copy and save tagged URL
 async function toClipboardAndSave() {
@@ -99,24 +98,32 @@ async function toClipboardAndSave() {
     <div class="builder">
       <div class="row col-100">
         <label for="utm-url">Destination URL*</label>
-        <input type="url" name="Destination URL" v-model="url" id="utm-url">
+        <input type="url" name="Destination URL" v-model="definitions.inputUrl" id="utm-url">
       </div>
       <div class="row col-40">
-        <label for="utm-channel">Placement channel*</label>
-        <input type="text" v-model="source" id="utm-channel" />
+        <label for="utm-placement">Placement channel*</label>
+        <select v-model="definitions.inputPlacementLong" id="utm-placement">
+          <option v-for="item in definitions.data[0].placementLongDefinitions" :key="item">
+            {{ item }}
+          </option>
+        </select>
       </div>
       <div class="row col-60">
         <label for="utm-campaign">Campaign name*</label>
-        <input type="text" v-model="campaign" id="utm-campaign" />
-      </div>
-      <div class="row col-40">
-        <label for="utm-source">Source*</label>
-        <input type="text" v-model="source" id="utm-source" />
+        <input type="text" v-model="definitions.inputCampaignName" id="utm-campaign" />
       </div>
       <div class="row col-20">
         <label for="utm-campaign-type">Campaign Type</label>
-        <select v-model="medium" id="utm-campaign-type">
+        <select v-model="definitions.inputCampaignType" id="utm-campaign-type">
           <option v-for="item in definitions.data[0].mediumDefinitions" :key="item">
+            {{ item }}
+          </option>
+        </select>
+      </div>
+      <div class="row col-40">
+        <label for="utm-source">Source*</label>
+        <select v-model="definitions.inputSource" id="utm-source">
+          <option v-for="item in definitions.data[0].sourceDefinitions" :key="item">
             {{ item }}
           </option>
         </select>
@@ -127,7 +134,7 @@ async function toClipboardAndSave() {
       </div>
       <div class="row col-20">
         <label for="utm-country">Country</label>
-        <input type="text" v-model="campaign" id="utm-country" />
+        <input type="text" v-model="definitions.inputCountry" id="utm-country" />
       </div>
       <div class="row col-50">
         <label for="utm-content">Content</label>
