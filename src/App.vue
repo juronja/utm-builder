@@ -38,7 +38,7 @@ onBeforeMount( async () => {
       <i alt="Menu" class="bi bi-list"></i>
       <nav>
         <RouterLink to="/manual" title="Manual">Manual</RouterLink>
-        <RouterLink to="/advanced" title="Advanced">Advanced</RouterLink>
+        <RouterLink to="/guided" title="Guided">Guided</RouterLink>
         <RouterLink to="/settings" title="Settings"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
       </nav>
     </div>

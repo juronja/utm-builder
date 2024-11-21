@@ -10,12 +10,12 @@ const router = createRouter({
       component: ManualView,
     },
     {
-      path: '/advanced',
-      name: 'advanced',
+      path: '/guided',
+      name: 'guided',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AdvancedView.vue'),
+      component: () => import('../views/GuidedView.vue'),
     },
     {
       path: '/settings',
