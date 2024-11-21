@@ -94,7 +94,7 @@ async function toClipboardAndSave() {
 
 <template>
   <div class="section-box">
-      <h1>Advanced tagging</h1>
+      <h1>Guided tagging</h1>
     <div class="builder">
       <div class="row col-100">
         <label for="utm-url">Destination URL*</label>
