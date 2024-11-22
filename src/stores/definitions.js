@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import {countries} from 'i18n-iso-countries'
 
@@ -7,21 +7,64 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   const isSaved = ref(false)
   const isLoading = ref(false)
 
+  // Guided inputs
   const inputUrl = ref('')
   const inputCampaignName = ref('')
+  const inputCampaignType = ref('')
+  const inputCampaignId = ref('')
   const inputPlacementLong = ref('')
   const inputPlacementShort = ref('')
   const inputMedium = ref('')
   const inputSource = ref('')
-  const inputCampaignType = ref('')
-  const inputContentCreative = ref('')
-  const inputBannerSize = ref('')
+  const inputContent = ref('')
+  const inputTerm = ref('')
   const inputCountry = ref('')
+
+  // Definition inputs
+  const inputDefCampaignType = ref('')
+  const inputDefPlacementLong = ref('')
+  const inputDefPlacementShort = ref('')
+  const inputDefMedium = ref('')
+  const inputDefSource = ref('')
+  const inputDefContentCreative = ref('')
+  const inputDefBannerSize = ref('')
+
 
   function toProperCase(string) {
     return string.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase())
   }
 
+  // Make UTM tags logic
+  const compCampaign = computed(() => {
+    if (inputPlacementLong.value == '' && inputCampaignName.value == '' && inputCampaignType.value == '' ) {
+        return ''
+      } else {
+        if (inputCampaignType.value == '') {
+          return 'utm_campaign=' + inputCampaignName.value
+        } else {
+          return `utm_campaign=${inputCampaignName.value} (${inputCampaignType.value})`
+        }
+      }
+    })
+  const compSource = computed(() => { if (inputSource.value == '') { return '' } else { return '&utm_source=' + inputSource.value } })
+  const compContent = computed(() => { if (inputContent.value == '') { return '' } else { return '&utm_content=' + inputContent.value } })
+  const compTerm = computed(() => { if (inputTerm.value == '') { return '' } else { return '&utm_term=' + inputTerm.value } })
+  const compCampaignId = computed(() => { if (inputCampaignId.value == '') { return '' } else { return '&utm_id=' + inputCampaignId.value } })
+
+  const compTags = computed(() => { return (compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value + compCampaignId.value)
+    .replace(/\s+/g, '+')
+    .replace(/š/g, 's')
+    .replace(/ž/g, 'z')
+    .replace(/č/g, 'c')
+    .replace(/ć/g, 'c')
+    .replace(/_/g, '-')
+    .replace(/\//g, '-')
+    .replace(/\\/g, '-')
+    .replace(/\./g, '-')
+    .toLowerCase()
+  })
+  const compParam = computed(() => { if (compCampaign.value !== '') { if (inputUrl.value.includes('?')) { return '&' } else { return '?' } } else { return '' } })
+  const compMedium = computed(() => { if (inputMedium.value == '') { return '' } else { return '&utm_medium=' + inputMedium.value } })
 
   // All definitions
   const data = ref([{ }])
@@ -92,7 +135,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     const normalizedItem = toProperCase(newItem)
     if (newItem.length !== 0) {
       data.value[0].placementLongDefinitions.push( normalizedItem )
-      inputPlacementLong.value = ''
+      inputDefPlacementLong.value = ''
     } else {
       console.error('Cannot add an empty item')
     }
@@ -111,7 +154,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     const normalizedItem = newItem.toUpperCase()
     if (newItem.length !== 0) {
       data.value[0].placementShortDefinitions.push( normalizedItem )
-      inputPlacementShort.value = ''
+      inputDefPlacementShort.value = ''
     } else {
       console.error('Cannot add an empty item')
     }
@@ -140,7 +183,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       .toLowerCase()
     if (newItem.length !== 0) {
       data.value[0].mediumDefinitions.push( normalizedItem )
-      inputMedium.value = ''
+      inputDefMedium.value = ''
     } else {
       console.error('Cannot add an empty item')
     }
@@ -168,7 +211,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       .toLowerCase()
     if (newItem.length !== 0) {
       data.value[0].sourceDefinitions.push( normalizedItem )
-      inputSource.value = ''
+      inputDefSource.value = ''
     } else {
       console.error('Cannot add an empty item')
     }
@@ -187,7 +230,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     const normalizedItem = newItem.toUpperCase()
     if (newItem.length !== 0) {
       data.value[0].campaignTypeDefinitions.push( normalizedItem )
-      inputCampaignType.value = ''
+      inputDefCampaignType.value = ''
     } else {
       console.error('Cannot add an empty item')
     }
@@ -216,7 +259,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     .toLowerCase()
   if (newItem.length !== 0) {
       data.value[0].contentCreativesDefinitions.push( normalizedItem )
-      inputContentCreative.value = ''
+      inputDefContentCreative.value = ''
     } else {
       console.error('Cannot add an empty item')
     }
@@ -228,7 +271,6 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       data.value[0].contentCreativesDefinitions.splice(index, 1)
     }
   }
-
 
   // Banner Size definition
   function addBannerSizeDefinition(newItem) {
@@ -245,7 +287,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     .toLowerCase()
   if (newItem.length !== 0) {
       data.value[0].bannerSizeDefinitions.push( normalizedItem )
-      inputBannerSize.value = ''
+      inputDefBannerSize.value = ''
     } else {
       console.error('Cannot add an empty item')
     }
@@ -267,12 +309,22 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       inputPlacementLong,
       inputPlacementShort,
       inputCampaignName,
+      inputCampaignId,
+      inputCampaignType,
       inputMedium,
       inputSource,
-      inputCampaignType,
-      inputContentCreative,
-      inputBannerSize,
+      inputContent,
+      inputTerm,
       inputCountry,
+      inputDefCampaignType,
+      inputDefPlacementLong,
+      inputDefPlacementShort,
+      inputDefMedium,
+      inputDefSource,
+      inputDefContentCreative,
+      inputDefBannerSize,
+      compParam,
+      compTags,
       saveDefinitions,
       getDefinitions,
       addMediumDefinition,

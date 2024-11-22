@@ -20,8 +20,8 @@ onBeforeMount( () => {
     <div class="column section-box placement-long">
       <h3>Placement Channels</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputPlacementLong" @keyup.enter="definitions.addPlacementLongDefinition(definitions.inputPlacementLong)" type="text" name="Add Placement Long Option" id="add-placement-long">
-        <button class="add-item-normal margin-left" @click="definitions.addPlacementLongDefinition(definitions.inputPlacementLong)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefPlacementLong" @keyup.enter="definitions.addPlacementLongDefinition(definitions.inputDefPlacementLong)" type="text" name="Add Placement Long Option" id="add-placement-long">
+        <button class="add-item-normal margin-left" @click="definitions.addPlacementLongDefinition(definitions.inputDefPlacementLong)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="definitions.isLoading">
@@ -40,8 +40,8 @@ onBeforeMount( () => {
     <div class="column section-box placement-short">
       <h3>Placement Channels Short</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputPlacementShort" @keyup.enter="definitions.addPlacementShortDefinition(definitions.inputPlacementShort)" type="text" name="Add Placement Short Option" id="add-placement-short">
-        <button class="add-item-normal margin-left" @click="definitions.addPlacementShortDefinition(definitions.inputPlacementShort)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefPlacementShort" @keyup.enter="definitions.addPlacementShortDefinition(definitions.inputDefPlacementShort)" type="text" name="Add Placement Short Option" id="add-placement-short">
+        <button class="add-item-normal margin-left" @click="definitions.addPlacementShortDefinition(definitions.inputDefPlacementShort)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="definitions.isLoading">
@@ -61,8 +61,8 @@ onBeforeMount( () => {
       <h3>Medium</h3>
       <div>
         <div class="input-row">
-          <input class="input-box-normal" v-model="definitions.inputMedium" @keyup.enter="definitions.addMediumDefinition(definitions.inputMedium)" type="text" name="Add Medium Option" id="add-medium">
-          <button class="add-item-normal margin-left" @click="definitions.addMediumDefinition(definitions.inputMedium)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+          <input class="input-box-normal" v-model="definitions.inputDefMedium" @keyup.enter="definitions.addMediumDefinition(definitions.inputDefMedium)" type="text" name="Add Medium Option" id="add-medium">
+          <button class="add-item-normal margin-left" @click="definitions.addMediumDefinition(definitions.inputDefMedium)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
         </div>
         <div class="definitions-row">
           <div v-if="definitions.isLoading">
@@ -82,8 +82,8 @@ onBeforeMount( () => {
     <div class="column section-box source">
       <h3>Source</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputSource" @keyup.enter="definitions.addSourceDefinition(definitions.inputSource)" type="text" name="Add Source Option" id="add-source">
-        <button class="add-item-normal margin-left" @click="definitions.addSourceDefinition(definitions.inputSource)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefSource" @keyup.enter="definitions.addSourceDefinition(definitions.inputDefSource)" type="text" name="Add Source Option" id="add-source">
+        <button class="add-item-normal margin-left" @click="definitions.addSourceDefinition(definitions.inputDefSource)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="definitions.isLoading">
@@ -102,8 +102,8 @@ onBeforeMount( () => {
     <div class="column section-box campaign-type">
       <h3>Campaign Type</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputCampaignType" @keyup.enter="definitions.addCampaignTypeDefinition(definitions.inputCampaignType)" type="text" name="Add Campaign Type Option" id="add-campaign-type">
-        <button class="add-item-normal margin-left" @click="definitions.addCampaignTypeDefinition(definitions.inputCampaignType)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefCampaignType" @keyup.enter="definitions.addCampaignTypeDefinition(definitions.inputDefCampaignType)" type="text" name="Add Campaign Type Option" id="add-campaign-type">
+        <button class="add-item-normal margin-left" @click="definitions.addCampaignTypeDefinition(definitions.inputDefCampaignType)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <!-- <hr> -->
       <div class="definitions-row">
@@ -124,8 +124,8 @@ onBeforeMount( () => {
       <h3>Content Creative</h3>
       <div>
         <div class="input-row">
-          <input class="input-box-normal" v-model="definitions.inputContentCreative" @keyup.enter="definitions.addContentCreativeDefinition(definitions.inputContentCreative)" type="text" name="Add Content Creative Option" id="add-content-creative">
-          <button class="add-item-normal margin-left" @click="definitions.addContentCreativeDefinition(definitions.inputContentCreative)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+          <input class="input-box-normal" v-model="definitions.inputDefContentCreative" @keyup.enter="definitions.addContentCreativeDefinition(definitions.inputDefContentCreative)" type="text" name="Add Content Creative Option" id="add-content-creative">
+          <button class="add-item-normal margin-left" @click="definitions.addContentCreativeDefinition(definitions.inputDefContentCreative)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
         </div>
         <div class="definitions-row">
           <div v-if="definitions.isLoading">
@@ -145,8 +145,8 @@ onBeforeMount( () => {
     <div class="column section-box banner-size">
       <h3>Banner Size</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputBannerSize" @keyup.enter="definitions.addBannerSizeDefinition(definitions.inputBannerSize)" type="text" name="Add Banner Size Option" id="add-banner-size">
-        <button class="add-item-normal margin-left" @click="definitions.addBannerSizeDefinition(definitions.inputBannerSize)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefBannerSize" @keyup.enter="definitions.addBannerSizeDefinition(definitions.inputDefBannerSize)" type="text" name="Add Banner Size Option" id="add-banner-size">
+        <button class="add-item-normal margin-left" @click="definitions.addBannerSizeDefinition(definitions.inputDefBannerSize)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="definitions.isLoading">
@@ -170,6 +170,7 @@ onBeforeMount( () => {
   <div class="link-box section-box">
     <h3>Your links</h3>
     <div class="link-row">
+      <p>IF</p>
       <div class="link-column ">
         <label for="link-placement">Placement channel</label>
         <select v-model="linkDefinitions.inputLinkPlacementLong" id="link-placement">
@@ -179,7 +180,7 @@ onBeforeMount( () => {
         </select>
       </div>
       <div>
-        <i class="bi bi-link margin-left-right link-column"></i>
+        <p>THEN</p>
       </div>
       <div class="link-column">
         <label for="link-placement-short">Placement channel short</label>
@@ -289,6 +290,12 @@ onBeforeMount( () => {
   flex-wrap: wrap;
   align-items: flex-end;
   /* flex: 0 0 auto; */
+}
+
+.link-row p {
+  font-size: 1.2rem;
+  margin: 0 0.75rem;
+  color: var(--color-primary);
 }
 
 .link-column {
