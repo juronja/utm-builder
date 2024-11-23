@@ -9,6 +9,7 @@ const linkDefinitions = useLinkDefinitionsStore()
 // Get definitions on load
 onBeforeMount( () => {
   definitions.getDefinitions()
+  linkDefinitions.getLinkDefinitions()
 })
 
 </script>
@@ -29,7 +30,7 @@ onBeforeMount( () => {
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data[0].placementLongDefinitions.sort()" :key="item">
+            <li v-for="item in definitions.data.placementLongDefinitions.sort()" :key="item">
               {{ item }}
               <span class="tag-del" @click="definitions.removePlacementLongDefinition(item)">x</span>
             </li>
@@ -49,7 +50,7 @@ onBeforeMount( () => {
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data[0].placementShortDefinitions.sort()" :key="item">
+            <li v-for="item in definitions.data.placementShortDefinitions.sort()" :key="item">
               {{ item }}
               <span class="tag-del" @click="definitions.removePlacementShortDefinition(item)">x</span>
             </li>
@@ -70,7 +71,7 @@ onBeforeMount( () => {
           </div>
           <div v-else>
             <ul>
-              <li v-for="item in definitions.data[0].mediumDefinitions.sort()" :key="item">
+              <li v-for="item in definitions.data.mediumDefinitions.sort()" :key="item">
                 {{ item }}
                 <span class="tag-del" @click="definitions.removeMediumDefinition(item)">x</span>
               </li>
@@ -91,7 +92,7 @@ onBeforeMount( () => {
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data[0].sourceDefinitions.sort()" :key="item">
+            <li v-for="item in definitions.data.sourceDefinitions.sort()" :key="item">
               {{ item }}
               <span class="tag-del" @click="definitions.removeSourceDefinition(item)">x</span>
             </li>
@@ -112,7 +113,7 @@ onBeforeMount( () => {
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data[0].campaignTypeDefinitions.sort()" :key="item">
+            <li v-for="item in definitions.data.campaignTypeDefinitions.sort()" :key="item">
               {{ item }}
               <span class="tag-del" @click="definitions.removeCampaignTypeDefinition(item)">x</span>
             </li>
@@ -133,7 +134,7 @@ onBeforeMount( () => {
           </div>
           <div v-else>
             <ul>
-              <li v-for="item in definitions.data[0].contentCreativesDefinitions.sort()" :key="item">
+              <li v-for="item in definitions.data.contentCreativesDefinitions.sort()" :key="item">
                 {{ item }}
                 <span class="tag-del" @click="definitions.removeContentCreativeDefinition(item)">x</span>
               </li>
@@ -154,7 +155,7 @@ onBeforeMount( () => {
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data[0].bannerSizeDefinitions.sort()" :key="item">
+            <li v-for="item in definitions.data.bannerSizeDefinitions.sort()" :key="item">
               {{ item }}
               <span class="tag-del" @click="definitions.removeBannerSizeDefinition(item)">x</span>
             </li>
@@ -171,51 +172,52 @@ onBeforeMount( () => {
     <h3>Your links</h3>
     <div class="link-row">
       <p>IF</p>
-      <div class="link-column ">
+      <div class="link-column">
         <label for="link-placement">Placement channel</label>
         <select v-model="linkDefinitions.inputLinkPlacementLong" id="link-placement">
-          <option v-for="item in definitions.data[0].placementLongDefinitions" :key="item">
+          <option selected value></option>
+          <option v-for="item in definitions.data.placementLongDefinitions" :key="item">
             {{ item }}
           </option>
         </select>
       </div>
-      <div>
-        <p>THEN</p>
-      </div>
+      <p>THEN</p>
       <div class="link-column">
-        <label for="link-placement-short">Placement channel short</label>
+        <label for="link-placement-short">short</label>
         <select v-model="linkDefinitions.inputLinkPlacementShort" id="link-placement-short">
-          <option v-for="item in definitions.data[0].placementShortDefinitions" :key="item">
+          <option selected value></option>
+          <option v-for="item in definitions.data.placementShortDefinitions" :key="item">
             {{ item }}
           </option>
         </select>
       </div>
-      <div>
+      <div class="col">
         <i class="bi bi-link margin-left-right link-column"></i>
       </div>
       <div class="link-column">
         <label for="link-medium">Medium</label>
         <select v-model="linkDefinitions.inputLinkMedium" id="link-medium">
-          <option v-for="item in definitions.data[0].mediumDefinitions" :key="item">
+          <option selected value></option>
+          <option v-for="item in definitions.data.mediumDefinitions" :key="item">
             {{ item }}
           </option>
         </select>
       </div>
-      <div class="link-column">
-        <button class="add-item-normal margin-left" @click="definitions.addBannerSizeDefinition(definitions.inputBannerSize)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+      <div class="link-column col-30">
+        <button class="add-item-link margin-left" @click="linkDefinitions.saveLinkDefinition(linkDefinitions.compLinkDefinitionsId)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
 
     </div>
-    <div>{{ linkDefinitions.compLinkDefinitions }}</div>
+    <div>{{ linkDefinitions.compLinkDefinitionsId }}</div>
     <div class="link-definitions-row">
       <div v-if="linkDefinitions.isLoading">
         Loading definitions ...
       </div>
       <div v-else>
         <ul>
-          <li v-for="item in definitions.data[0].bannerSizeDefinitions.sort()" :key="item">
-            {{ item }}
-            <span class="tag-del" @click="definitions.removeBannerSizeDefinition(item)">x</span>
+          <li v-for="item in linkDefinitions.data" :key="item">
+            {{ item._id }}
+            <span class="tag-del" @click="linkDefinitions.removeLinkDefinition(item)">x</span>
           </li>
         </ul>
       </div>
@@ -223,7 +225,7 @@ onBeforeMount( () => {
 
   </div>
   <div class="save-btn section-gap">
-    <button @click="definitions.saveDefinitions">{{ linkDefinitions.isSaved ? 'Saved!' : 'Save links' }}</button>
+    <!-- <button @click="linkDefinitions.saveDefinitions">{{ linkDefinitions.isSaved ? 'Saved!' : 'Save links' }}</button> -->
   </div>
 
 
@@ -311,15 +313,6 @@ onBeforeMount( () => {
   font-size: 2rem;
 }
 
-.link-definitions-row {
-  /* font-size: 0.75rem; */
-  margin-top: 1rem;
-  /* background-color: var(--color-input-background);
-  border: 1px solid var(--color-border);
-  border-radius: 0.25rem; */
-}
-
-
 .input-row {
   display: flex;
   flex-direction: row;
@@ -344,6 +337,14 @@ onBeforeMount( () => {
   /* min-height: 3rem; */
   /* max-height: 6rem; */
   /* overflow-y: auto; adds scrollbar */
+  background-color: var(--color-input-background);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+}
+
+.link-definitions-row {
+  font-size: 0.75rem;
+  margin-top: 1rem;
   background-color: var(--color-input-background);
   border: 1px solid var(--color-border);
   border-radius: 0.25rem;
@@ -421,22 +422,44 @@ input, select {
   width: 35%;
 }
 
+.add-item-link {
+  width: 35%;
+}
+
+
 /* Responsive layout */
 @media screen and (max-width: 480px) {
   .wrapper {
     grid-template-columns: auto;
   }
 
-  .placement {
-  grid-area: 1 / 1 / span 1 / span 1;
+  /* Grid system */
+  .placement-long {
+    grid-area: 1 / 1 / span 1 / span 1;
   }
 
-  .medium {
+  .placement-short {
     grid-area: 2 / 1 / span 1 / span 1;
   }
 
-  .source {
+  .campaign-type {
     grid-area: 3 / 1 / span 1 / span 1;
+  }
+
+  .medium {
+    grid-area: 4 / 1 / span 1 / span 1;
+  }
+
+  .source {
+    grid-area: 5 / 1/ span 1 / span 1;
+  }
+
+  .content-creative {
+    grid-area: 6 / 1 / span 1 / span 1;
+  }
+
+  .banner-size {
+    grid-area: 7 / 1 / span 1 / span 1;
   }
 
   .margin-left-right {
@@ -450,9 +473,24 @@ input, select {
   .input-box-normal {
     width: 60%;
   }
+
   .add-item-normal {
     width: 45%;
   }
+
+  .link-row {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .add-item-link {
+    margin-top: 1.5rem;
+    align-items: center;
+    width: 100%;
+  }
+
 
 }
 
