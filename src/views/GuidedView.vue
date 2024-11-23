@@ -79,7 +79,7 @@ async function toClipboardAndSave() {
         <label for="utm-placement">Placement channel*</label>
         <select v-model="definitions.inputPlacementLong" id="utm-placement">
           <option selected value></option>
-          <option v-for="item in definitions.data[0].placementLongDefinitions" :key="item">
+          <option v-for="item in definitions.data.placementLongDefinitions" :key="item">
             {{ item }}
           </option>
         </select>
@@ -92,7 +92,7 @@ async function toClipboardAndSave() {
         <label for="utm-campaign-type">Campaign Type</label>
         <select v-model="definitions.inputCampaignType" id="utm-campaign-type">
           <option selected value></option>
-          <option v-for="item in definitions.data[0].campaignTypeDefinitions" :key="item">
+          <option v-for="item in definitions.data.campaignTypeDefinitions" :key="item">
             {{ item }}
           </option>
         </select>
@@ -101,7 +101,7 @@ async function toClipboardAndSave() {
         <label for="utm-source">Source*</label>
         <select v-model="definitions.inputSource" id="utm-source">
           <option selected value></option>
-          <option v-for="item in definitions.data[0].sourceDefinitions" :key="item">
+          <option v-for="item in definitions.data.sourceDefinitions" :key="item">
             {{ item }}
           </option>
         </select>
