@@ -139,10 +139,22 @@ hr {
   width: 30%;
 }
 
+.col-25 {
+  flex: 0 0 auto;
+  width: 25%;
+}
+
 .col-20 {
   flex: 0 0 auto;
   width: 20%;
 }
+
+.col-10 {
+  flex: 0 0 auto;
+  width: 10%;
+}
+
+
 
 /* Transitions */
 
