@@ -29,6 +29,11 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   const inputDefContentCreative = ref('')
   const inputDefBannerSize = ref('')
 
+  const inputLinkPlacementLong = ref('')
+  const inputLinkPlacementShort = ref('')
+  const inputLinkMedium = ref('')
+
+
 
   function toProperCase(string) {
     return string.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase())
@@ -67,8 +72,18 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     .toLowerCase()
   })
 
+  // Make Link Name Syntax logic
+  const compLinkDefinitionsId = computed(() => {
+    if (inputLinkPlacementLong.value == 0 || inputLinkPlacementShort.value == 0 || inputLinkMedium.value == 0) {
+      return ''
+    } else {
+      return (`${inputLinkPlacementLong.value}-${inputLinkPlacementShort.value}-${inputLinkMedium.value}`).replace(/\s+/g, '-').toLowerCase()
+    }
+  })
+
+
   // All definitions
-  const data = ref({ })
+  const data = ref({})
   const dataDefault = ref({
     mediumDefinitions : ['affiliate', 'banner', 'content-text', 'display', 'email', 'mobile', 'ppc', 'referral', 'sms', 'social'],
     placementLongDefinitions : ['Google Search', 'Google Display', 'Google Gmail', 'Google YouTube', 'Facebook', 'Direct Buy - Banner', 'Direct buy - Editorial', 'Email', 'Twitter', 'LinkedIn', 'Blog', 'Affiliate', 'Referral', 'Offline Print', 'Whitepaper', 'Retail', 'Facebook Post', 'Instagram Post', 'Twitter Post', 'LinkedIn Post', 'TikTok Post', 'App'],
@@ -76,8 +91,13 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     sourceDefinitions : ['google', 'facebook', 'twitter', 'linkedin', 'editorial', 'print', 'pdf', 'package', 'instagram', 'app'],
     campaignTypeDefinitions : ['BRAND', 'DSA', 'RLSA', 'REM', 'TRAFFIC', 'PPE', 'REACH', 'VIDEO', 'LEAD', 'WEBSITE VISITORS', 'INTERESTS', 'LOOKALIKE', 'ENGAGED WITH FB', 'ENGAGED WITH IG', 'ALL WOMEN'],
     contentCreativesDefinitions : ['slideshow', 'video', 'single photo', 'carousel', 'story', 'post', 'bio'],
-    bannerSizeDefinitions : ['970X250px', '320x100px', '728x90px', '300x400px', '500x500px', '300x250px', '160x600px', '320x480px', '300x50px', '320x50px', '960x180px', '170x600px', '940x200px', '600x300px', '750x300px', 'native-direct', '1080x608px', '670x200px']
+    bannerSizeDefinitions : ['970X250px', '320x100px', '728x90px', '300x400px', '500x500px', '300x250px', '160x600px', '320x480px', '300x50px', '320x50px', '960x180px', '170x600px', '940x200px', '600x300px', '750x300px', 'native-direct', '1080x608px', '670x200px'],
+    linkDefinitions : [
+      { _id: 'google-search-(s)-ppc', long: 'Google Search', short : '(S)', medium : 'ppc' },
+      { _id: 'google-display-(gdn)-banner', long: 'Google Display', short : '(GDN)', medium : 'display' }
+    ]
   })
+
 
   // Get All Definitions
   async function getDefinitions() {
@@ -113,6 +133,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       campaignTypeDefinitions: data.value.campaignTypeDefinitions,
       contentCreativesDefinitions: data.value.contentCreativesDefinitions,
       bannerSizeDefinitions: data.value.bannerSizeDefinitions,
+      linkDefinitions: data.value.linkDefinitions,
       clientId: clientId
     }
     // Save to database
@@ -125,179 +146,86 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       }
     })
     // return await response.json() // not sure if I need this return
-    } catch(err) {
-      console.error(err)
+    } catch(error) {
+      console.error(error)
     }
   }
 
+  // Add definition
+  function addDefinition(newItem, key) {
+    const normalizedItem = newItem
+      .replace(/\s+/g, '-')
+      .replace(/š/g, 's')
+      .replace(/ž/g, 'z')
+      .replace(/č/g, 'c')
+      .replace(/ć/g, 'c')
+      .replace(/_/g, '-')
+      .replace(/\//g, '-')
+      .replace(/\\/g, '-')
+      .replace(/\./g, '-')
+      .toLowerCase()
+    if (newItem.length !== 0) {
+      key.push( normalizedItem )
+    } else {
+      console.error('Cannot add an empty item')
+    }
+  }
 
-  // Placement Long definition
-  function addPlacementLongDefinition(newItem) {
+  // Add Proper Case definition
+  function addDefinitionProperCase(newItem, key) {
     const normalizedItem = toProperCase(newItem)
     if (newItem.length !== 0) {
-      data.value.placementLongDefinitions.push( normalizedItem )
-      inputDefPlacementLong.value = ''
+      key.push( normalizedItem )
     } else {
       console.error('Cannot add an empty item')
     }
 
   }
-  function removePlacementLongDefinition(item) {
-    const index = data.value.placementLongDefinitions.indexOf(item)
-    if (index !== -1) {
-      data.value.placementLongDefinitions.splice(index, 1)
-    }
-  }
 
-
-  // Placement Short definition
-  function addPlacementShortDefinition(newItem) {
+  // Add Upper Case definition
+  function addDefinitionUpperCase(newItem, key) {
     const normalizedItem = newItem.toUpperCase()
     if (newItem.length !== 0) {
-      data.value.placementShortDefinitions.push( normalizedItem )
-      inputDefPlacementShort.value = ''
+      key.push( normalizedItem )
     } else {
       console.error('Cannot add an empty item')
     }
 
   }
-  function removePlacementShortDefinition(item) {
-    const index = data.value.placementShortDefinitions.indexOf(item)
+
+  // Remove Definition
+  function removeDefinition(item, key) {
+    const index = key.indexOf(item)
     if (index !== -1) {
-      data.value.placementShortDefinitions.splice(index, 1)
+      key.splice(index, 1)
     }
   }
 
+  // Add Link Definition
+  async function addLinkDefinition(newItem) {
 
-  // Medium definition
-  function addMediumDefinition(newItem) {
-    const normalizedItem = newItem
-      .replace(/\s+/g, '-')
-      .replace(/š/g, 's')
-      .replace(/ž/g, 'z')
-      .replace(/č/g, 'c')
-      .replace(/ć/g, 'c')
-      .replace(/_/g, '-')
-      .replace(/\//g, '-')
-      .replace(/\\/g, '-')
-      .replace(/\./g, '-')
-      .toLowerCase()
+    // Add to list
     if (newItem.length !== 0) {
-      data.value.mediumDefinitions.push( normalizedItem )
-      inputDefMedium.value = ''
+      data.value.linkDefinitions.push({
+        _id: newItem,
+        long: inputLinkPlacementLong.value,
+        short: inputLinkPlacementShort.value,
+        medium: inputLinkMedium.value,
+        })
     } else {
       console.error('Cannot add an empty item')
     }
+    inputLinkPlacementLong.value = ''
+    inputLinkPlacementShort.value = ''
+    inputLinkMedium.value = ''
+
   }
-  function removeMediumDefinition(item) {
-    const index = data.value.mediumDefinitions.indexOf(item)
+
+  // Remove Link Definition
+  function removeLinkDefinition(item) {
+    const index = data.value.linkDefinitions.indexOf(item)
     if (index !== -1) {
-      data.value.mediumDefinitions.splice(index, 1)
-    }
-  }
-
-
-  // Source definition
-  function addSourceDefinition(newItem) {
-    const normalizedItem = newItem
-      .replace(/\s+/g, '-')
-      .replace(/š/g, 's')
-      .replace(/ž/g, 'z')
-      .replace(/č/g, 'c')
-      .replace(/ć/g, 'c')
-      .replace(/_/g, '-')
-      .replace(/\//g, '-')
-      .replace(/\\/g, '-')
-      .replace(/\./g, '-')
-      .toLowerCase()
-    if (newItem.length !== 0) {
-      data.value.sourceDefinitions.push( normalizedItem )
-      inputDefSource.value = ''
-    } else {
-      console.error('Cannot add an empty item')
-    }
-
-  }
-  function removeSourceDefinition(item) {
-    const index = data.value.sourceDefinitions.indexOf(item)
-    if (index !== -1) {
-      data.value.sourceDefinitions.splice(index, 1)
-    }
-  }
-
-
-  // Campaign Type definition
-  function addCampaignTypeDefinition(newItem) {
-    const normalizedItem = newItem.toUpperCase()
-    if (newItem.length !== 0) {
-      data.value.campaignTypeDefinitions.push( normalizedItem )
-      inputDefCampaignType.value = ''
-    } else {
-      console.error('Cannot add an empty item')
-    }
-
-  }
-  function removeCampaignTypeDefinition(item) {
-    const index = data.value.campaignTypeDefinitions.indexOf(item)
-    if (index !== -1) {
-      data.value.campaignTypeDefinitions.splice(index, 1)
-    }
-  }
-
-
-  // Content Creative definition
-  function addContentCreativeDefinition(newItem) {
-    const normalizedItem = newItem
-    .replace(/\s+/g, '-')
-    .replace(/š/g, 's')
-    .replace(/ž/g, 'z')
-    .replace(/č/g, 'c')
-    .replace(/ć/g, 'c')
-    .replace(/_/g, '-')
-    .replace(/\//g, '-')
-    .replace(/\\/g, '-')
-    .replace(/\./g, '-')
-    .toLowerCase()
-  if (newItem.length !== 0) {
-      data.value.contentCreativesDefinitions.push( normalizedItem )
-      inputDefContentCreative.value = ''
-    } else {
-      console.error('Cannot add an empty item')
-    }
-
-  }
-  function removeContentCreativeDefinition(item) {
-    const index = data.value.contentCreativesDefinitions.indexOf(item)
-    if (index !== -1) {
-      data.value.contentCreativesDefinitions.splice(index, 1)
-    }
-  }
-
-  // Banner Size definition
-  function addBannerSizeDefinition(newItem) {
-    const normalizedItem = newItem
-    .replace(/\s+/g, '-')
-    .replace(/š/g, 's')
-    .replace(/ž/g, 'z')
-    .replace(/č/g, 'c')
-    .replace(/ć/g, 'c')
-    .replace(/_/g, '-')
-    .replace(/\//g, '-')
-    .replace(/\\/g, '-')
-    .replace(/\./g, '-')
-    .toLowerCase()
-  if (newItem.length !== 0) {
-      data.value.bannerSizeDefinitions.push( normalizedItem )
-      inputDefBannerSize.value = ''
-    } else {
-      console.error('Cannot add an empty item')
-    }
-
-  }
-  function removeBannerSizeDefinition(item) {
-    const index = data.value.bannerSizeDefinitions.indexOf(item)
-    if (index !== -1) {
-      data.value.bannerSizeDefinitions.splice(index, 1)
+      data.value.linkDefinitions.splice(index, 1)
     }
   }
 
@@ -326,22 +254,18 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     inputDefBannerSize,
     compParam,
     compTags,
+    inputLinkPlacementLong,
+    inputLinkPlacementShort,
+    inputLinkMedium,
+    compLinkDefinitionsId,
     saveDefinitions,
     getDefinitions,
-    addMediumDefinition,
-    removeMediumDefinition,
-    addSourceDefinition,
-    removeSourceDefinition,
-    addPlacementLongDefinition,
-    removePlacementLongDefinition,
-    addPlacementShortDefinition,
-    removePlacementShortDefinition,
-    addCampaignTypeDefinition,
-    removeCampaignTypeDefinition,
-    addContentCreativeDefinition,
-    removeContentCreativeDefinition,
-    addBannerSizeDefinition,
-    removeBannerSizeDefinition
+    addDefinition,
+    addDefinitionProperCase,
+    addDefinitionUpperCase,
+    removeDefinition,
+    addLinkDefinition,
+    removeLinkDefinition,
   }
 })
 

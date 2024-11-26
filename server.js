@@ -122,7 +122,6 @@ app.get('/api/users/:clientId/get-definitions', async (req, res) => {
     // get data from db
     const getDefinitions = await db.collection('definitions')
         .find({ clientId: clientId })
-        .project({ _id: 0 })
         .toArray()
     // Send a response to frontend
     res.json(getDefinitions)
@@ -135,62 +134,6 @@ app.get('/api/users/:clientId/get-definitions', async (req, res) => {
   }
 
 })
-
-
-// POST Link Definitions endpoint
-app.post('/api/users/:clientId/save-link-definition', async (req, res) => {
-  const payload = req.body
-
-  // Connect to DB
-  await mongo.connect()
-  console.log('Connected to DB successfully')
-
-  // Save payload to DB with expiration time
-  try {
-    payload['createdAt'] = new Date()
-    await db.collection('definitions-link').updateOne({ _id: payload._id }, { $set: payload }, { upsert: true })
-    await db.collection('definitions-link').createIndex({createdAt: 1}, { expireAfterSeconds: 86400 })
-    // Send a response to frontend
-    res.json(payload)
-  } catch(error) {
-    if (error instanceof MongoServerError) {
-        console.error(`There is an error: ${error}`)
-    }
-    throw error
-  } finally {
-    // Disconnect
-    await mongo.close()
-    console.log('Disconnected from DB successfully')
-  }
-})
-
-// GET Link Definitions endpoint
-app.get('/api/users/:clientId/get-link-definitions', async (req, res) => {
-  const clientId = req.params.clientId
-
-  // Connect to DB
-  await mongo.connect()
-  console.log('Connected to DB successfully')
-
-  try {
-    // get data from db
-    const getDefinitions = await db.collection('definitions-link')
-        .find({ clientId: clientId })
-        .project({ _id: 0 })
-        .toArray()
-    // Send a response to frontend
-    res.json(getDefinitions)
-  } catch (error) {
-    console.error(error)
-  } finally {
-    // Disconnect
-    await mongo.close()
-    console.log('Disconnected from DB successfully')
-  }
-
-})
-
-
 
 
 // app.listen(3000, () => { console.log('Server is listening on port 3000') }) // replaced by ViteExpress

@@ -1,15 +1,12 @@
 <script setup>
 import { onBeforeMount } from 'vue'
 import { useDefinitionsStore } from '@/stores/definitions'
-import { useLinkDefinitionsStore } from '@/stores/definitions-link';
 
 const definitions = useDefinitionsStore()
-const linkDefinitions = useLinkDefinitionsStore()
 
 // Get definitions on load
 onBeforeMount( () => {
   definitions.getDefinitions()
-  linkDefinitions.getLinkDefinitions()
 })
 
 </script>
@@ -21,8 +18,8 @@ onBeforeMount( () => {
     <div class="column section-box placement-long">
       <h3>Placement Channels</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefPlacementLong" @keyup.enter="definitions.addPlacementLongDefinition(definitions.inputDefPlacementLong)" type="text" name="Add Placement Long Option" id="add-placement-long">
-        <button class="add-item-normal margin-left" @click="definitions.addPlacementLongDefinition(definitions.inputDefPlacementLong)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefPlacementLong" @keyup.enter="definitions.addDefinitionProperCase(definitions.inputDefPlacementLong, definitions.data.placementLongDefinitions); definitions.inputDefPlacementLong = ''" type="text" name="Add Placement Long Option" id="add-placement-long">
+        <button class="add-item-normal margin-left" @click="definitions.addDefinitionProperCase(definitions.inputDefPlacementLong, definitions.data.placementLongDefinitions); definitions.inputDefPlacementLong = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="definitions.isLoading">
@@ -32,7 +29,7 @@ onBeforeMount( () => {
           <ul>
             <li v-for="item in definitions.data.placementLongDefinitions.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removePlacementLongDefinition(item)">x</span>
+              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.placementLongDefinitions)">x</span>
             </li>
           </ul>
         </div>
@@ -41,8 +38,8 @@ onBeforeMount( () => {
     <div class="column section-box placement-short">
       <h3>Placement Channels Short</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefPlacementShort" @keyup.enter="definitions.addPlacementShortDefinition(definitions.inputDefPlacementShort)" type="text" name="Add Placement Short Option" id="add-placement-short">
-        <button class="add-item-normal margin-left" @click="definitions.addPlacementShortDefinition(definitions.inputDefPlacementShort)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefPlacementShort" @keyup.enter="definitions.addDefinitionUpperCase(definitions.inputDefPlacementShort, definitions.data.placementShortDefinitions); definitions.inputDefPlacementShort = ''" type="text" name="Add Placement Short Option" id="add-placement-short">
+        <button class="add-item-normal margin-left" @click="definitions.addDefinitionUpperCase(definitions.inputDefPlacementShort, definitions.data.placementShortDefinitions); definitions.inputDefPlacementShort = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="definitions.isLoading">
@@ -52,7 +49,7 @@ onBeforeMount( () => {
           <ul>
             <li v-for="item in definitions.data.placementShortDefinitions.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removePlacementShortDefinition(item)">x</span>
+              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.placementShortDefinitions)">x</span>
             </li>
           </ul>
         </div>
@@ -62,8 +59,8 @@ onBeforeMount( () => {
       <h3>Medium</h3>
       <div>
         <div class="input-row">
-          <input class="input-box-normal" v-model="definitions.inputDefMedium" @keyup.enter="definitions.addMediumDefinition(definitions.inputDefMedium)" type="text" name="Add Medium Option" id="add-medium">
-          <button class="add-item-normal margin-left" @click="definitions.addMediumDefinition(definitions.inputDefMedium)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+          <input class="input-box-normal" v-model="definitions.inputDefMedium" @keyup.enter="definitions.addDefinition(definitions.inputDefMedium, definitions.data.mediumDefinitions); definitions.inputDefMedium = ''" type="text" name="Add Medium Option" id="add-medium">
+          <button class="add-item-normal margin-left" @click="definitions.addDefinition(definitions.inputDefMedium, definitions.data.mediumDefinitions); definitions.inputDefMedium = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
         </div>
         <div class="definitions-row">
           <div v-if="definitions.isLoading">
@@ -73,7 +70,7 @@ onBeforeMount( () => {
             <ul>
               <li v-for="item in definitions.data.mediumDefinitions.sort()" :key="item">
                 {{ item }}
-                <span class="tag-del" @click="definitions.removeMediumDefinition(item)">x</span>
+                <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.mediumDefinitions)">x</span>
               </li>
             </ul>
           </div>
@@ -83,8 +80,8 @@ onBeforeMount( () => {
     <div class="column section-box source">
       <h3>Source</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefSource" @keyup.enter="definitions.addSourceDefinition(definitions.inputDefSource)" type="text" name="Add Source Option" id="add-source">
-        <button class="add-item-normal margin-left" @click="definitions.addSourceDefinition(definitions.inputDefSource)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefSource" @keyup.enter="definitions.addDefinition(definitions.inputDefSource, definitions.data.sourceDefinitions); definitions.inputDefSource = ''" type="text" name="Add Source Option" id="add-source">
+        <button class="add-item-normal margin-left" @click="definitions.addDefinition(definitions.inputDefSource, definitions.data.sourceDefinitions); definitions.inputDefSource = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="definitions.isLoading">
@@ -94,7 +91,7 @@ onBeforeMount( () => {
           <ul>
             <li v-for="item in definitions.data.sourceDefinitions.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removeSourceDefinition(item)">x</span>
+              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.sourceDefinitions)">x</span>
             </li>
           </ul>
         </div>
@@ -103,8 +100,8 @@ onBeforeMount( () => {
     <div class="column section-box campaign-type">
       <h3>Campaign Type</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefCampaignType" @keyup.enter="definitions.addCampaignTypeDefinition(definitions.inputDefCampaignType)" type="text" name="Add Campaign Type Option" id="add-campaign-type">
-        <button class="add-item-normal margin-left" @click="definitions.addCampaignTypeDefinition(definitions.inputDefCampaignType)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefCampaignType" @keyup.enter="definitions.addDefinitionUpperCase(definitions.inputDefCampaignType, definitions.data.campaignTypeDefinitions); definitions.inputDefCampaignType = ''" type="text" name="Add Campaign Type Option" id="add-campaign-type">
+        <button class="add-item-normal margin-left" @click="definitions.addDefinitionUpperCase(definitions.inputDefCampaignType, definitions.data.campaignTypeDefinitions); definitions.inputDefCampaignType = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <!-- <hr> -->
       <div class="definitions-row">
@@ -115,7 +112,7 @@ onBeforeMount( () => {
           <ul>
             <li v-for="item in definitions.data.campaignTypeDefinitions.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removeCampaignTypeDefinition(item)">x</span>
+              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.campaignTypeDefinitions)">x</span>
             </li>
           </ul>
         </div>
@@ -125,8 +122,8 @@ onBeforeMount( () => {
       <h3>Content Creative</h3>
       <div>
         <div class="input-row">
-          <input class="input-box-normal" v-model="definitions.inputDefContentCreative" @keyup.enter="definitions.addContentCreativeDefinition(definitions.inputDefContentCreative)" type="text" name="Add Content Creative Option" id="add-content-creative">
-          <button class="add-item-normal margin-left" @click="definitions.addContentCreativeDefinition(definitions.inputDefContentCreative)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+          <input class="input-box-normal" v-model="definitions.inputDefContentCreative" @keyup.enter="definitions.addDefinition(definitions.inputDefContentCreative, definitions.data.contentCreativesDefinitions); definitions.inputDefContentCreative = ''" type="text" name="Add Content Creative Option" id="add-content-creative">
+          <button class="add-item-normal margin-left" @click="definitions.addDefinition(definitions.inputDefContentCreative, definitions.data.contentCreativesDefinitions); definitions.inputDefContentCreative = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
         </div>
         <div class="definitions-row">
           <div v-if="definitions.isLoading">
@@ -136,7 +133,7 @@ onBeforeMount( () => {
             <ul>
               <li v-for="item in definitions.data.contentCreativesDefinitions.sort()" :key="item">
                 {{ item }}
-                <span class="tag-del" @click="definitions.removeContentCreativeDefinition(item)">x</span>
+                <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.contentCreativesDefinitions)">x</span>
               </li>
             </ul>
           </div>
@@ -146,8 +143,8 @@ onBeforeMount( () => {
     <div class="column section-box banner-size">
       <h3>Banner Size</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefBannerSize" @keyup.enter="definitions.addBannerSizeDefinition(definitions.inputDefBannerSize)" type="text" name="Add Banner Size Option" id="add-banner-size">
-        <button class="add-item-normal margin-left" @click="definitions.addBannerSizeDefinition(definitions.inputDefBannerSize)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="definitions.inputDefBannerSize" @keyup.enter="definitions.addDefinition(definitions.inputDefBannerSize, definitions.data.bannerSizeDefinitions); definitions.inputDefBannerSize = ''" type="text" name="Add Banner Size Option" id="add-banner-size">
+        <button class="add-item-normal margin-left" @click="definitions.addDefinition(definitions.inputDefBannerSize, definitions.data.bannerSizeDefinitions); definitions.inputDefBannerSize = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="definitions.isLoading">
@@ -157,15 +154,12 @@ onBeforeMount( () => {
           <ul>
             <li v-for="item in definitions.data.bannerSizeDefinitions.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removeBannerSizeDefinition(item)">x</span>
+              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.bannerSizeDefinitions)">x</span>
             </li>
           </ul>
         </div>
       </div>
     </div>
-  </div>
-  <div class="save-btn section-gap">
-    <button @click="definitions.saveDefinitions">{{ definitions.isSaved ? 'Saved!' : 'Save definitions' }}</button>
   </div>
   <h2 class="section-gap">Link definitions</h2>
   <div class="link-box section-box">
@@ -174,7 +168,7 @@ onBeforeMount( () => {
       <p>IF</p>
       <div class="link-column">
         <label for="link-placement">Placement channel</label>
-        <select v-model="linkDefinitions.inputLinkPlacementLong" id="link-placement">
+        <select v-model="definitions.inputLinkPlacementLong" id="link-placement">
           <option selected value></option>
           <option v-for="item in definitions.data.placementLongDefinitions" :key="item">
             {{ item }}
@@ -183,8 +177,8 @@ onBeforeMount( () => {
       </div>
       <p>THEN</p>
       <div class="link-column">
-        <label for="link-placement-short">short</label>
-        <select v-model="linkDefinitions.inputLinkPlacementShort" id="link-placement-short">
+        <label for="link-placement-short">Short</label>
+        <select v-model="definitions.inputLinkPlacementShort" id="link-placement-short">
           <option selected value></option>
           <option v-for="item in definitions.data.placementShortDefinitions" :key="item">
             {{ item }}
@@ -196,7 +190,7 @@ onBeforeMount( () => {
       </div>
       <div class="link-column">
         <label for="link-medium">Medium</label>
-        <select v-model="linkDefinitions.inputLinkMedium" id="link-medium">
+        <select v-model="definitions.inputLinkMedium" id="link-medium">
           <option selected value></option>
           <option v-for="item in definitions.data.mediumDefinitions" :key="item">
             {{ item }}
@@ -204,20 +198,19 @@ onBeforeMount( () => {
         </select>
       </div>
       <div class="link-column col-30">
-        <button class="add-item-link margin-left" @click="linkDefinitions.saveLinkDefinition(linkDefinitions.compLinkDefinitionsId)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <button class="add-item-link margin-left" @click="definitions.addLinkDefinition(definitions.compLinkDefinitionsId)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
 
     </div>
-    <div>{{ linkDefinitions.compLinkDefinitionsId }}</div>
     <div class="link-definitions-row">
-      <div v-if="linkDefinitions.isLoading">
+      <div v-if="definitions.isLoading">
         Loading definitions ...
       </div>
       <div v-else>
         <ul>
-          <li v-for="item in linkDefinitions.data" :key="item">
+          <li v-for="item in definitions.data.linkDefinitions" :key="item">
             {{ item._id }}
-            <span class="tag-del" @click="linkDefinitions.removeLinkDefinition(item)">x</span>
+            <span class="tag-del" @click="definitions.removeLinkDefinition(item)">x</span>
           </li>
         </ul>
       </div>
@@ -225,7 +218,7 @@ onBeforeMount( () => {
 
   </div>
   <div class="save-btn section-gap">
-    <!-- <button @click="linkDefinitions.saveDefinitions">{{ linkDefinitions.isSaved ? 'Saved!' : 'Save links' }}</button> -->
+    <button @click="definitions.saveDefinitions">{{ definitions.isSaved ? 'Saved!' : 'Save definitions' }}</button>
   </div>
 
 
