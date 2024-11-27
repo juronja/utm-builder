@@ -5,11 +5,10 @@ import { onBeforeMount } from 'vue'
 import { v4 as uuid } from 'uuid'
 
 let clientId = localStorage.getItem('clientId')
-
 const tagState = ref('convention')
 
 
-// Set ClientID
+// Set client ID on load
 onBeforeMount( async () => {
   try {
     if (!clientId) {
@@ -20,6 +19,7 @@ onBeforeMount( async () => {
     console.error(err)
   }
 })
+
 
 </script>
 
