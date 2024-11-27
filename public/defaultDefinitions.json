@@ -33,6 +33,7 @@
             "link": {
                 "items": [
                     { "_id": "google-search-(s)-ppc", "long": "Google Search", "short" : "(S)", "medium" : "ppc" },
+                    { "_id": "direct-buy---banner-(dbb)-banner", "long": "Direct Buy - Banner", "short" : "(DBB)", "medium" : "banner" },
                     { "_id": "google-display-(gdn)-banner", "long": "Google Display", "short" : "(GDN)", "medium" : "display" }
                 ],
                 "required": [true, "Required"]
