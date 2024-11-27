@@ -124,7 +124,7 @@ app.get('/api/users/:clientId/get-definitions', async (req, res) => {
         .find({ clientId: clientId })
         .toArray()
     // Send a response to frontend
-    res.json(getDefinitions)
+    res.json(getDefinitions) // Added zero fetches the first object in the array
   } catch (error) {
     console.error(error)
   } finally {

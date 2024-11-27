@@ -2,11 +2,11 @@
 import { onBeforeMount } from 'vue'
 import { useDefinitionsStore } from '@/stores/definitions'
 
-const definitions = useDefinitionsStore()
+const store = useDefinitionsStore()
 
-// Get definitions on load
+// Get definitions
 onBeforeMount( () => {
-  definitions.getDefinitions()
+  store.getDefinitions()
 })
 
 </script>
@@ -18,18 +18,18 @@ onBeforeMount( () => {
     <div class="column section-box placement-long">
       <h3>Placement Channels</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefPlacementLong" @keyup.enter="definitions.addDefinitionProperCase(definitions.inputDefPlacementLong, definitions.data.placementLongDefinitions); definitions.inputDefPlacementLong = ''" type="text" name="Add Placement Long Option" id="add-placement-long">
-        <button class="add-item-normal margin-left" @click="definitions.addDefinitionProperCase(definitions.inputDefPlacementLong, definitions.data.placementLongDefinitions); definitions.inputDefPlacementLong = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="store.inputDefPlacementLong" @keyup.enter="store.addDefinitionProperCase(store.inputDefPlacementLong, store.data[0].definitions.placementLong.items); store.inputDefPlacementLong = ''" type="text" name="Add Placement Long Option" id="add-placement-long">
+        <button class="add-item-normal margin-left" @click="store.addDefinitionProperCase(store.inputDefPlacementLong, store.data[0].definitions.placementLong.items); store.inputDefPlacementLong = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
-        <div v-if="definitions.isLoading">
+        <div v-if="store.isDataLoading">
           Loading definitions ...
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data.placementLongDefinitions.sort()" :key="item">
+            <li v-for="item in store.data[0].definitions.placementLong.items.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.placementLongDefinitions)">x</span>
+              <span class="tag-del" @click="store.removeDefinition(item, store.data[0].definitions.placementLong.items)">x</span>
             </li>
           </ul>
         </div>
@@ -38,18 +38,18 @@ onBeforeMount( () => {
     <div class="column section-box placement-short">
       <h3>Placement Channels Short</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefPlacementShort" @keyup.enter="definitions.addDefinitionUpperCase(definitions.inputDefPlacementShort, definitions.data.placementShortDefinitions); definitions.inputDefPlacementShort = ''" type="text" name="Add Placement Short Option" id="add-placement-short">
-        <button class="add-item-normal margin-left" @click="definitions.addDefinitionUpperCase(definitions.inputDefPlacementShort, definitions.data.placementShortDefinitions); definitions.inputDefPlacementShort = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="store.inputDefPlacementShort" @keyup.enter="store.addDefinitionUpperCase(store.inputDefPlacementShort, store.data[0].definitions.placementShort.items); store.inputDefPlacementShort = ''" type="text" name="Add Placement Short Option" id="add-placement-short">
+        <button class="add-item-normal margin-left" @click="store.addDefinitionUpperCase(store.inputDefPlacementShort, store.data[0].definitions.placementShort.items); store.inputDefPlacementShort = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
-        <div v-if="definitions.isLoading">
+        <div v-if="store.isDataLoading">
           Loading definitions ...
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data.placementShortDefinitions.sort()" :key="item">
+            <li v-for="item in store.data[0].definitions.placementShort.items.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.placementShortDefinitions)">x</span>
+              <span class="tag-del" @click="store.removeDefinition(item, store.data[0].definitions.placementShort.items)">x</span>
             </li>
           </ul>
         </div>
@@ -59,18 +59,18 @@ onBeforeMount( () => {
       <h3>Medium</h3>
       <div>
         <div class="input-row">
-          <input class="input-box-normal" v-model="definitions.inputDefMedium" @keyup.enter="definitions.addDefinition(definitions.inputDefMedium, definitions.data.mediumDefinitions); definitions.inputDefMedium = ''" type="text" name="Add Medium Option" id="add-medium">
-          <button class="add-item-normal margin-left" @click="definitions.addDefinition(definitions.inputDefMedium, definitions.data.mediumDefinitions); definitions.inputDefMedium = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+          <input class="input-box-normal" v-model="store.inputDefMedium" @keyup.enter="store.addDefinition(store.inputDefMedium, store.data[0].definitions.medium.items); store.inputDefMedium = ''" type="text" name="Add Medium Option" id="add-medium">
+          <button class="add-item-normal margin-left" @click="store.addDefinition(store.inputDefMedium, store.data[0].definitions.medium.items); store.inputDefMedium = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
         </div>
         <div class="definitions-row">
-          <div v-if="definitions.isLoading">
+          <div v-if="store.isDataLoading">
             Loading definitions ...
           </div>
           <div v-else>
             <ul>
-              <li v-for="item in definitions.data.mediumDefinitions.sort()" :key="item">
+              <li v-for="item in store.data[0].definitions.medium.items.sort()" :key="item">
                 {{ item }}
-                <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.mediumDefinitions)">x</span>
+                <span class="tag-del" @click="store.removeDefinition(item, store.data[0].definitions.medium.items)">x</span>
               </li>
             </ul>
           </div>
@@ -80,18 +80,18 @@ onBeforeMount( () => {
     <div class="column section-box source">
       <h3>Source</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefSource" @keyup.enter="definitions.addDefinition(definitions.inputDefSource, definitions.data.sourceDefinitions); definitions.inputDefSource = ''" type="text" name="Add Source Option" id="add-source">
-        <button class="add-item-normal margin-left" @click="definitions.addDefinition(definitions.inputDefSource, definitions.data.sourceDefinitions); definitions.inputDefSource = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="store.inputDefSource" @keyup.enter="store.addDefinition(store.inputDefSource, store.data[0].definitions.source.items); store.inputDefSource = ''" type="text" name="Add Source Option" id="add-source">
+        <button class="add-item-normal margin-left" @click="store.addDefinition(store.inputDefSource, store.data[0].definitions.source.items); store.inputDefSource = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
-        <div v-if="definitions.isLoading">
+        <div v-if="store.isDataLoading">
           Loading definitions ...
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data.sourceDefinitions.sort()" :key="item">
+            <li v-for="item in store.data[0].definitions.source.items.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.sourceDefinitions)">x</span>
+              <span class="tag-del" @click="store.removeDefinition(item, store.data[0].definitions.source.items)">x</span>
             </li>
           </ul>
         </div>
@@ -100,19 +100,18 @@ onBeforeMount( () => {
     <div class="column section-box campaign-type">
       <h3>Campaign Type</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefCampaignType" @keyup.enter="definitions.addDefinitionUpperCase(definitions.inputDefCampaignType, definitions.data.campaignTypeDefinitions); definitions.inputDefCampaignType = ''" type="text" name="Add Campaign Type Option" id="add-campaign-type">
-        <button class="add-item-normal margin-left" @click="definitions.addDefinitionUpperCase(definitions.inputDefCampaignType, definitions.data.campaignTypeDefinitions); definitions.inputDefCampaignType = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="store.inputDefCampaignType" @keyup.enter="store.addDefinitionUpperCase(store.inputDefCampaignType, store.data[0].definitions.campaignType.items); store.inputDefCampaignType = ''" type="text" name="Add Campaign Type Option" id="add-campaign-type">
+        <button class="add-item-normal margin-left" @click="store.addDefinitionUpperCase(store.inputDefCampaignType, store.data[0].definitions.campaignType.items); store.inputDefCampaignType = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
-      <!-- <hr> -->
       <div class="definitions-row">
-        <div v-if="definitions.isLoading">
+        <div v-if="store.isDataLoading">
           Loading definitions ...
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data.campaignTypeDefinitions.sort()" :key="item">
+            <li v-for="item in store.data[0].definitions.campaignType.items.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.campaignTypeDefinitions)">x</span>
+              <span class="tag-del" @click="store.removeDefinition(item, store.data[0].definitions.campaignType.items)">x</span>
             </li>
           </ul>
         </div>
@@ -122,18 +121,18 @@ onBeforeMount( () => {
       <h3>Content Creative</h3>
       <div>
         <div class="input-row">
-          <input class="input-box-normal" v-model="definitions.inputDefContentCreative" @keyup.enter="definitions.addDefinition(definitions.inputDefContentCreative, definitions.data.contentCreativesDefinitions); definitions.inputDefContentCreative = ''" type="text" name="Add Content Creative Option" id="add-content-creative">
-          <button class="add-item-normal margin-left" @click="definitions.addDefinition(definitions.inputDefContentCreative, definitions.data.contentCreativesDefinitions); definitions.inputDefContentCreative = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+          <input class="input-box-normal" v-model="store.inputDefContentCreative" @keyup.enter="store.addDefinition(store.inputDefContentCreative, store.data[0].definitions.contentCreative.items); store.inputDefContentCreative = ''" type="text" name="Add Content Creative Option" id="add-content-creative">
+          <button class="add-item-normal margin-left" @click="store.addDefinition(store.inputDefContentCreative, store.data[0].definitions.contentCreative.items); store.inputDefContentCreative = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
         </div>
         <div class="definitions-row">
-          <div v-if="definitions.isLoading">
+          <div v-if="store.isDataLoading">
             Loading definitions ...
           </div>
           <div v-else>
             <ul>
-              <li v-for="item in definitions.data.contentCreativesDefinitions.sort()" :key="item">
+              <li v-for="item in store.data[0].definitions.contentCreative.items.sort()" :key="item">
                 {{ item }}
-                <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.contentCreativesDefinitions)">x</span>
+                <span class="tag-del" @click="store.removeDefinition(item, store.data[0].definitions.contentCreative.items)">x</span>
               </li>
             </ul>
           </div>
@@ -143,23 +142,26 @@ onBeforeMount( () => {
     <div class="column section-box banner-size">
       <h3>Banner Size</h3>
       <div class="input-row">
-        <input class="input-box-normal" v-model="definitions.inputDefBannerSize" @keyup.enter="definitions.addDefinition(definitions.inputDefBannerSize, definitions.data.bannerSizeDefinitions); definitions.inputDefBannerSize = ''" type="text" name="Add Banner Size Option" id="add-banner-size">
-        <button class="add-item-normal margin-left" @click="definitions.addDefinition(definitions.inputDefBannerSize, definitions.data.bannerSizeDefinitions); definitions.inputDefBannerSize = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <input class="input-box-normal" v-model="store.inputDefBannerSize" @keyup.enter="store.addDefinition(store.inputDefBannerSize, store.data[0].definitions.bannerSize.items); store.inputDefBannerSize = ''" type="text" name="Add Banner Size Option" id="add-banner-size">
+        <button class="add-item-normal margin-left" @click="store.addDefinition(store.inputDefBannerSize, store.data[0].definitions.bannerSize.items); store.inputDefBannerSize = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
-        <div v-if="definitions.isLoading">
+        <div v-if="store.isDataLoading">
           Loading definitions ...
         </div>
         <div v-else>
           <ul>
-            <li v-for="item in definitions.data.bannerSizeDefinitions.sort()" :key="item">
+            <li v-for="item in store.data[0].definitions.bannerSize.items.sort()" :key="item">
               {{ item }}
-              <span class="tag-del" @click="definitions.removeDefinition(item, definitions.data.bannerSizeDefinitions)">x</span>
+              <span class="tag-del" @click="store.removeDefinition(item, store.data[0].definitions.bannerSize.items)">x</span>
             </li>
           </ul>
         </div>
       </div>
     </div>
+  </div>
+  <div class="link-definitions-row section-gap">
+    {{store.data[0]}}
   </div>
   <h2 class="section-gap">Link definitions</h2>
   <div class="link-box section-box">
@@ -168,9 +170,12 @@ onBeforeMount( () => {
       <p>IF</p>
       <div class="link-column">
         <label for="link-placement">Placement channel</label>
-        <select v-model="definitions.inputLinkPlacementLong" id="link-placement">
+        <select v-if="store.isDataLoading">
+          <option  disabled selected value >Loading definitions ...</option>
+        </select>
+        <select v-else v-model="store.inputLinkPlacementLong" id="link-placement">
           <option selected value></option>
-          <option v-for="item in definitions.data.placementLongDefinitions" :key="item">
+          <option v-for="item in store.data[0].definitions.placementLong.items" :key="item">
             {{ item }}
           </option>
         </select>
@@ -178,9 +183,12 @@ onBeforeMount( () => {
       <p>THEN</p>
       <div class="link-column">
         <label for="link-placement-short">Short</label>
-        <select v-model="definitions.inputLinkPlacementShort" id="link-placement-short">
+        <select v-if="store.isDataLoading">
+          <option  disabled selected value >Loading definitions ...</option>
+        </select>
+        <select v-else v-model="store.inputLinkPlacementShort" id="link-placement-short">
           <option selected value></option>
-          <option v-for="item in definitions.data.placementShortDefinitions" :key="item">
+          <option v-for="item in store.data[0].definitions.placementShort.items" :key="item">
             {{ item }}
           </option>
         </select>
@@ -190,35 +198,36 @@ onBeforeMount( () => {
       </div>
       <div class="link-column">
         <label for="link-medium">Medium</label>
-        <select v-model="definitions.inputLinkMedium" id="link-medium">
+        <select v-if="store.isDataLoading">
+          <option  disabled selected value >Loading definitions ...</option>
+        </select>
+        <select v-else v-model="store.inputLinkMedium" id="link-medium">
           <option selected value></option>
-          <option v-for="item in definitions.data.mediumDefinitions" :key="item">
+          <option v-for="item in store.data[0].definitions.medium.items" :key="item">
             {{ item }}
           </option>
         </select>
       </div>
       <div class="link-column col-30">
-        <button class="add-item-link margin-left" @click="definitions.addLinkDefinition(definitions.compLinkDefinitionsId)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <button class="add-item-link margin-left" @click="store.addLinkDefinition(store.compLinkDefinitionsId)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
-
     </div>
     <div class="link-definitions-row">
-      <div v-if="definitions.isLoading">
+      <div v-if="store.isDataLoading">
         Loading definitions ...
       </div>
       <div v-else>
         <ul>
-          <li v-for="item in definitions.data.linkDefinitions" :key="item">
+          <li v-for="item in store.data[0].definitions.link.items" :key="item">
             {{ item._id }}
-            <span class="tag-del" @click="definitions.removeLinkDefinition(item)">x</span>
+            <span class="tag-del" @click="store.removeLinkDefinition(item)">x</span>
           </li>
         </ul>
       </div>
     </div>
-
   </div>
   <div class="save-btn section-gap">
-    <button @click="definitions.saveDefinitions">{{ definitions.isSaved ? 'Saved!' : 'Save definitions' }}</button>
+    <button @click="store.save.items">{{ store.isSaved ? 'Saved!' : 'Save definitions' }}</button>
   </div>
 
 

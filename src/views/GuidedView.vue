@@ -3,8 +3,13 @@ import { ref, computed, onBeforeMount } from 'vue'
 import UtmRecent from '@/components/UtmRecent.vue'
 import { useDefinitionsStore } from '@/stores/definitions';
 
+// Get definitions
+onBeforeMount( () => {
+  store.getDefinitions()
+})
+
 // States
-const definitions = useDefinitionsStore()
+const store = useDefinitionsStore()
 
 const isCopied = ref(false)
 const isCleared = ref(false)
@@ -12,28 +17,22 @@ const isCleared = ref(false)
 let clientId = localStorage.getItem('clientId')
 
 
-const compTaggedUrl = computed(() => { return definitions.inputUrl + definitions.compParam + definitions.compTags })
+const compTaggedUrl = computed(() => { return store.inputUrl + store.compParam + store.compTags })
 
 
 // Clear content
 function clearAll() {
-  definitions.inputUrl = ''
-  definitions.inputCampaignName = ''
-  definitions.inputMedium = ''
-  definitions.inputSource = ''
-  definitions.inputContent = ''
-  definitions.inputTerm = ''
-  definitions.inputCampaignId = ''
+  store.inputUrl = ''
+  store.inputCampaignName = ''
+  store.inputMedium = ''
+  store.inputSource = ''
+  store.inputContent = ''
+  store.inputTerm = ''
+  store.inputCampaignId = ''
   isCleared.value = true
   console.log('Text cleared')
   setTimeout(() => { isCleared.value = false }, 1000)
 }
-
-// Get definitions on load
-onBeforeMount( () => {
-  definitions.getDefinitions()
-})
-
 
 // Copy and save tagged URL
 async function toClipboardAndSave() {
@@ -73,54 +72,63 @@ async function toClipboardAndSave() {
     <div class="builder">
       <div class="row col-100">
         <label for="utm-url">Destination URL*</label>
-        <input type="url" name="Destination URL" v-model="definitions.inputUrl" id="utm-url">
+        <input type="url" name="Destination URL" v-model="store.inputUrl" id="utm-url">
       </div>
       <div class="row col-40">
         <label for="utm-placement">Placement channel*</label>
-        <select v-model="definitions.inputPlacementLong" id="utm-placement">
+        <select v-if="store.isDataLoading">
+          <option  disabled selected value >Loading definitions ...</option>
+        </select>
+        <select v-else v-model="store.inputPlacementLong" id="utm-placement">
           <option selected value></option>
-          <option v-for="item in definitions.data.placementLongDefinitions" :key="item">
+          <option v-for="item in store.data[0].definitions.placementLong.items" :key="item">
             {{ item }}
           </option>
         </select>
       </div>
       <div class="row col-60">
         <label for="utm-campaign">Campaign name*</label>
-        <input type="text" v-model="definitions.inputCampaignName" id="utm-campaign" />
+        <input type="text" v-model="store.inputCampaignName" id="utm-campaign" />
       </div>
       <div class="row col-20">
         <label for="utm-campaign-type">Campaign Type</label>
-        <select v-model="definitions.inputCampaignType" id="utm-campaign-type">
+        <select v-if="store.isDataLoading">
+          <option  disabled selected value >Loading definitions ...</option>
+        </select>
+        <select v-else v-model="store.inputCampaignType" id="utm-campaign-type">
           <option selected value></option>
-          <option v-for="item in definitions.data.campaignTypeDefinitions" :key="item">
+          <option v-for="item in store.data[0].definitions.campaignType.items" :key="item">
             {{ item }}
           </option>
         </select>
       </div>
       <div class="row col-40">
         <label for="utm-source">Source*</label>
-        <select v-model="definitions.inputSource" id="utm-source">
+        <select v-if="store.isDataLoading">
+          <option  disabled selected value >Loading definitions ...</option>
+        </select>
+        <select v-else v-model="store.inputSource" id="utm-source">
           <option selected value></option>
-          <option v-for="item in definitions.data.sourceDefinitions" :key="item">
+          <option v-for="item in store.data[0].definitions.source.items" :key="item">
             {{ item }}
           </option>
         </select>
       </div>
       <div class="row col-20">
         <label for="utm-campaignId">Campaign ID</label>
-        <input type="text" v-model="definitions.inputCampaignId" id="utm-campaignId" />
+        <input type="text" v-model="store.inputCampaignId" id="utm-campaignId" />
       </div>
       <div class="row col-20">
         <label for="utm-country">Country</label>
-        <input type="text" v-model="definitions.inputCountry" id="utm-country" />
+        <input type="text" v-model="store.inputCountry" id="utm-country" />
       </div>
       <div class="row col-50">
         <label for="utm-content">Content</label>
-        <input type="text" v-model="definitions.inputContent" id="utm-content" />
+        <input type="text" v-model="store.inputContent" id="utm-content" />
       </div>
       <div class="row col-50">
         <label for="utm-term">Term</label>
-        <input type="text" v-model="definitions.inputTerm" id="utm-term" />
+        <input type="text" v-model="store.inputTerm" id="utm-term" />
       </div>
       <p>* Required</p>
     </div>

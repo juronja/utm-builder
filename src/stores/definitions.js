@@ -5,7 +5,8 @@ import {countries} from 'i18n-iso-countries'
 export const useDefinitionsStore = defineStore('utm-definitions', () => {
   let clientId = localStorage.getItem('clientId')
   const isSaved = ref(false)
-  const isLoading = ref(false)
+  const isDataLoading = ref(false)
+  const isDataError = ref('')
 
   // Guided inputs
   const inputUrl = ref('')
@@ -99,21 +100,29 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   })
 
 
+  console.log(data)
+
+
   // Get All Definitions
   async function getDefinitions() {
-    isLoading.value = true
+    isDataLoading.value = true
+
     try {
-      // Get from database
+      // Get data from database
       const response = await fetch(`api/users/${clientId}/get-definitions`)
       data.value = await response.json()
-      // Check if data is empty and assign default values if necessary
+
+      // Validate IF response IS empty..
       if (data.value.length === 0) {
-        data.value = dataDefault.value
+        // .. assign default values from json file instead
+        const getDefinitionsFromFile = await fetch('/defaultDefinitions.json')
+        data.value = await getDefinitionsFromFile.json()
       }
     } catch(error) {
+      // isDataError.value = error.stringify() // Validation for errors oyu can use inside html
       console.error("Error fetching definitions:", error)
     } finally {
-      isLoading.value = false
+      isDataLoading.value = false
     }
   }
 
@@ -233,7 +242,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   return {
     data,
     isSaved,
-    isLoading,
+    isDataLoading,
     inputUrl,
     inputPlacementLong,
     inputPlacementShort,
@@ -265,7 +274,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     addDefinitionUpperCase,
     removeDefinition,
     addLinkDefinition,
-    removeLinkDefinition,
+    removeLinkDefinition
   }
 })
 
