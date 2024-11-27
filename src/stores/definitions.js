@@ -34,6 +34,8 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   const inputLinkPlacementShort = ref('')
   const inputLinkMedium = ref('')
 
+  // All definitions
+  const data = ref({})
 
 
   function toProperCase(string) {
@@ -83,25 +85,6 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   })
 
 
-  // All definitions
-  const data = ref({})
-  const dataDefault = ref({
-    mediumDefinitions : ['affiliate', 'banner', 'content-text', 'display', 'email', 'mobile', 'ppc', 'referral', 'sms', 'social'],
-    placementLongDefinitions : ['Google Search', 'Google Display', 'Google Gmail', 'Google YouTube', 'Facebook', 'Direct Buy - Banner', 'Direct buy - Editorial', 'Email', 'Twitter', 'LinkedIn', 'Blog', 'Affiliate', 'Referral', 'Offline Print', 'Whitepaper', 'Retail', 'Facebook Post', 'Instagram Post', 'Twitter Post', 'LinkedIn Post', 'TikTok Post', 'App'],
-    placementShortDefinitions : ["(S)","(GDN)","(GSP)","(YT)","(FB)","(DBB)","(DBE)","(EML)","(TW)","(LI)","(BLG)","(AFF)","(REF)","(INF)","(OFP)","(WHP)","(RET)","(FBP)","(IGP)","(TWP)","(LIP)","(APP)"],
-    sourceDefinitions : ['google', 'facebook', 'twitter', 'linkedin', 'editorial', 'print', 'pdf', 'package', 'instagram', 'app'],
-    campaignTypeDefinitions : ['BRAND', 'DSA', 'RLSA', 'REM', 'TRAFFIC', 'PPE', 'REACH', 'VIDEO', 'LEAD', 'WEBSITE VISITORS', 'INTERESTS', 'LOOKALIKE', 'ENGAGED WITH FB', 'ENGAGED WITH IG', 'ALL WOMEN'],
-    contentCreativesDefinitions : ['slideshow', 'video', 'single photo', 'carousel', 'story', 'post', 'bio'],
-    bannerSizeDefinitions : ['970X250px', '320x100px', '728x90px', '300x400px', '500x500px', '300x250px', '160x600px', '320x480px', '300x50px', '320x50px', '960x180px', '170x600px', '940x200px', '600x300px', '750x300px', 'native-direct', '1080x608px', '670x200px'],
-    linkDefinitions : [
-      { _id: 'google-search-(s)-ppc', long: 'Google Search', short : '(S)', medium : 'ppc' },
-      { _id: 'google-display-(gdn)-banner', long: 'Google Display', short : '(GDN)', medium : 'display' }
-    ]
-  })
-
-
-  console.log(data)
-
 
   // Get All Definitions
   async function getDefinitions() {
@@ -134,16 +117,42 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
     try {
     const payload = {
-      _id: 'all-definitions',
-      mediumDefinitions: data.value.mediumDefinitions,
-      placementLongDefinitions: data.value.placementLongDefinitions,
-      placementShortDefinitions: data.value.placementShortDefinitions,
-      sourceDefinitions: data.value.sourceDefinitions,
-      campaignTypeDefinitions: data.value.campaignTypeDefinitions,
-      contentCreativesDefinitions: data.value.contentCreativesDefinitions,
-      bannerSizeDefinitions: data.value.bannerSizeDefinitions,
-      linkDefinitions: data.value.linkDefinitions,
-      clientId: clientId
+      _id: "userId",
+      clientId: clientId,
+      definitions: {
+        placementLong: {
+          items: data.value[0].definitions.placementLong.items,
+          required: data.value[0].definitions.placementLong.required
+        },
+        placementShort: {
+          items: data.value[0].definitions.placementShort.items,
+          required: data.value[0].definitions.placementShort.required
+        },
+        medium: {
+          items: data.value[0].definitions.medium.items,
+          required: data.value[0].definitions.medium.required
+        },
+        source: {
+          items: data.value[0].definitions.source.items,
+          required: data.value[0].definitions.source.required
+        },
+        campaignType: {
+          items: data.value[0].definitions.campaignType.items,
+          required: data.value[0].definitions.campaignType.required
+        },
+        contentCreative: {
+          items: data.value[0].definitions.contentCreative.items,
+          required: data.value[0].definitions.contentCreative.required
+        },
+        bannerSize: {
+          items: data.value[0].definitions.bannerSize.items,
+          required: data.value[0].definitions.bannerSize.required
+        },
+        link: {
+          items: data.value[0].definitions.link.items,
+          required: data.value[0].definitions.link.required
+        }
+      }
     }
     // Save to database
     await fetch(`api/users/${clientId}/save-definitions`, {
@@ -215,7 +224,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
     // Add to list
     if (newItem.length !== 0) {
-      data.value.linkDefinitions.push({
+      data.value[0].definitions.link.items.push({
         _id: newItem,
         long: inputLinkPlacementLong.value,
         short: inputLinkPlacementShort.value,
@@ -232,9 +241,9 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
   // Remove Link Definition
   function removeLinkDefinition(item) {
-    const index = data.value.linkDefinitions.indexOf(item)
+    const index = data.value[0].definitions.link.items.indexOf(item)
     if (index !== -1) {
-      data.value.linkDefinitions.splice(index, 1)
+      data.value[0].definitions.link.items.splice(index, 1)
     }
   }
 
