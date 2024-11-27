@@ -4,7 +4,7 @@ import UtmRecent from '@/components/UtmRecent.vue';
 import { useDefinitionsStore } from '@/stores/definitions'
 
 // States
-const definitions = useDefinitionsStore()
+const store = useDefinitionsStore()
 
 const url = ref('')
 const campaign = ref('')
