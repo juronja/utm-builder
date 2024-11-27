@@ -160,9 +160,6 @@ onBeforeMount( () => {
       </div>
     </div>
   </div>
-  <div class="link-definitions-row section-gap">
-    {{store.data[0]}}
-  </div>
   <h2 class="section-gap">Link definitions</h2>
   <div class="link-box section-box">
     <h3>Your links</h3>
@@ -227,7 +224,7 @@ onBeforeMount( () => {
     </div>
   </div>
   <div class="save-btn section-gap">
-    <button @click="store.save.items">{{ store.isSaved ? 'Saved!' : 'Save definitions' }}</button>
+    <button @click="store.saveDefinitions">{{ store.isSaved ? 'Saved!' : 'Save definitions' }}</button>
   </div>
 
 
