@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import UtmRecent from '@/components/UtmRecent.vue'
 import { useDefinitionsStore } from '@/stores/definitions';
 
@@ -10,14 +10,10 @@ onBeforeMount( () => {
 
 // States
 const store = useDefinitionsStore()
+let clientId = localStorage.getItem('clientId')
 
 const isCopied = ref(false)
 const isCleared = ref(false)
-
-let clientId = localStorage.getItem('clientId')
-
-
-const compTaggedUrl = computed(() => { return store.inputUrl + store.compParam + store.compTags })
 
 
 // Clear content
@@ -36,15 +32,15 @@ function clearAll() {
 
 // Copy and save tagged URL
 async function toClipboardAndSave() {
-  if (!compTaggedUrl.value == 0) {
+  if (!store.compTaggedUrl == 0) {
     try {
-    navigator.clipboard.writeText(compTaggedUrl.value)
+    navigator.clipboard.writeText(store.compTaggedUrl)
     isCopied.value = true
     setTimeout(() => { isCopied.value = false }, 1000)
 
     // Save for backend
     const payload = {
-      taggedUrl: compTaggedUrl.value,
+      taggedUrl: store.compTaggedUrl,
       clientId: clientId
     }
     await fetch(`api/users/${clientId}/save-tagged-url`, {
@@ -74,7 +70,7 @@ async function toClipboardAndSave() {
         <label for="utm-url">Destination URL*</label>
         <input type="url" name="Destination URL" v-model="store.inputUrl" id="utm-url">
       </div>
-      <div class="row col-40">
+      <div class="row col-20">
         <label for="utm-placement">Placement channel*</label>
         <select v-if="store.isDataLoading">
           <option  disabled selected value >Loading definitions ...</option>
@@ -82,6 +78,18 @@ async function toClipboardAndSave() {
         <select v-else v-model="store.inputPlacementLong" id="utm-placement">
           <option selected value></option>
           <option v-for="item in store.data[0].definitions.placementLong.items" :key="item">
+            {{ item }}
+          </option>
+        </select>
+      </div>
+      <div class="row col-20">
+        <label for="utm-source">Source*</label>
+        <select v-if="store.isDataLoading">
+          <option  disabled selected value >Loading definitions ...</option>
+        </select>
+        <select v-else v-model="store.inputSource" id="utm-source">
+          <option selected value></option>
+          <option v-for="item in store.data[0].definitions.source.items" :key="item">
             {{ item }}
           </option>
         </select>
@@ -102,19 +110,7 @@ async function toClipboardAndSave() {
           </option>
         </select>
       </div>
-      <div class="row col-40">
-        <label for="utm-source">Source*</label>
-        <select v-if="store.isDataLoading">
-          <option  disabled selected value >Loading definitions ...</option>
-        </select>
-        <select v-else v-model="store.inputSource" id="utm-source">
-          <option selected value></option>
-          <option v-for="item in store.data[0].definitions.source.items" :key="item">
-            {{ item }}
-          </option>
-        </select>
-      </div>
-      <div class="row col-20">
+      <div class="row col-60">
         <label for="utm-campaignId">Campaign ID</label>
         <input type="text" v-model="store.inputCampaignId" id="utm-campaignId" />
       </div>
@@ -136,16 +132,15 @@ async function toClipboardAndSave() {
     <div class="output-box">
       <h2>Tagged URL</h2>
       <div class="output">
-        <p> {{ compTaggedUrl ? compTaggedUrl : 'Fill the fields above to make a tagged URL here ...' }} </p>
+        <p> {{ store.compTaggedUrl ? store.compTaggedUrl : 'Fill the fields above to make a tagged URL here ...' }} </p>
         <!-- add copy validation on the button -->
         <button @click="clearAll"> {{ isCleared ? 'Cleared!' : 'Clear' }} </button>
         <button @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
       </div>
       <h2>Campaign name suggestion</h2>
       <div class="output">
-        <p> {{ compTaggedUrl ? compPlacement : 'Fill the fields above to make a Campaign name suggestion ...' }} </p>
+        <p> {{ store.compCampaignNameSuggestion ? store.compCampaignNameSuggestion : 'Fill the fields above to make a Campaign name suggestion ...' }} </p>
         <!-- add copy validation on the button -->
-        <button @click="clearAll"> {{ isCleared ? 'Cleared!' : 'Clear' }} </button>
         <button @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
       </div>
     </div>

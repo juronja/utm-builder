@@ -9,6 +9,7 @@ onBeforeMount( () => {
   store.getDefinitions()
 })
 
+
 </script>
 
 <template>
@@ -206,7 +207,7 @@ onBeforeMount( () => {
         </select>
       </div>
       <div class="link-column col-30">
-        <button class="add-item-link margin-left" @click="store.addLinkDefinition(store.compLinkDefinitionsId)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <button class="add-item-link margin-left" @click="store.addLinkDefinition(store.compLinkDefinitionsName)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
     </div>
     <div class="link-definitions-row">
@@ -215,8 +216,8 @@ onBeforeMount( () => {
       </div>
       <div v-else>
         <ul>
-          <li v-for="item in store.data[0].definitions.link.items" :key="item">
-            {{ item._id }}
+          <li v-for="item in store.data[0].definitions.link" :key="item._id">
+            {{ item.combinedName }}
             <span class="tag-del" @click="store.removeLinkDefinition(item)">x</span>
           </li>
         </ul>

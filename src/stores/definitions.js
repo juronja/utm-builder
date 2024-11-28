@@ -38,31 +38,52 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   const data = ref({})
 
 
-  function toProperCase(string) {
-    return string.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase())
-  }
+  //********* COMPUTED **********//
 
-  // Make UTM tags logic for Guided Tab
-  const compCampaign = computed(() => {
-    if (inputPlacementLong.value == '' && inputCampaignName.value == '' && inputCampaignType.value == '' ) {
-        return ''
-      } else {
-        if (inputCampaignType.value == '') {
-          return 'utm_campaign=' + inputCampaignName.value
-        } else {
-          return `utm_campaign=${inputCampaignName.value} (${inputCampaignType.value})`
-        }
-      }
-    })
   const compParam = computed(() => { if (compCampaign.value !== '') { if (inputUrl.value.includes('?')) { return '&' } else { return '?' } } else { return '' } })
-  const compMedium = computed(() => { if (inputMedium.value == '') { return '' } else { return '&utm_medium=' + inputMedium.value } })
-
   const compSource = computed(() => { if (inputSource.value == '') { return '' } else { return '&utm_source=' + inputSource.value } })
   const compContent = computed(() => { if (inputContent.value == '') { return '' } else { return '&utm_content=' + inputContent.value } })
   const compTerm = computed(() => { if (inputTerm.value == '') { return '' } else { return '&utm_term=' + inputTerm.value } })
   const compCampaignId = computed(() => { if (inputCampaignId.value == '') { return '' } else { return '&utm_id=' + inputCampaignId.value } })
+  const compCampaignType = computed(() => { if (inputCampaignType.value == '') { return '' } else { return `(${inputCampaignType.value})` } })
 
-  const compTags = computed(() => { return (compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value + compCampaignId.value)
+  const compMedium = computed(() => {
+    if (!isDataLoading.value) {
+      const linkItem = data.value[0].definitions.link.find(item => item._id === inputPlacementLong.value)
+      return linkItem ? '&utm_medium=' + linkItem.mappings.medium : ''
+    }
+    return ''
+  })
+
+  const compPlacementShort = computed (() => {
+    if (!isDataLoading.value) {
+      const linkItem = data.value[0].definitions.link.find(item => item._id === inputPlacementLong.value)
+      return linkItem ? `${linkItem.mappings.short}` : ''
+    }
+    return ''
+  })
+
+  const compCampaign = computed(() => {
+    if (inputPlacementLong.value == '' && inputCampaignName.value == '' && inputCampaignType.value == '' ) {
+        return ''
+      } else {
+        return `utm_campaign=${compPlacementShort.value}` + (` ${inputCampaignName.value} `)
+        .replace(/\s+/g, '+')
+        .replace(/š/g, 's')
+        .replace(/ž/g, 'z')
+        .replace(/č/g, 'c')
+        .replace(/ć/g, 'c')
+        .replace(/_/g, '-')
+        .replace(/\//g, '-')
+        .replace(/\\/g, '-')
+        .replace(/\./g, '-')
+        .toLowerCase() +
+        compCampaignType.value
+      }
+  })
+
+  // UTM combined tags
+  const compTags = computed(() => { return (compMedium.value + compSource.value + compContent.value + compTerm.value + compCampaignId.value)
     .replace(/\s+/g, '+')
     .replace(/š/g, 's')
     .replace(/ž/g, 'z')
@@ -75,16 +96,30 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     .toLowerCase()
   })
 
-  // Make Link Name Syntax logic
-  const compLinkDefinitionsId = computed(() => {
+  // Final Tagged URL
+  const compTaggedUrl = computed(() => { return inputUrl.value + compParam.value + compCampaign.value + compTags.value })
+
+
+  // Make Campaign Name suggestion logic for Guided Tab
+  const compCampaignNameSuggestion = computed(() => {
+    if (!inputPlacementLong.value == 0 || !inputCampaignName.value == 0 || !inputCampaignType.value == 0) {
+      return (`${compPlacementShort.value} (AT) ${inputCampaignName.value} ${compCampaignType.value}`)
+    }
+    return ''
+  })
+
+
+  // Link Definition logic for Settings when saving
+  const compLinkDefinitionsName = computed(() => {
     if (inputLinkPlacementLong.value == 0 || inputLinkPlacementShort.value == 0 || inputLinkMedium.value == 0) {
       return ''
     } else {
-      return (`${inputLinkPlacementLong.value}-${inputLinkPlacementShort.value}-${inputLinkMedium.value}`).replace(/\s+/g, '-').toLowerCase()
+      return (`${inputLinkPlacementLong.value} = (${inputLinkPlacementShort.value}), ${inputLinkMedium.value}`)
     }
   })
 
 
+  //********* FUNCTIONS **********//
 
   // Get All Definitions
   async function getDefinitions() {
@@ -119,41 +154,9 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     const payload = {
       _id: "userId",
       clientId: clientId,
-      definitions: {
-        placementLong: {
-          items: data.value[0].definitions.placementLong.items,
-          required: data.value[0].definitions.placementLong.required
-        },
-        placementShort: {
-          items: data.value[0].definitions.placementShort.items,
-          required: data.value[0].definitions.placementShort.required
-        },
-        medium: {
-          items: data.value[0].definitions.medium.items,
-          required: data.value[0].definitions.medium.required
-        },
-        source: {
-          items: data.value[0].definitions.source.items,
-          required: data.value[0].definitions.source.required
-        },
-        campaignType: {
-          items: data.value[0].definitions.campaignType.items,
-          required: data.value[0].definitions.campaignType.required
-        },
-        contentCreative: {
-          items: data.value[0].definitions.contentCreative.items,
-          required: data.value[0].definitions.contentCreative.required
-        },
-        bannerSize: {
-          items: data.value[0].definitions.bannerSize.items,
-          required: data.value[0].definitions.bannerSize.required
-        },
-        link: {
-          items: data.value[0].definitions.link.items,
-          required: data.value[0].definitions.link.required
-        }
-      }
+      definitions: data.value[0].definitions
     }
+
     // Save to database
     await fetch(`api/users/${clientId}/save-definitions`, {
       method: 'POST', // Specify the HTTP method (POST in this case)
@@ -168,6 +171,13 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       console.error(error)
     }
   }
+
+
+  // Propper Case function
+  function toProperCase(string) {
+    return string.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase())
+  }
+
 
   // Add definition
   function addDefinition(newItem, key) {
@@ -224,12 +234,14 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
     // Add to list
     if (newItem.length !== 0) {
-      data.value[0].definitions.link.items.push({
-        _id: newItem,
-        long: inputLinkPlacementLong.value,
-        short: inputLinkPlacementShort.value,
-        medium: inputLinkMedium.value,
-        })
+      data.value[0].definitions.link.push({
+        _id: inputLinkPlacementLong.value,
+        combinedName: newItem,
+        mappings: {
+          short: inputLinkPlacementShort.value,
+          medium: inputLinkMedium.value
+        }
+      })
     } else {
       console.error('Cannot add an empty item')
     }
@@ -241,9 +253,9 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
   // Remove Link Definition
   function removeLinkDefinition(item) {
-    const index = data.value[0].definitions.link.items.indexOf(item)
+    const index = data.value[0].definitions.link.indexOf(item)
     if (index !== -1) {
-      data.value[0].definitions.link.items.splice(index, 1)
+      data.value[0].definitions.link.splice(index, 1)
     }
   }
 
@@ -272,10 +284,12 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     inputDefBannerSize,
     compParam,
     compTags,
+    compTaggedUrl,
+    compCampaignNameSuggestion,
+    compLinkDefinitionsName,
     inputLinkPlacementLong,
     inputLinkPlacementShort,
     inputLinkMedium,
-    compLinkDefinitionsId,
     saveDefinitions,
     getDefinitions,
     addDefinition,
