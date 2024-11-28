@@ -1,13 +1,12 @@
 [
     {
-        "_id":"userId/clientId",
         "definitions": {
             "placementLong": {
-                "items": ["Google Search", "Google Display", "Google Gmail", "Google YouTube", "Facebook", "Direct Buy - Banner", "Direct buy - Editorial", "Email", "Twitter", "LinkedIn", "Blog", "Affiliate", "Referral", "Offline Print", "Whitepaper", "Retail", "Facebook Post", "Instagram Post", "Twitter Post", "LinkedIn Post", "TikTok Post", "App"],
+                "items": ["Google Search", "Google Display", "Google Gmail", "Google YouTube", "Facebook", "Direct Buy Banner", "Direct buy Editorial", "Email", "Twitter", "LinkedIn", "Blog", "Affiliate", "Referral", "Offline Print", "Whitepaper", "Retail", "Facebook Post", "Instagram Post", "Twitter Post", "LinkedIn Post", "TikTok Post", "App"],
                 "required": [true, "Required"]
             },
             "placementShort": {
-                "items": ["(S)","(GDN)","(GSP)","(YT)","(FB)","(DBB)","(DBE)","(EML)","(TW)","(LI)","(BLG)","(AFF)","(REF)","(INF)","(OFP)","(WHP)","(RET)","(FBP)","(IGP)","(TWP)","(LIP)","(APP)"],
+                "items": ["S", "GDN", "GSP", "YT", "FB", "DBB", "DBE", "EML", "TW", "LI", "BLG", "AFF", "REF", "INF", "OFP", "WHP", "RET", "FBP", "IGP", "TWP", "LIP", "APP"],
                 "required": [true, "Required"]
             },
             "medium": {
@@ -20,26 +19,34 @@
             },
             "campaignType": {
                 "items": ["BRAND", "DSA", "RLSA", "REM", "TRAFFIC", "PPE", "REACH", "VIDEO", "LEAD", "WEBSITE VISITORS", "INTERESTS", "LOOKALIKE", "ENGAGED WITH FB", "ENGAGED WITH IG", "ALL WOMEN"],
-                "required": [true, "Required"]
+                "required": [false, "Not required"]
             },
             "contentCreative": {
                 "items": ["slideshow", "video", "single photo", "carousel", "story", "post", "bio"],
-                "required": [true, "Required"]
+                "required": [false, "Not required"]
             },
             "bannerSize": {
                 "items": ["970X250px", "320x100px", "728x90px", "300x400px", "500x500px", "300x250px", "160x600px", "320x480px", "300x50px", "320x50px", "960x180px", "170x600px", "940x200px", "600x300px", "750x300px", "native-direct", "1080x608px", "670x200px"],
-                "required": [true, "Required"]
+                "required": [false, "Not required"]
             },
-            "link": {
-                "items": [
-                    { "_id": "google-search-(s)-ppc", "long": "Google Search", "short" : "(S)", "medium" : "ppc" },
-                    { "_id": "direct-buy---banner-(dbb)-banner", "long": "Direct Buy - Banner", "short" : "(DBB)", "medium" : "banner" },
-                    { "_id": "google-display-(gdn)-banner", "long": "Google Display", "short" : "(GDN)", "medium" : "display" }
-                ],
-                "required": [true, "Required"]
-            }
+            "link": [
+                {
+                    "_id": "Google Search",
+                    "combinedName": "Google Search = (S), ppc",
+                    "mappings": {
+                        "short": "(S)",
+                        "medium": "ppc"
+                    }
+                },
+                {
+                    "_id": "Direct Buy Banner",
+                    "combinedName": "Direct Buy Banner = (DDB), banner",
+                    "mappings": {
+                        "short": "(DDB)",
+                        "medium": "banner"
+                    }
+                }
+            ]
         }
     }
-    
-    
 ]
