@@ -38,6 +38,33 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   const data = ref({})
 
 
+  // Required fields Validation
+  const urlRequired = ref(false)
+  const placementRequired = ref(false)
+  const sourceRequired = ref(false)
+  const campaignRequired = ref(false)
+
+
+  function inputReq(item) {
+    if (item === 'url' && inputUrl.value == 0) {
+      console.error('This field is required')
+      urlRequired.value = true
+    }
+    if (item === 'placement' && inputPlacementLong.value == 0) {
+      console.error('This field is required')
+      placementRequired.value = true
+    }
+    if (item === 'source' && inputSource.value == 0) {
+      console.error('This field is required')
+      sourceRequired.value = true
+    }
+    if (item === 'campaign' && inputCampaignName.value == 0) {
+      console.error('This field is required')
+      campaignRequired.value = true
+    }
+  }
+
+
   //********* COMPUTED **********//
 
   const compParam = computed(() => { if (compCampaign.value !== '') { if (inputUrl.value.includes('?')) { return '&' } else { return '?' } } else { return '' } })
@@ -121,6 +148,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
   //********* FUNCTIONS **********//
 
+
   // Get All Definitions
   async function getDefinitions() {
     isDataLoading.value = true
@@ -193,7 +221,11 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       .replace(/\./g, '-')
       .toLowerCase()
     if (newItem.length !== 0) {
-      key.push( normalizedItem )
+      if (key.includes(normalizedItem)) {
+        console.error('Item already exists: ', normalizedItem)
+      } else {
+        key.push( normalizedItem )
+      }
     } else {
       console.error('Cannot add an empty item')
     }
@@ -203,7 +235,11 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   function addDefinitionProperCase(newItem, key) {
     const normalizedItem = toProperCase(newItem)
     if (newItem.length !== 0) {
-      key.push( normalizedItem )
+      if (key.includes(normalizedItem)) {
+        console.error('Item already exists: ', normalizedItem)
+      } else {
+        key.push( normalizedItem )
+      }
     } else {
       console.error('Cannot add an empty item')
     }
@@ -214,7 +250,11 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   function addDefinitionUpperCase(newItem, key) {
     const normalizedItem = newItem.toUpperCase()
     if (newItem.length !== 0) {
-      key.push( normalizedItem )
+      if (key.includes(normalizedItem)) {
+        console.error('Item already exists: ', normalizedItem)
+      } else {
+        key.push( normalizedItem )
+      }
     } else {
       console.error('Cannot add an empty item')
     }
@@ -230,18 +270,22 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   }
 
   // Add Link Definition
-  async function addLinkDefinition(newItem) {
-
+  function addLinkDefinition(newItem) {
+    const key = data.value[0].definitions.link
     // Add to list
     if (newItem.length !== 0) {
-      data.value[0].definitions.link.push({
-        _id: inputLinkPlacementLong.value,
-        combinedName: newItem,
-        mappings: {
-          short: inputLinkPlacementShort.value,
-          medium: inputLinkMedium.value
-        }
-      })
+      if (key.some(item => item['combinedName'] === newItem)) {
+        console.error('Item already exists: ', newItem)
+      } else {
+        key.push({
+          _id: inputLinkPlacementLong.value,
+          combinedName: newItem,
+          mappings: {
+            short: inputLinkPlacementShort.value,
+            medium: inputLinkMedium.value
+          }
+        })
+      }
     } else {
       console.error('Cannot add an empty item')
     }
@@ -297,7 +341,12 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     addDefinitionUpperCase,
     removeDefinition,
     addLinkDefinition,
-    removeLinkDefinition
+    removeLinkDefinition,
+    urlRequired,
+    placementRequired,
+    sourceRequired,
+    campaignRequired,
+    inputReq
   }
 })
 

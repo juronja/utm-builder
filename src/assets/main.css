@@ -103,6 +103,11 @@ hr {
   margin-top: calc(var(--section-gap) / 2);
 }
 
+.input-req-validation {
+  font-size: 0.75rem;
+  color: var(--color-danger);
+}
+
 /* Layout defaults */
 .col-100 {
   flex: 0 0 auto;

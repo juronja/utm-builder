@@ -32,7 +32,7 @@ function clearAll() {
 
 // Copy and save tagged URL
 async function toClipboardAndSave() {
-  if (!store.compTaggedUrl == 0) {
+  if (!store.compTaggedUrl == 0 && !store.inputUrl == 0 && !store.input.placementLong == 0 && !store.inputSource == 0 && !store.inputCampaignName == 0) {
     try {
     navigator.clipboard.writeText(store.compTaggedUrl)
     isCopied.value = true
@@ -57,6 +57,18 @@ async function toClipboardAndSave() {
     }
   } else {
     console.error('Nothing to copy, no tagged URLs');
+    if (store.inputUrl == 0) {
+      store.urlRequired = true
+    }
+    if (store.inputPlacementLong == 0) {
+      store.placementRequired = true
+    }
+    if (store.inputSource == 0) {
+      store.sourceRequired = true
+    }
+    if (store.inputCampaignName == 0) {
+      store.campaignRequired = true
+    }
   }
 }
 
@@ -68,35 +80,39 @@ async function toClipboardAndSave() {
     <div class="builder">
       <div class="row col-100">
         <label for="utm-url">Destination URL*</label>
-        <input type="url" name="Destination URL" v-model="store.inputUrl" id="utm-url">
+        <input @blur="store.inputReq('url')" type="url" name="Destination URL" v-model="store.inputUrl" id="utm-url">
+        <div v-if="store.urlRequired" class="input-req-validation">This field is required</div>
       </div>
       <div class="row col-20">
         <label for="utm-placement">Placement channel*</label>
         <select v-if="store.isDataLoading">
           <option  disabled selected value >Loading definitions ...</option>
         </select>
-        <select v-else v-model="store.inputPlacementLong" id="utm-placement">
+        <select @blur="store.inputReq('placement')" v-else v-model="store.inputPlacementLong" id="utm-placement">
           <option selected value></option>
           <option v-for="item in store.data[0].definitions.placementLong.items" :key="item">
             {{ item }}
           </option>
         </select>
+        <div v-if="store.placementRequired" class="input-req-validation">This field is required</div>
       </div>
       <div class="row col-20">
         <label for="utm-source">Source*</label>
         <select v-if="store.isDataLoading">
           <option  disabled selected value >Loading definitions ...</option>
         </select>
-        <select v-else v-model="store.inputSource" id="utm-source">
+        <select @blur="store.inputReq('source')" v-else v-model="store.inputSource" id="utm-source">
           <option selected value></option>
           <option v-for="item in store.data[0].definitions.source.items" :key="item">
             {{ item }}
           </option>
         </select>
+        <div v-if="store.sourceRequired" class="input-req-validation">This field is required</div>
       </div>
       <div class="row col-60">
         <label for="utm-campaign">Campaign name*</label>
-        <input type="text" v-model="store.inputCampaignName" id="utm-campaign" />
+        <input @blur="store.inputReq('campaign')" type="text" v-model="store.inputCampaignName" id="utm-campaign" />
+        <div v-if="store.campaignRequired" class="input-req-validation">This field is required</div>
       </div>
       <div class="row col-20">
         <label for="utm-campaign-type">Campaign Type</label>
