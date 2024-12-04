@@ -207,7 +207,7 @@ onBeforeMount( () => {
         </select>
       </div>
       <div class="link-column col-30">
-        <button class="add-item-link margin-left" @click="store.addLinkDefinition(store.compLinkDefinitionsName)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <button class="add-item-link margin-left-link" @click="store.addLinkDefinition(store.compLinkDefinitionsName)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
     </div>
     <div class="link-definitions-row">
@@ -322,8 +322,11 @@ onBeforeMount( () => {
   min-height: 2.5rem;
 }
 
-
 .margin-left {
+  margin-left: 0.5rem;
+}
+
+.margin-left-link {
   margin-left: 0.5rem;
 }
 
@@ -487,8 +490,19 @@ input, select {
 
   .add-item-link {
     margin-top: 1.5rem;
-    align-items: center;
     width: 100%;
+  }
+
+  .link-column {
+    width: 100%;
+  }
+
+  .margin-left-link {
+    margin-left: 0;
+  }
+
+  .link-row p {
+    margin: 0;
   }
 
 
