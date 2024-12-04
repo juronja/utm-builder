@@ -1,12 +1,29 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import {countries} from 'i18n-iso-countries'
+import countries from 'i18n-iso-countries'
+import english from 'i18n-iso-countries/langs/en.json'
 
 export const useDefinitionsStore = defineStore('utm-definitions', () => {
   let clientId = localStorage.getItem('clientId')
   const isSaved = ref(false)
   const isDataLoading = ref(false)
-  const isDataError = ref('')
+
+  // Countries
+  countries.registerLocale(english)
+  const countriesList = countries.getNames("en", {select: "official"})
+
+  const compCountryShort = computed (() => {
+    if (!isDataLoading.value) {
+      const countryCode = Object.keys(countriesList).find(code => {
+        return countriesList[code] === inputCountry.value
+      })
+      return countryCode ? `(${countryCode})` : ''
+    }
+    return ''
+  })
+
+
+  // const isDataError = ref('')
 
   // Guided inputs
   const inputUrl = ref('')
@@ -94,8 +111,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     if (inputPlacementLong.value == '' && inputCampaignName.value == '' && inputCampaignType.value == '' ) {
         return ''
       } else {
-        return `utm_campaign=${compPlacementShort.value}` + (` ${inputCampaignName.value} `)
-        .replace(/\s+/g, '+')
+        return (`utm_campaign=${compPlacementShort.value} ` + `${compCountryShort.value} ` + (`${inputCampaignName.value}`)
         .replace(/š/g, 's')
         .replace(/ž/g, 'z')
         .replace(/č/g, 'c')
@@ -105,9 +121,11 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
         .replace(/\\/g, '-')
         .replace(/\./g, '-')
         .toLowerCase() +
-        compCampaignType.value
+        (` ${compCampaignType.value}`))
+        .replace(/\s+/g, '+')
       }
   })
+
 
   // UTM combined tags
   const compTags = computed(() => { return (compMedium.value + compSource.value + compContent.value + compTerm.value + compCampaignId.value)
@@ -130,7 +148,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   // Make Campaign Name suggestion logic for Guided Tab
   const compCampaignNameSuggestion = computed(() => {
     if (!inputPlacementLong.value == 0 || !inputCampaignName.value == 0 || !inputCampaignType.value == 0) {
-      return (`${compPlacementShort.value} (AT) ${inputCampaignName.value} ${compCampaignType.value}`)
+      return (`${compPlacementShort.value} ${compCountryShort.value} ${inputCampaignName.value} ${compCampaignType.value}`)
     }
     return ''
   })
@@ -201,7 +219,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   }
 
 
-  // Propper Case function
+  // Proper Case function
   function toProperCase(string) {
     return string.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase())
   }
@@ -346,7 +364,9 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     placementRequired,
     sourceRequired,
     campaignRequired,
-    inputReq
+    inputReq,
+    countriesList,
+    compCountryShort
   }
 })
 

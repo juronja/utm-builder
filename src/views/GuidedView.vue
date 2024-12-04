@@ -13,6 +13,7 @@ const store = useDefinitionsStore()
 let clientId = localStorage.getItem('clientId')
 
 const isCopied = ref(false)
+const isCopiedName = ref(false)
 const isCleared = ref(false)
 
 
@@ -31,16 +32,16 @@ function clearAll() {
 }
 
 // Copy and save tagged URL
-async function toClipboardAndSave() {
-  if (!store.compTaggedUrl == 0 && !store.inputUrl == 0 && !store.input.placementLong == 0 && !store.inputSource == 0 && !store.inputCampaignName == 0) {
+async function toClipboardAndSave(item) {
+  if (!store.compTaggedUrl == 0 && !store.inputUrl == 0 && !store.inputPlacementLong == 0 && !store.inputSource == 0 && !store.inputCampaignName == 0) {
     try {
-    navigator.clipboard.writeText(store.compTaggedUrl)
+    navigator.clipboard.writeText(item)
     isCopied.value = true
     setTimeout(() => { isCopied.value = false }, 1000)
 
     // Save for backend
     const payload = {
-      taggedUrl: store.compTaggedUrl,
+      taggedUrl: item,
       clientId: clientId
     }
     await fetch(`api/users/${clientId}/save-tagged-url`, {
@@ -52,8 +53,8 @@ async function toClipboardAndSave() {
       }
     })
     // return await response.json() // not sure if I need this return
-    } catch(err) {
-      console.error(err)
+    } catch(error) {
+      console.error(error)
     }
   } else {
     console.error('Nothing to copy, no tagged URLs');
@@ -71,6 +72,24 @@ async function toClipboardAndSave() {
     }
   }
 }
+
+  // Copy campaign name suggestion
+  async function toClipboardCampaignName(item) {
+    if (!item == 0) {
+      try {
+      await navigator.clipboard.writeText(item)
+      isCopiedName.value = true
+      setTimeout(() => { isCopiedName.value = false }, 1000)
+      console.log('Text copied:', item)
+    } catch(error) {
+      console.error(error)
+    }
+    } else {
+      console.error('Nothing to copy');
+    }
+  }
+
+
 
 </script>
 
@@ -126,13 +145,21 @@ async function toClipboardAndSave() {
           </option>
         </select>
       </div>
-      <div class="row col-60">
+      <div class="row col-50">
         <label for="utm-campaignId">Campaign ID</label>
         <input type="text" v-model="store.inputCampaignId" id="utm-campaignId" />
       </div>
-      <div class="row col-20">
+      <div class="row col-30">
         <label for="utm-country">Country</label>
-        <input type="text" v-model="store.inputCountry" id="utm-country" />
+        <select v-if="store.isDataLoading">
+          <option  disabled selected value >Loading definitions ...</option>
+        </select>
+        <select v-else v-model="store.inputCountry" id="utm-country">
+          <option selected value></option>
+          <option v-for="item in store.countriesList" :key="item">
+            {{ item }}
+          </option>
+        </select>
       </div>
       <div class="row col-50">
         <label for="utm-content">Content</label>
@@ -151,13 +178,13 @@ async function toClipboardAndSave() {
         <p> {{ store.compTaggedUrl ? store.compTaggedUrl : 'Fill the fields above to make a tagged URL here ...' }} </p>
         <!-- add copy validation on the button -->
         <button @click="clearAll"> {{ isCleared ? 'Cleared!' : 'Clear' }} </button>
-        <button @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
+        <button @click="toClipboardAndSave(store.compTaggedUrl)"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
       </div>
       <h2>Campaign name suggestion</h2>
       <div class="output">
         <p> {{ store.compCampaignNameSuggestion ? store.compCampaignNameSuggestion : 'Fill the fields above to make a Campaign name suggestion ...' }} </p>
         <!-- add copy validation on the button -->
-        <button @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
+        <button @click="toClipboardCampaignName(store.compCampaignNameSuggestion)"> {{ isCopiedName ? 'Copied!' : 'Copy' }} </button>
       </div>
     </div>
   </div>
