@@ -2,19 +2,19 @@
     {
         "definitions": {
             "placementLong": {
-                "items": ["Google Search", "Google Display", "Google Gmail", "Google YouTube", "Facebook", "Direct Buy Banner", "Direct buy Editorial", "Email", "Twitter", "LinkedIn", "Blog", "Affiliate", "Referral", "Offline Print", "Whitepaper", "Retail", "Facebook Post", "Instagram Post", "Twitter Post", "LinkedIn Post", "TikTok Post", "App"],
+                "items": ["Paid Search", "Organic Search", "Paid Social", "Organic Social", "Paid Video", "Organic Video", "Media Buy Banner", "Media Buy Editorial", "Email", "Blog", "Affiliates", "Referral", "Offline Print", "Whitepaper", "Retail", "SMS", "Mobile Push Notifications"],
                 "required": [true, "Required"]
             },
             "placementShort": {
-                "items": ["S", "GDN", "GSP", "YT", "FB", "DBB", "DBE", "EML", "TW", "LI", "BLG", "AFF", "REF", "INF", "OFP", "WHP", "RET", "FBP", "IGP", "TWP", "LIP", "APP"],
+                "items": ["PSE", "OSE", "PSO", "OSO", "PVI", "OVI", "MBB", "MBE", "EML", "BLG", "AFF", "REF", "OFP", "WHP", "RET", "SMS", "MPN"],
                 "required": [true, "Required"]
             },
             "medium": {
-                "items": ["affiliate", "banner", "content-text", "display", "email", "mobile", "ppc", "referral", "sms", "social"],
+                "items": ["affiliate", "banner", "content-text", "direct", "display", "email", "mobile", "ppc", "referral", "sms", "social", "video"],
                 "required": [true, "Required"]
             },
             "source": {
-                "items": ["google", "facebook", "twitter", "linkedin", "editorial", "print", "pdf", "package", "instagram", "app"],
+                "items": ["google", "facebook", "twitter", "linkedin", "instagram", "tik-tok", "media-buy", "editorial", "influencer", "print", "pdf", "package", "app", "youtube"],
                 "required": [true, "Required"]
             },
             "campaignType": {
@@ -31,19 +31,83 @@
             },
             "link": [
                 {
-                    "_id": "Google Search",
-                    "combinedName": "Google Search = (S), ppc",
+                    "_id": "Affiliates",
+                    "combinedName": "Affiliates = (AFF), affiliate",
                     "mappings": {
-                        "short": "(S)",
-                        "medium": "ppc"
+                        "short": "(AFF)",
+                        "medium": "affiliate"
                     }
                 },
                 {
-                    "_id": "Direct Buy Banner",
-                    "combinedName": "Direct Buy Banner = (DDB), banner",
+                    "_id": "Organic Social",
+                    "combinedName": "Organic Social = (OSO), social",
                     "mappings": {
-                        "short": "(DDB)",
+                        "short": "(OSO)",
+                        "medium": "social"
+                    }
+                },
+                {
+                    "_id": "Paid Social",
+                    "combinedName": "Paid Social = (PSO), social",
+                    "mappings": {
+                        "short": "(PSO)",
+                        "medium": "social"
+                    }
+                },
+                {
+                    "_id": "Media Buy Banner",
+                    "combinedName": "Media Buy Banner = (MBB), banner",
+                    "mappings": {
+                        "short": "(MBB)",
                         "medium": "banner"
+                    }
+                },
+                {
+                    "_id": "Media Buy Editorial",
+                    "combinedName": "Media Buy Editorial = (MBE), content-text",
+                    "mappings": {
+                        "short": "(MBE)",
+                        "medium": "content-text"
+                    }
+                },
+                {
+                    "_id": "Email",
+                    "combinedName": "Email = (EML), email",
+                    "mappings": {
+                        "short": "(EML)",
+                        "medium": "email"
+                    }
+                },
+                {
+                    "_id": "Blog",
+                    "combinedName": "Blog = (BLG), content-text",
+                    "mappings": {
+                        "short": "(BLG)",
+                        "medium": "content-text"
+                    }
+                },
+                {
+                    "_id": "Referral",
+                    "combinedName": "Referral = (REF), referral",
+                    "mappings": {
+                        "short": "(REF)",
+                        "medium": "referral"
+                    }
+                },
+                {
+                    "_id": "SMS",
+                    "combinedName": "SMS = (SMS), sms",
+                    "mappings": {
+                        "short": "(SMS)",
+                        "medium": "sms"
+                    }
+                },
+                {
+                    "_id": "Mobile Push Notifications",
+                    "combinedName": "Mobile Push Notifications = (MPN), mobile",
+                    "mappings": {
+                        "short": "(MPN)",
+                        "medium": "mobile"
                     }
                 }
             ]
