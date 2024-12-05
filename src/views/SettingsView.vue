@@ -20,7 +20,7 @@ onBeforeMount( () => {
       <h3>Placement Channels</h3>
       <div class="input-row">
         <input class="input-box-normal" v-model="store.inputDefPlacementLong" @keyup.enter="store.addDefinitionProperCase(store.inputDefPlacementLong, store.data[0].definitions.placementLong.items); store.inputDefPlacementLong = ''" type="text" name="Add Placement Long Option" id="add-placement-long">
-        <button class="add-item-normal margin-left" @click="store.addDefinitionProperCase(store.inputDefPlacementLong, store.data[0].definitions.placementLong.items); store.inputDefPlacementLong = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <button class="button add-item-normal margin-left" @click="store.addDefinitionProperCase(store.inputDefPlacementLong, store.data[0].definitions.placementLong.items); store.inputDefPlacementLong = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="store.isDataLoading">
@@ -40,7 +40,7 @@ onBeforeMount( () => {
       <h3>Placement Channels Short</h3>
       <div class="input-row">
         <input class="input-box-normal" v-model="store.inputDefPlacementShort" @keyup.enter="store.addDefinitionUpperCase(store.inputDefPlacementShort, store.data[0].definitions.placementShort.items); store.inputDefPlacementShort = ''" type="text" name="Add Placement Short Option" id="add-placement-short">
-        <button class="add-item-normal margin-left" @click="store.addDefinitionUpperCase(store.inputDefPlacementShort, store.data[0].definitions.placementShort.items); store.inputDefPlacementShort = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <button class="button add-item-normal margin-left" @click="store.addDefinitionUpperCase(store.inputDefPlacementShort, store.data[0].definitions.placementShort.items); store.inputDefPlacementShort = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="store.isDataLoading">
@@ -61,7 +61,7 @@ onBeforeMount( () => {
       <div>
         <div class="input-row">
           <input class="input-box-normal" v-model="store.inputDefMedium" @keyup.enter="store.addDefinition(store.inputDefMedium, store.data[0].definitions.medium.items); store.inputDefMedium = ''" type="text" name="Add Medium Option" id="add-medium">
-          <button class="add-item-normal margin-left" @click="store.addDefinition(store.inputDefMedium, store.data[0].definitions.medium.items); store.inputDefMedium = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+          <button class="button add-item-normal margin-left" @click="store.addDefinition(store.inputDefMedium, store.data[0].definitions.medium.items); store.inputDefMedium = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
         </div>
         <div class="definitions-row">
           <div v-if="store.isDataLoading">
@@ -82,7 +82,7 @@ onBeforeMount( () => {
       <h3>Source</h3>
       <div class="input-row">
         <input class="input-box-normal" v-model="store.inputDefSource" @keyup.enter="store.addDefinition(store.inputDefSource, store.data[0].definitions.source.items); store.inputDefSource = ''" type="text" name="Add Source Option" id="add-source">
-        <button class="add-item-normal margin-left" @click="store.addDefinition(store.inputDefSource, store.data[0].definitions.source.items); store.inputDefSource = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <button class="button add-item-normal margin-left" @click="store.addDefinition(store.inputDefSource, store.data[0].definitions.source.items); store.inputDefSource = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="store.isDataLoading">
@@ -102,7 +102,7 @@ onBeforeMount( () => {
       <h3>Campaign Type</h3>
       <div class="input-row">
         <input class="input-box-normal" v-model="store.inputDefCampaignType" @keyup.enter="store.addDefinitionUpperCase(store.inputDefCampaignType, store.data[0].definitions.campaignType.items); store.inputDefCampaignType = ''" type="text" name="Add Campaign Type Option" id="add-campaign-type">
-        <button class="add-item-normal margin-left" @click="store.addDefinitionUpperCase(store.inputDefCampaignType, store.data[0].definitions.campaignType.items); store.inputDefCampaignType = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <button class="button add-item-normal margin-left" @click="store.addDefinitionUpperCase(store.inputDefCampaignType, store.data[0].definitions.campaignType.items); store.inputDefCampaignType = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="store.isDataLoading">
@@ -123,7 +123,7 @@ onBeforeMount( () => {
       <div>
         <div class="input-row">
           <input class="input-box-normal" v-model="store.inputDefContentCreative" @keyup.enter="store.addDefinition(store.inputDefContentCreative, store.data[0].definitions.contentCreative.items); store.inputDefContentCreative = ''" type="text" name="Add Content Creative Option" id="add-content-creative">
-          <button class="add-item-normal margin-left" @click="store.addDefinition(store.inputDefContentCreative, store.data[0].definitions.contentCreative.items); store.inputDefContentCreative = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+          <button class="button add-item-normal margin-left" @click="store.addDefinition(store.inputDefContentCreative, store.data[0].definitions.contentCreative.items); store.inputDefContentCreative = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
         </div>
         <div class="definitions-row">
           <div v-if="store.isDataLoading">
@@ -144,7 +144,7 @@ onBeforeMount( () => {
       <h3>Banner Size</h3>
       <div class="input-row">
         <input class="input-box-normal" v-model="store.inputDefBannerSize" @keyup.enter="store.addDefinition(store.inputDefBannerSize, store.data[0].definitions.bannerSize.items); store.inputDefBannerSize = ''" type="text" name="Add Banner Size Option" id="add-banner-size">
-        <button class="add-item-normal margin-left" @click="store.addDefinition(store.inputDefBannerSize, store.data[0].definitions.bannerSize.items); store.inputDefBannerSize = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+        <button class="button add-item-normal margin-left" @click="store.addDefinition(store.inputDefBannerSize, store.data[0].definitions.bannerSize.items); store.inputDefBannerSize = ''"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
       <div class="definitions-row">
         <div v-if="store.isDataLoading">
@@ -166,7 +166,7 @@ onBeforeMount( () => {
     <h3>Your links</h3>
     <div class="link-row">
       <p>IF</p>
-      <div class="link-column">
+      <div class="link-column col-20">
         <label for="link-placement">Placement channel</label>
         <select v-if="store.isDataLoading">
           <option  disabled selected value >Loading definitions ...</option>
@@ -179,7 +179,7 @@ onBeforeMount( () => {
         </select>
       </div>
       <p>THEN</p>
-      <div class="link-column">
+      <div class="link-column col-10">
         <label for="link-placement-short">Short</label>
         <select v-if="store.isDataLoading">
           <option  disabled selected value >Loading definitions ...</option>
@@ -194,7 +194,7 @@ onBeforeMount( () => {
       <div class="col">
         <i class="bi bi-link margin-left-right link-column"></i>
       </div>
-      <div class="link-column">
+      <div class="link-column col-15">
         <label for="link-medium">Medium</label>
         <select v-if="store.isDataLoading">
           <option  disabled selected value >Loading definitions ...</option>
@@ -206,8 +206,8 @@ onBeforeMount( () => {
           </option>
         </select>
       </div>
-      <div class="link-column col-30">
-        <button class="add-item-link margin-left-link" @click="store.addLinkDefinition(store.compLinkDefinitionsName)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
+      <div class="link-column col-15">
+        <button class="button add-item-link margin-left-link" @click="store.addLinkDefinition(store.compLinkDefinitionsName)"><i class="bi bi-plus-circle-fill"></i> Add item</button>
       </div>
     </div>
     <div class="link-definitions-row">
@@ -225,7 +225,7 @@ onBeforeMount( () => {
     </div>
   </div>
   <div class="save-btn section-gap">
-    <button @click="store.saveDefinitions">{{ store.isSaved ? 'Saved!' : 'Save definitions' }}</button>
+    <button class="button" @click="store.saveDefinitions">{{ store.isSaved ? 'Saved!' : 'Save definitions' }}</button>
   </div>
 
 
@@ -422,10 +422,6 @@ input, select {
 }
 
 .add-item-normal {
-  width: 35%;
-}
-
-.add-item-link {
   width: 35%;
 }
 

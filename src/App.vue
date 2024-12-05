@@ -5,7 +5,7 @@ import { onBeforeMount } from 'vue'
 import { v4 as uuid } from 'uuid'
 
 let clientId = localStorage.getItem('clientId')
-const tagState = ref('convention')
+const navOpen = ref(false)
 
 
 // Set client ID on load
@@ -21,6 +21,8 @@ onBeforeMount( async () => {
 })
 
 
+
+
 </script>
 
 <template>
@@ -28,15 +30,20 @@ onBeforeMount( async () => {
     <div class="logo">
       <img alt="UTM Builder logo" src="@/assets/logo.svg" width="300" height="45" />
     </div>
-  <!-- <div class="navbar">
-    <Transition mode="out-in" name="slide-up">
-      <button v-if="tagState === 'convention'" @click="tagState = 'manual'" class="btn-tag">convention</button>
-      <button v-else-if="tagState === 'manual'" @click="tagState = 'convention'" class="btn-tag">manual</button>
-    </Transition>
-    </div> -->
     <div class="navigation">
-      <i alt="Menu" class="bi bi-list"></i>
-      <nav>
+        <Transition mode="out-in">
+        <button v-if="navOpen === false" class="hamburger" @click="navOpen = !navOpen" type="button">
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
+        <button v-else-if="navOpen === true" class="hamburger is-active" @click="navOpen = !navOpen" type="button">
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
+        </Transition>
+      <nav class="nav-desktop">
         <RouterLink to="/manual" title="Manual">Manual</RouterLink>
         <RouterLink to="/guided" title="Guided">Guided</RouterLink>
         <RouterLink to="/settings" title="Settings"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
@@ -44,6 +51,13 @@ onBeforeMount( async () => {
     </div>
   </header>
   <main>
+    <div v-if="navOpen" class="nav-overlay">
+      <nav class="nav-mobile">
+        <RouterLink to="/manual" title="Manual" @click="navOpen = !navOpen">Manual</RouterLink>
+        <RouterLink to="/guided" title="Guided" @click="navOpen = !navOpen">Guided</RouterLink>
+        <RouterLink to="/settings" title="Settings" @click="navOpen = !navOpen"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
+      </nav>
+    </div>
     <RouterView />
   </main>
   <footer>
@@ -67,32 +81,38 @@ onBeforeMount( async () => {
   width: 40%;
 }
 
-.bi-list {
+.hamburger {
   display: none;
-  padding: 0 1rem;
-}
-
-nav {
-  display: flex;
-  font-size: 1.25rem;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
 }
 
 nav a.router-link-exact-active:hover {
   background-color: transparent;
 }
 
-nav a:first-of-type {
+nav a.router-link-exact-active {
+  color: var(--color-text);
+}
+
+.nav-desktop {
+  display: flex;
+  font-size: 1.25rem;
+}
+
+.nav-desktop a {
+  display: inline-block;
+  padding: 0 1rem;
+  border-left: 1px solid var(--color-border);
+}
+
+.nav-desktop a:first-of-type {
   border: 0;
+}
+
+.nav-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.5rem;
 }
 
 .github {
@@ -103,11 +123,6 @@ nav a:first-of-type {
   font-size: 0.75rem;
 }
 
-/* .tag {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-} */
 
 /* Responsive layout */
 @media screen and (max-width: 480px) {
@@ -119,14 +134,25 @@ nav a:first-of-type {
     width: 20%;
   }
 
-  nav {
+  .nav-desktop {
     display: none;
   }
 
-  .bi-list {
+  .hamburger {
     display: flex;
   }
 
+  .nav-overlay {
+    position: fixed;
+    top: calc(var(--app-padding-top) + var(--header-height));
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding-top: 3rem;
+    z-index: 1;
+    background-color: var(--color-background);
+    height: calc(100vh - var(--app-padding-top) - var(--header-height));
+  }
 }
 
 

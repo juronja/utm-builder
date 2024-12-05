@@ -61,6 +61,9 @@
   --tag-padding: 0 0 0 0.4rem;
   font-size: 16px;
   --section-gap: 80px;
+  --header-height: 3rem;
+  --footer-height: 6rem;
+  --app-padding-top: 2rem;
 
 }
 

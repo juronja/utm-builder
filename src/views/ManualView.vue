@@ -128,8 +128,8 @@ async function toClipboardAndSave() {
       <div class="output">
         <p> {{ compTaggedUrl ? compTaggedUrl : 'Fill the fields above to make a tagged URL here ...' }} </p>
         <!-- add copy validation on the button -->
-        <button @click="clearAll"> {{ isCleared ? 'Cleared!' : 'Clear' }} </button>
-        <button @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
+        <button class="button" @click="clearAll"> {{ isCleared ? 'Cleared!' : 'Clear' }} </button>
+        <button class="button" @click="toClipboardAndSave"> {{ isCopied ? 'Copied!' : 'Copy' }} </button>
       </div>
     </div>
   </div>

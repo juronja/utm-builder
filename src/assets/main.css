@@ -7,14 +7,16 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.75rem;
-  padding-top: 1.5rem;
+  padding-top: var(--app-padding-top);
   font-weight: normal;
 }
 
 header {
   display: flex;
   align-items: center;
-  margin: 1rem 0 2rem 0;
+  margin: 0 0 2rem 0;
+  z-index: 2;
+  height: var(--header-height);
 }
 
 main {
@@ -26,10 +28,9 @@ footer {
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-  height: 100px;
+  height: var(--footer-height);
   padding: 0 calc(var(--gutter-x)* .5);
   border-top: 0.1rem solid var(--color-border);
-  /* background-color: var(--color-background-footer); */
   width: 100% !important; /* Override max-width */
 }
 
@@ -70,20 +71,8 @@ h3 {
   font-size: 1.2rem;
 }
 
-button {
-  padding: var(--input-padding);
-  color: var(--color-button-text);
-  background-color: var(--color-primary);
-  border: 1px solid var(--color-border);
-  border-radius: 0.25rem;
-  font-size: 1rem;
-}
-
 button:hover {
   cursor: pointer;
-  background-color: var(--color-primary-muted);
-  box-shadow: 0 0 0 .25rem var(--color-shadow-hover);
-  outline: 0;
 }
 
 hr {
@@ -92,6 +81,20 @@ hr {
   border: none;
   height: 0.1rem;
 }
+
+.button {
+  padding: var(--input-padding);
+  color: var(--color-button-text);
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+  .button:hover {
+    background-color: var(--color-primary-muted);
+    box-shadow: 0 0 0 .25rem var(--color-shadow-hover);
+    outline: 0;
+  }
 
 .section-box {
   padding: 0.1rem 0;
@@ -154,28 +157,31 @@ hr {
   width: 20%;
 }
 
+.col-15 {
+  flex: 0 0 auto;
+  width: 15%;
+}
+
 .col-10 {
   flex: 0 0 auto;
   width: 10%;
 }
 
+.col-5 {
+  flex: 0 0 auto;
+  width: 5%;
+}
+
+
 
 
 /* Transitions */
-
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.2s ease-out;
+.v-enter-active, .v-leave-active {
+  transition: opacity 50ms linear;
 }
 
-.slide-up-enter-from {
+.v-enter-from, .v-leave-to {
   opacity: 0;
-  transform: translateY(5px);
-}
-
-.slide-up-leave-to {
-  opacity: 0;
-  transform: translateY(-5px);
 }
 
 @media (hover: hover) {
@@ -203,6 +209,5 @@ hr {
 
   #app {
     display: flex;
-    padding: 0 2rem;
   }
 }

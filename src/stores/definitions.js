@@ -30,8 +30,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   const inputCampaignName = ref('')
   const inputCampaignType = ref('')
   const inputCampaignId = ref('')
-  const inputPlacementLong = ref('')
-  const inputPlacementShort = ref('')
+  const inputPlacement = ref('')
   const inputMedium = ref('')
   const inputSource = ref('')
   const inputContent = ref('')
@@ -67,7 +66,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
       console.error('This field is required')
       urlRequired.value = true
     }
-    if (item === 'placement' && inputPlacementLong.value == 0) {
+    if (item === 'placement' && inputPlacement.value == 0) {
       console.error('This field is required')
       placementRequired.value = true
     }
@@ -93,7 +92,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
   const compMedium = computed(() => {
     if (!isDataLoading.value) {
-      const linkItem = data.value[0].definitions.link.find(item => item._id === inputPlacementLong.value)
+      const linkItem = data.value[0].definitions.link.find(item => item._id === inputPlacement.value)
       return linkItem ? '&utm_medium=' + linkItem.mappings.medium : ''
     }
     return ''
@@ -101,14 +100,14 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
   const compPlacementShort = computed (() => {
     if (!isDataLoading.value) {
-      const linkItem = data.value[0].definitions.link.find(item => item._id === inputPlacementLong.value)
+      const linkItem = data.value[0].definitions.link.find(item => item._id === inputPlacement.value)
       return linkItem ? `${linkItem.mappings.short}` : ''
     }
     return ''
   })
 
   const compCampaign = computed(() => {
-    if (inputPlacementLong.value == '' && inputCampaignName.value == '' && inputCampaignType.value == '' ) {
+    if (inputPlacement.value == '' && inputCampaignName.value == '' && inputCampaignType.value == '' ) {
         return ''
       } else {
         return (`utm_campaign=${compPlacementShort.value} ` + `${compCountryShort.value} ` + (`${inputCampaignName.value}`)
@@ -147,7 +146,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
   // Make Campaign Name suggestion logic for Guided Tab
   const compCampaignNameSuggestion = computed(() => {
-    if (!inputPlacementLong.value == 0 || !inputCampaignName.value == 0 || !inputCampaignType.value == 0) {
+    if (!inputPlacement.value == 0 || !inputCampaignName.value == 0 || !inputCampaignType.value == 0) {
       return (`${compPlacementShort.value} ${compCountryShort.value} ${inputCampaignName.value} ${compCampaignType.value}`)
     }
     return ''
@@ -327,8 +326,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     isSaved,
     isDataLoading,
     inputUrl,
-    inputPlacementLong,
-    inputPlacementShort,
+    inputPlacement,
     inputCampaignName,
     inputCampaignId,
     inputCampaignType,

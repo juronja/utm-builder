@@ -21,7 +21,7 @@ onBeforeMount( () => {
       <ul v-else>
         <li v-for="(item, index) in recentUrls.data" :key="item._id">
           {{item.taggedUrl}}
-          <button @click="recentUrls.toClipboard(item.taggedUrl, index)"> {{ item.isCopied ? 'Copied!' : 'Copy' }} </button>
+          <button class="button" @click="recentUrls.toClipboard(item.taggedUrl, index)"> {{ item.isCopied ? 'Copied!' : 'Copy' }} </button>
         </li>
       </ul>
     </div>
