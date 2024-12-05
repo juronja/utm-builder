@@ -41,10 +41,6 @@ a {
   padding: 3px;
 }
 
-i {
-  color: var(--color-text);
-}
-
 /* Fonts */
 h1 {
   font-family: "Asap", sans-serif;
@@ -52,6 +48,7 @@ h1 {
   font-weight: 500;
   font-style: normal;
   font-size: 1.5rem;
+  margin-top: 0.5rem;
   margin-bottom: calc(var(--gutter-y)* .6);
 }
 

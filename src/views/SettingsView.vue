@@ -387,7 +387,6 @@ ul li {
   align-items: center;
   padding: var(--tag-padding);
   margin: 0.2rem;
-  color: var(--color-button-text);
   border: 1px solid var(--color-border);
   background-color: var(--color-input-background);
   border-radius: 0.25rem;

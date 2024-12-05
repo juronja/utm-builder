@@ -26,7 +26,7 @@
   --color-light-1: rgba(0, 189, 126, 0.4);
   --color-light-2: rgba(13, 253, 161, 0.10);
   --color-light-3: rgba(61, 61, 61, 0.12);
-  --color-dark-1: rgba(107, 107, 107, 0.65);
+  --color-dark-1: rgba(129, 129, 129, 0.65);
   --color-dark-2: rgba(92, 92, 92, 0.48);
   --color-dark-3: rgba(65, 65, 65, 0.48);
 
@@ -62,7 +62,7 @@
   font-size: 16px;
   --section-gap: 80px;
   --header-height: 3rem;
-  --footer-height: 6rem;
+  --footer-height: 7rem;
   --app-padding-top: 2rem;
 
 }
