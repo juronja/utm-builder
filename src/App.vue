@@ -109,12 +109,8 @@ nav a.router-link-exact-active {
 }
 
 .nav-mobile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 1.5rem;
+  display: none;
 }
-
 .github {
   background-color: grey;
   padding: calc(var(--gutter-x)* .1) calc(var(--gutter-x)* .3);
@@ -142,13 +138,32 @@ nav a.router-link-exact-active {
     display: flex;
   }
 
+  .nav-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2rem;
+  }
+
+  .nav-mobile a {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 0;
+    width: 75%;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .nav-mobile a:first-of-type {
+    border: 0;
+  }
+
   .nav-overlay {
     position: fixed;
     top: calc(var(--app-padding-top) + var(--header-height));
     right: 0;
     bottom: 0;
     left: 0;
-    padding-top: 3rem;
+    padding: 3rem 1.75rem;
     z-index: 1;
     background-color: var(--color-background);
     height: calc(100vh - var(--app-padding-top) - var(--header-height));
