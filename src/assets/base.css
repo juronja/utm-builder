@@ -8,7 +8,7 @@
 :root {
   --color-white: #ffffff;
   --color-white-soft: #eeefe9;
-  --color-white-dark: #e5e7e0;
+  --color-white-dark: #daddd6;
 
   --color-black: #202020;
   --color-black-soft: #303030;
@@ -49,7 +49,7 @@
   --color-input-text: var(--color-text-light-1);
   
   --color-button-text: var(--color-white);
-  --color-section-background: var(--color-dark-1);
+  --color-section-background: var(--color-white-dark);
 
   --color-text: var(--color-text-light-1);
 }
