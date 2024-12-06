@@ -20,7 +20,9 @@ onBeforeMount( async () => {
   }
 })
 
-
+function navIsOpen() {
+  navOpen.value = !navOpen.value
+}
 
 
 </script>
@@ -32,12 +34,12 @@ onBeforeMount( async () => {
     </div>
     <div class="navigation">
         <Transition mode="out-in">
-        <button v-if="navOpen === false" class="hamburger" @click="navOpen = !navOpen" type="button">
+        <button v-if="navOpen === false" class="hamburger" @click="navIsOpen" type="button">
           <span class="hamburger-box">
             <span class="hamburger-inner"></span>
           </span>
         </button>
-        <button v-else-if="navOpen === true" class="hamburger is-active" @click="navOpen = !navOpen" type="button">
+        <button v-else-if="navOpen === true" class="hamburger is-active" @click="navIsOpen" type="button">
           <span class="hamburger-box">
             <span class="hamburger-inner"></span>
           </span>
@@ -49,18 +51,18 @@ onBeforeMount( async () => {
         <RouterLink to="/settings" title="Settings"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
       </nav>
     </div>
-  </header>
-  <main>
     <div v-if="navOpen" class="nav-overlay">
       <nav class="nav-mobile">
-        <RouterLink to="/manual" title="Manual" @click="navOpen = !navOpen">Manual</RouterLink>
-        <RouterLink to="/guided" title="Guided" @click="navOpen = !navOpen">Guided</RouterLink>
-        <RouterLink to="/settings" title="Settings" @click="navOpen = !navOpen"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
+        <RouterLink to="/manual" title="Manual" @click="navIsOpen">Manual</RouterLink>
+        <RouterLink to="/guided" title="Guided" @click="navIsOpen">Guided</RouterLink>
+        <RouterLink to="/settings" title="Settings" @click="navIsOpen"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
       </nav>
     </div>
+  </header>
+  <main v-if="!navOpen">
     <RouterView />
   </main>
-  <footer>
+  <footer v-if="!navOpen">
     <a href="https://github.com/juronja/utm-builder" target="_blank" class="github">GitHub <i class="bi bi-github"></i></a>
   </footer>
 </template>
