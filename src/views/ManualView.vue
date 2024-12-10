@@ -5,28 +5,20 @@ import { useDefinitionsStore } from '@/stores/definitions'
 
 // States
 const store = useDefinitionsStore()
-
-const url = ref('')
-const campaign = ref('')
-const medium = ref('')
-const source = ref('')
-const content = ref('')
-const term = ref('')
-const campaignId = ref('')
+let clientId = localStorage.getItem('clientId')
 
 const isCopied = ref(false)
 const isCleared = ref(false)
 
-let clientId = localStorage.getItem('clientId')
 
 // Make UTM tags logic
-const compParam = computed(() => { if (campaign.value == '') { return '' } else { if (url.value.includes('?')) { return '&' } else { return '?' } } })
-const compCampaign = computed(() => { if (campaign.value == '') { return '' } else { return 'utm_campaign=' + campaign.value } })
-const compMedium = computed(() => { if (medium.value == '') { return '' } else { return '&utm_medium=' + medium.value } })
-const compSource = computed(() => { if (source.value == '') { return '' } else { return '&utm_source=' + source.value } })
-const compContent = computed(() => { if (content.value == '') { return '' } else { return '&utm_content=' + content.value } })
-const compTerm = computed(() => { if (term.value == '') { return '' } else { return '&utm_term=' + term.value } })
-const compCampaignId = computed(() => { if (campaignId.value == '') { return '' } else { return '&utm_id=' + campaignId.value } })
+const compParam = computed(() => { if (store.inputManCampaign == '') { return '' } else { if (store.inputManUrl.includes('?')) { return '&' } else { return '?' } } })
+const compCampaign = computed(() => { if (store.inputManCampaign == '') { return '' } else { return 'utm_campaign=' + store.inputManCampaign } })
+const compMedium = computed(() => { if (store.inputManMedium == '') { return '' } else { return '&utm_medium=' + store.inputManMedium } })
+const compSource = computed(() => { if (store.inputManSource == '') { return '' } else { return '&utm_source=' + store.inputManSource } })
+const compContent = computed(() => { if (store.inputManContent == '') { return '' } else { return '&utm_content=' + store.inputManContent } })
+const compTerm = computed(() => { if (store.inputManTerm == '') { return '' } else { return '&utm_term=' + store.inputManTerm } })
+const compCampaignId = computed(() => { if (store.inputManCampaignId == '') { return '' } else { return '&utm_id=' + store.inputManCampaignId } })
 const compTags = computed(() => { return (compParam.value + compCampaign.value + compMedium.value + compSource.value + compContent.value + compTerm.value + compCampaignId.value)
   .replace(/\s+/g, '+')
   .replace(/š/g, 's')
@@ -39,22 +31,41 @@ const compTags = computed(() => { return (compParam.value + compCampaign.value +
   .replace(/\./g, '-')
   .toLowerCase()
 })
-const compTaggedUrl = computed(() => { return url.value + compTags.value })
+const compTaggedUrl = computed(() => { return store.inputManUrl + compTags.value })
 
 
 // Clear content
 function clearAll() {
-  url.value = ''
-  campaign.value = ''
-  medium.value = ''
-  source.value = ''
-  content.value = ''
-  term.value = ''
-  campaignId.value = ''
+  store.inputManUrl = ''
+  store.inputManCampaign = ''
+  store.inputManMedium = ''
+  store.inputManSource = ''
+  store.inputManContent = ''
+  store.inputManTerm = ''
+  store.inputManCampaignId = ''
   isCleared.value = true
-  console.log('Text cleared')
   setTimeout(() => { isCleared.value = false }, 1000)
 }
+
+function inputReq(item) {
+    if (item === 'url' && store.inputManUrl == 0) {
+      console.error('This field is required')
+      store.urlRequired = true
+    }
+    if (item === 'source' && store.inputManSource == 0) {
+      console.error('This field is required')
+      store.sourceRequired = true
+    }
+    if (item === 'campaign' && store.inputManCampaign == 0) {
+      console.error('This field is required')
+      store.campaignRequired = true
+    }
+    if (item === 'medium' && store.inputManMedium == 0) {
+      console.error('This field is required')
+      store.mediumRequired = true
+    }
+  }
+
 
 // Copy and save tagged URL
 async function toClipboardAndSave() {
@@ -95,31 +106,35 @@ async function toClipboardAndSave() {
     <div class="builder">
       <div class="row col-100">
         <label for="utm-url">Destination URL*</label>
-        <input type="url" name="Destination URL" v-model="url" id="utm-url">
+        <input @blur="inputReq('url')" type="url" name="Destination URL" v-model="store.inputManUrl" id="utm-url">
+        <div v-if="store.urlRequired" class="input-req-validation">This field is required</div>
       </div>
       <div class="row col-40">
         <label for="utm-campaign">Campaign name*</label>
-        <input type="text" v-model="campaign" id="utm-campaign" />
+        <input @blur="inputReq('campaign')" type="text" v-model="store.inputManCampaign" id="utm-campaign" />
+        <div v-if="store.campaignRequired" class="input-req-validation">This field is required</div>
       </div>
       <div class="row col-20">
         <label for="utm-medium">Medium*</label>
-        <input type="text" v-model="medium" id="utm-medium" />
+        <input @blur="inputReq('medium')" type="text" v-model="store.inputManMedium" id="utm-medium" />
+        <div v-if="store.mediumRequired" class="input-req-validation">This field is required</div>
       </div>
       <div class="row col-40">
         <label for="utm-source">Source*</label>
-        <input type="text" v-model="source" id="utm-source" />
+        <input @blur="inputReq('source')" type="text" v-model="store.inputManSource" id="utm-source" />
+        <div v-if="store.sourceRequired" class="input-req-validation">This field is required</div>
       </div>
       <div class="row col-40">
         <label for="utm-content">Content</label>
-        <input type="text" v-model="content" id="utm-content" />
+        <input type="text" v-model="store.inputManContent" id="utm-content" />
       </div>
       <div class="row col-30">
         <label for="utm-term">Term</label>
-        <input type="text" v-model="term" id="utm-term" />
+        <input type="text" v-model="store.inputManTerm" id="utm-term" />
       </div>
       <div class="row col-30">
         <label for="utm-campaignId">Campaign ID</label>
-        <input type="text" v-model="campaignId" id="utm-campaignId" />
+        <input type="text" v-model="store.inputManCampaignId" id="utm-campaignId" />
       </div>
       <p>* Required</p>
     </div>

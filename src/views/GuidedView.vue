@@ -26,6 +26,9 @@ function clearAll() {
   store.inputContent = ''
   store.inputTerm = ''
   store.inputCampaignId = ''
+  store.inputCountry = ''
+  store.inputCampaignType = ''
+  store.inputPlacement = ''
   isCleared.value = true
   console.log('Text cleared')
   setTimeout(() => { isCleared.value = false }, 1000)

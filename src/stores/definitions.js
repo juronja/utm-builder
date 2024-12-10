@@ -25,6 +25,15 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
 
   // const isDataError = ref('')
 
+  // Manual inputs
+  const inputManUrl = ref('')
+  const inputManCampaign = ref('')
+  const inputManMedium = ref('')
+  const inputManSource = ref('')
+  const inputManContent = ref('')
+  const inputManTerm = ref('')
+  const inputManCampaignId = ref('')
+
   // Guided inputs
   const inputUrl = ref('')
   const inputCampaignName = ref('')
@@ -59,7 +68,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
   const placementRequired = ref(false)
   const sourceRequired = ref(false)
   const campaignRequired = ref(false)
-
+  const mediumRequired = ref(false)
 
   function inputReq(item) {
     if (item === 'url' && inputUrl.value == 0) {
@@ -335,6 +344,13 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     inputContent,
     inputTerm,
     inputCountry,
+    inputManUrl,
+    inputManCampaign,
+    inputManMedium,
+    inputManSource,
+    inputManContent,
+    inputManTerm,
+    inputManCampaignId,
     inputDefCampaignType,
     inputDefPlacementLong,
     inputDefPlacementShort,
@@ -362,6 +378,7 @@ export const useDefinitionsStore = defineStore('utm-definitions', () => {
     placementRequired,
     sourceRequired,
     campaignRequired,
+    mediumRequired,
     inputReq,
     countriesList,
     compCountryShort
