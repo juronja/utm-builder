@@ -46,14 +46,14 @@ function navIsOpen() {
         </button>
         </Transition>
       <nav class="nav-desktop">
-        <RouterLink to="/manual" title="Manual">Manual</RouterLink>
+        <RouterLink to="/" title="Manual">Manual</RouterLink>
         <RouterLink to="/guided" title="Guided">Guided</RouterLink>
         <RouterLink to="/settings" title="Settings"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
       </nav>
     </div>
     <div v-if="navOpen" class="nav-overlay">
       <nav class="nav-mobile">
-        <RouterLink to="/manual" title="Manual" @click="navIsOpen">Manual</RouterLink>
+        <RouterLink to="/" title="Manual" @click="navIsOpen">Manual</RouterLink>
         <RouterLink to="/guided" title="Guided" @click="navIsOpen">Guided</RouterLink>
         <RouterLink to="/settings" title="Settings" @click="navIsOpen"><i alt="Settings" class="bi bi-gear-fill"></i></RouterLink>
       </nav>
