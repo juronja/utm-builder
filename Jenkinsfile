@@ -5,7 +5,7 @@ pipeline {
     environment {
         BUILD_VERSION = VersionNumber (versionNumberString: '${BUILD_YEAR}.${BUILD_MONTH}.${BUILDS_THIS_MONTH}')
         DOCKERH_REPO = "juronja"
-        NEXUS_REPO = "192.168.84.16:8082"
+        NEXUS_REPO = "192.168.84.20:8082"
         IMAGE_TAG = "utm-builder"
         CONTAINER_NAME = "utm-builder"
     }
