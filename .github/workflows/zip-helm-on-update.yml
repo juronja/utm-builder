@@ -13,5 +13,7 @@ jobs:
   zip-folder:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
     - name: zip folder
       run: tar -czvf helm_chart.tar.gz helm-chart/
