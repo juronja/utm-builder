@@ -79,7 +79,7 @@ pipeline {
             steps {
                 script {
                     echo "use files from the container workspace"
-                    sh "envsubst < $HELM_FOLDER/values.yaml | helm install $PROJECT_NAME -n $K8S_NAMESPACE -f -"
+                    sh "envsubst < $HELM_FOLDER/values.yaml | helm install $PROJECT_NAME $HELM_FOLDER -n $K8S_NAMESPACE -f -"
                 }
             }
         }
