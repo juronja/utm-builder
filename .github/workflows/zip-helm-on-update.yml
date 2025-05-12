@@ -1,0 +1,17 @@
+name: Zip helm folder on update
+
+on:
+  push:
+    branches:
+    - dev
+    - main
+    # Inputs the workflow accepts.
+    paths:
+    - "helm-chart/**"
+    - "!helm-chart/*.tar.gz"
+jobs:
+  zip-folder:
+    runs-on: ubuntu-latest
+    steps:
+    - name: zip folder
+      run: tar -czvf helm_chart.tar.gz helm-chart/
