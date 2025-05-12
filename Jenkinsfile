@@ -7,7 +7,7 @@ pipeline {
         DOCKERH_REPO = "juronja"
         NEXUS_REPO = "192.168.84.20:8082"
         IMAGE_NAME = "utm-builder"
-        CONTAINER_NAME = "utm-builder"
+        PROJECT_NAME = "utm-builder"
         IMAGE_TAG_DEV = "dev-latest"
     }
     options { buildDiscarder(logRotator(numToKeepStr: '10')) } // keeping only n builds
@@ -40,7 +40,7 @@ pipeline {
         //     }
         //     steps {
         //         script {
-        //             echo "Unit testing $CONTAINER_NAME ..."
+        //             echo "Unit testing $PROJECT_NAME ..."
         //         }
         //     }
         // }
@@ -59,7 +59,7 @@ pipeline {
                     // sh "printenv"
                     sh "curl -o compose.base.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose.base.yaml > compose.base.yaml"
                     sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose.dev.yaml > compose.yaml"
-                    echo "Starting container $CONTAINER_NAME ..."
+                    echo "Starting container $PROJECT_NAME ..."
                     sh "docker compose up -d --remove-orphans"
                 }
             }
@@ -68,7 +68,7 @@ pipeline {
             environment {
                 K8S_NAMESPACE = "utm-builder"
                 APP_IMAGE = "$NEXUS_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
-                HELM_FOLDER = "https://github.com/juronja/utm-builder/tree/refs/heads/dev/helm-chart"
+                HELM_FOLDER = "helm-chart"
             }
             when {
                 branch "dev" 
@@ -78,8 +78,8 @@ pipeline {
             }
             steps {
                 script {
-                    sh "curl -o "
-                    sh "envsubst < helm-chart/values.yaml | helm install  "
+                    echo "use files from the container workspace"
+                    sh "envsubst < $HELM_FOLDER/values.yaml | helm install $PROJECT_NAME -n $K8S_NAMESPACE -f -"
                 }
             }
         }
