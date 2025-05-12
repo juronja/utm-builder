@@ -68,15 +68,17 @@ pipeline {
             environment {
                 K8S_NAMESPACE = "utm-builder"
                 APP_IMAGE = "$NEXUS_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
+                HELM_FOLDER = "https://github.com/juronja/utm-builder/tree/refs/heads/dev/helm-chart"
             }
             when {
-                branch "main" 
+                branch "dev" 
             }
             input {
                 message 'Deploy on DOKS?'
             }
             steps {
                 script {
+                    sh "curl -o "
                     sh "envsubst < helm-chart/values.yaml | helm install  "
                 }
             }
