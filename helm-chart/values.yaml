@@ -5,7 +5,6 @@ appImage: $APP_IMAGE
 # main: juronja/utm-builder:latest
 
 namespace: $K8S_NAMESPACE
-# namespace: utm-builder
 
 frontendService:
   name: ub-app
