@@ -9,6 +9,7 @@ on:
     paths:
     - "helm-chart/**"
     - "!helm-chart/*.tar.gz"
+  workflow_dispatch:
 jobs:
   zip-folder:
     runs-on: ubuntu-latest
