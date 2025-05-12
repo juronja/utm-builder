@@ -15,6 +15,8 @@ spec:
        labels:
         app.kubernetes.io/name: {{ .Values.frontendService.name }}
     spec:
+      imagePullSecrets:
+      - name: {{ .Values.dockerSecrets }}
       containers:
       - name: {{ .Values.frontendService.name }}
         image: {{ .Values.appImage }}

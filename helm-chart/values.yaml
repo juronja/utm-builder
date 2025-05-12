@@ -5,6 +5,7 @@ appImage: $APP_IMAGE
 # main: juronja/utm-builder:latest
 
 namespace: $K8S_NAMESPACE
+dockerSecrets: docker-secrets
 
 frontendService:
   name: ub-app
