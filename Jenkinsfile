@@ -36,21 +36,21 @@ pipeline {
                 sh "docker push $NEXUS_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
             }
         }
-        stage('Build DEV image for ECR') {
-            environment {
-                ECR_CREDS = credentials('ecr-creds')
-            }
-            when {
-                branch "dev"
-            }
-            steps {
-                echo "Building DEV Docker image for ECR ..."
-                sh "docker build -t $ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV ."
-                // Next line in single quotes for security
-                sh 'echo $ECR_CREDS_PSW | docker login -u $ECR_CREDS_USR --password-stdin $ECR_REPO'
-                sh "docker push $ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
-            }
-        }
+        // stage('Build DEV image for ECR') {
+        //     environment {
+        //         ECR_CREDS = credentials('ecr-creds')
+        //     }
+        //     when {
+        //         branch "dev"
+        //     }
+        //     steps {
+        //         echo "Building DEV Docker image for ECR ..."
+        //         sh "docker build -t $ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV ."
+        //         // Next line in single quotes for security
+        //         sh 'echo $ECR_CREDS_PSW | docker login -u $ECR_CREDS_USR --password-stdin $ECR_REPO'
+        //         sh "docker push $ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
+        //     }
+        // }
         // stage('Unit tests') {
         //     when {
         //         branch "main" 
