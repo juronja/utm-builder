@@ -4,12 +4,13 @@ pipeline {
     agent any
     environment {
         BUILD_VERSION = VersionNumber (versionNumberString: '${BUILD_YEAR}.${BUILD_MONTH}.${BUILDS_THIS_MONTH}')
-        DOCKERH_REPO = "juronja"
-        NEXUS_REPO = "192.168.84.20:8082"
-        ECR_REPO = "233207430299.dkr.ecr.eu-central-1.amazonaws.com"
         IMAGE_NAME = "utm-builder"
         PROJECT_NAME = "utm-builder"
         IMAGE_TAG_DEV = "dev-latest"
+        // Repositories
+        DOCKERH_REPO = "juronja"
+        NEXUS_REPO = "192.168.84.20:8082"
+        ECR_REPO = "233207430299.dkr.ecr.eu-central-1.amazonaws.com"
     }
     options { buildDiscarder(logRotator(numToKeepStr: '10')) } // keeping only n builds
     stages {
@@ -100,26 +101,30 @@ pipeline {
                 }
             }
         }
-        stage('Build & Deploy PROD') {
+        stage('Build MAIN image for Dockerhub') {
             environment {
                 DOCKERHUB_CREDS = credentials('dockerhub-creds')
-                HOSTING_CREDS = credentials('creds-hosting-prod')
             }
             when {
                 branch "main" 
             }
-            input {
-                message 'Deploy on Production?'
-            }
             steps {
-                // Build
                 echo "Building Docker image for Docker Hub ..."
                 sh "docker build -t $DOCKERH_REPO/$IMAGE_NAME:latest -t $DOCKERH_REPO/$IMAGE_NAME:$BUILD_VERSION ."
                 // Next line in single quotes for security
                 sh 'echo $DOCKERHUB_CREDS_PSW | docker login -u $DOCKERHUB_CREDS_USR --password-stdin'
                 sh "docker push $DOCKERH_REPO/$IMAGE_NAME:latest"
                 sh "docker push $DOCKERH_REPO/$IMAGE_NAME:$BUILD_VERSION"
-                // Deploy
+            }
+        }
+        stage('Deploy MAIN on HOSTING-PROD') {
+            environment {
+                HOSTING_CREDS = credentials('creds-hosting-prod')
+            }
+            when {
+                branch "main" 
+            }
+            steps {
                 script {
                     sshagent(['ssh-hosting-prod']) {
                         echo "Deploying Docker container on HOSTING-PROD ..."
@@ -128,22 +133,6 @@ pipeline {
                 }
             }
         }
-        // stage('Deploy PROD on HOSTING-PROD') {
-        //     environment {
-        //         HOSTING_CREDS = credentials('creds-hosting-prod')
-        //     }
-        //     when {
-        //         branch "main" 
-        //     }
-        //     steps {
-        //         script {
-        //             sshagent(['ssh-hosting-prod']) {
-        //                 echo "Deploying Docker container on HOSTING-PROD ..."
-        //                 sh "ssh -o StrictHostKeyChecking=no $HOSTING_CREDS_USR@$HOSTING_CREDS_PSW 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose-commands.sh)\"'"
-        //             }
-        //         }
-        //     }
-        // }
         // stage('Deploy PROD on EC2') {
         //     when {
         //         branch "main" 
