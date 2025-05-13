@@ -6,6 +6,7 @@ pipeline {
         BUILD_VERSION = VersionNumber (versionNumberString: '${BUILD_YEAR}.${BUILD_MONTH}.${BUILDS_THIS_MONTH}')
         DOCKERH_REPO = "juronja"
         NEXUS_REPO = "192.168.84.20:8082"
+        ECR_REPO = "233207430299.dkr.ecr.eu-central-1.amazonaws.com"
         IMAGE_NAME = "utm-builder"
         PROJECT_NAME = "utm-builder"
         IMAGE_TAG_DEV = "dev-latest"
@@ -34,6 +35,21 @@ pipeline {
                 sh "docker push $NEXUS_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
             }
         }
+        stage('Build DEV image for ECR') {
+            environment {
+                ECR_CREDS = credentials('ecr-creds')
+            }
+            when {
+                branch "dev"
+            }
+            steps {
+                echo "Building DEV Docker image for ECR ..."
+                sh "docker build -t $ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV ."
+                // Next line in single quotes for security
+                sh 'echo $ECR_CREDS_PSW | docker login -u $ECR_CREDS_USR --password-stdin $ECR_REPO'
+                sh "docker push $ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
+            }
+        }
         // stage('Unit tests') {
         //     when {
         //         branch "main" 
@@ -44,6 +60,7 @@ pipeline {
         //         }
         //     }
         // }
+
         stage('Deploy DEV on HOMELAB (Host)') {
             environment {
                 MONGO_CREDS = credentials('creds-mongo-utm-builder') // fetches a set of credentials based on the identifier
@@ -78,7 +95,7 @@ pipeline {
             }
             steps {
                 script {
-                    echo "use files from the container workspace"
+                    echo "Deploying helm on DOKS ..."
                     sh "envsubst < $HELM_FOLDER/values.yaml | helm upgrade $PROJECT_NAME $HELM_FOLDER -n $K8S_NAMESPACE --install -f -"
                 }
             }
