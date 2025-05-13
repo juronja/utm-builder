@@ -21,7 +21,7 @@ pipeline {
 //                }
 //            }
 //        }
-        stage('Build DEV image for Nexus') {
+        stage('Build DEV for Nexus') {
             environment {
                 NEXUS_CREDS = credentials('nexus-creds')
             }
@@ -85,7 +85,7 @@ pipeline {
         stage('Deploy DEV on DOKS') {
             environment {
                 K8S_NAMESPACE = "utm-builder"
-                APP_IMAGE = "$NEXUS_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
+                APP_IMAGE = "$ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
                 HELM_FOLDER = "helm-chart"
             }
             when {
