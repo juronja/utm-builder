@@ -99,6 +99,7 @@ pipeline {
                 script {
                     echo "Deploying helm on DOKS ..."
                     sh 'echo $ECR_CREDS_PSW | docker login -u $ECR_CREDS_USR --password-stdin $ECR_REPO'
+                    sh "envsubst < $HELM_FOLDER/values.yaml > $HELM_FOLDER/temp_values.yaml"
                     sh "envsubst < $HELM_FOLDER/values.yaml | helm upgrade $PROJECT_NAME $HELM_FOLDER -n $K8S_NAMESPACE --install -f -"
                 }
             }
