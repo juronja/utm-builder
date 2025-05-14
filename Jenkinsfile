@@ -36,7 +36,7 @@ pipeline {
                 sh "docker push $NEXUS_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
             }
         }
-        // stage('Build DEV image for ECR') {
+        // stage('Build DEV for ECR') {
         //     environment {
         //         ECR_CREDS = credentials('ecr-creds')
         //     }
@@ -87,6 +87,7 @@ pipeline {
                 K8S_NAMESPACE = "utm-builder"
                 APP_IMAGE = "$ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
                 HELM_FOLDER = "helm-chart"
+                ECR_CREDS = credentials('ecr-creds')
             }
             when {
                 branch "dev" 
@@ -97,11 +98,12 @@ pipeline {
             steps {
                 script {
                     echo "Deploying helm on DOKS ..."
+                    sh 'echo $ECR_CREDS_PSW | docker login -u $ECR_CREDS_USR --password-stdin $ECR_REPO'
                     sh "envsubst < $HELM_FOLDER/values.yaml | helm upgrade $PROJECT_NAME $HELM_FOLDER -n $K8S_NAMESPACE --install -f -"
                 }
             }
         }
-        stage('Build MAIN image for Dockerhub') {
+        stage('Build MAIN for Dockerhub') {
             environment {
                 DOCKERHUB_CREDS = credentials('dockerhub-creds')
             }
