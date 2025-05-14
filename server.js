@@ -3,7 +3,7 @@ import { MongoClient, MongoServerError } from 'mongodb'
 import ViteExpress from "vite-express";
 
 // Definitions
-const { MONGO_ADMIN_USER, MONGO_ADMIN_PASS, ENV_LOCAL } = process.env // Import user and pass from SYSTEM environments
+const { MONGO_ADMIN_USER, MONGO_ADMIN_PASS, ENV_LOCAL, K8S_NAMESPACE } = process.env // Import user and pass from SYSTEM environments
 // add LINUX variables by editing "nano ~/.profile" and adding "export MONGO_ADMIN_USER=username"
 // add WINDOWS variables with "setx ENV_LOCAL true"
 // add JENKINS variables with "credentials"
@@ -13,6 +13,8 @@ const { MONGO_ADMIN_USER, MONGO_ADMIN_PASS, ENV_LOCAL } = process.env // Import 
 let mongo = undefined
 if (ENV_LOCAL) { // Local environment
     mongo = new MongoClient(`mongodb://127.0.0.1:27017`)
+} else if (K8S_NAMESPACE) { // Kubernetes environment, use k8s container dns name
+    mongo = new MongoClient(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASS}@ub-mongodb.${K8S_NAMESPACE}.svc.cluster.local`)
 } else { // use container name when starting application as docker container, part of docker-compose
     mongo = new MongoClient(`mongodb://${MONGO_ADMIN_USER}:${MONGO_ADMIN_PASS}@ub-mongodb`)
 }
