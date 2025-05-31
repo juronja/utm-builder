@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Stoping container
+# Stopping container
 docker image prune --all --force
 # docker system prune --all --force
 
