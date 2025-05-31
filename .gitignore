@@ -24,6 +24,6 @@ dist-ssr
 .idea
 
 # Terraform
-.terraform/*
+terraform/*/.terraform*
 *.tfstate*
-variables.tf
+*.tfvars
