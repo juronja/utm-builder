@@ -51,6 +51,7 @@ pipeline {
         //         sh "docker push $ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
         //     }
         // }
+
         // stage('Unit tests') {
         //     when {
         //         branch "main" 
@@ -72,36 +73,33 @@ pipeline {
                 branch "dev" 
             }
             steps {
-                script {
-                    sh "docker image prune --all --force"
-                    // sh "printenv"
-                    sh "curl -o compose.base.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose.base.yaml > compose.base.yaml"
-                    sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose.dev.yaml > compose.yaml"
-                    echo "Starting container $PROJECT_NAME ..."
-                    sh "docker compose up -d --remove-orphans"
-                }
+                sh "docker image prune --all --force"
+                // sh "printenv"
+                sh "curl -o compose.base.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose.base.yaml > compose.base.yaml"
+                sh "curl -o compose.yaml https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose.dev.yaml > compose.yaml"
+                echo "Starting container $PROJECT_NAME ..."
+                sh "docker compose up -d --remove-orphans"
             }
         }
-        stage('Deploy DEV on DOKS') {
-            environment {
-                K8S_NAMESPACE = "utm-builder"
-                APP_IMAGE = "$ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
-                HELM_FOLDER = "helm-chart"
-                ECR_CREDS = credentials('ecr-creds')
-            }
-            when {
-                branch "dev" 
-            }
-            input {
-                message 'Deploy on DOKS?'
-            }
-            steps {
-                script {
-                    echo "Deploying helm on DOKS ..."
-                    sh "envsubst < $HELM_FOLDER/values.yaml | helm upgrade $PROJECT_NAME $HELM_FOLDER -n $K8S_NAMESPACE --install -f -"
-                }
-            }
-        }
+        // stage('Deploy DEV on DOKS') {
+        //     environment {
+        //         K8S_NAMESPACE = "utm-builder"
+        //         APP_IMAGE = "$ECR_REPO/$IMAGE_NAME:$IMAGE_TAG_DEV"
+        //         HELM_FOLDER = "helm-chart"
+        //     }
+        //     when {
+        //         branch "dev" 
+        //     }
+        //     input {
+        //         message 'Deploy on DOKS?'
+        //     }
+        //     steps {
+        //         script {
+        //             echo "Deploying helm on DOKS ..."
+        //             sh "envsubst < $HELM_FOLDER/values.yaml | helm upgrade $PROJECT_NAME $HELM_FOLDER -n $K8S_NAMESPACE --install -f -"
+        //         }
+        //     }
+        // }
         stage('Build MAIN for Dockerhub') {
             environment {
                 DOCKERHUB_CREDS = credentials('dockerhub-creds')
@@ -126,11 +124,25 @@ pipeline {
                 branch "main" 
             }
             steps {
-                script {
+                script { // sshagent must be in script block
                     sshagent(['ssh-hosting-prod']) {
                         echo "Deploying Docker container on HOSTING-PROD ..."
                         sh "ssh -o StrictHostKeyChecking=no $HOSTING_CREDS_USR@$HOSTING_CREDS_PSW 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose-commands.sh)\"'"
                     }
+                }
+            }
+        }
+        stage('Provision EC2') {
+            environment {
+                HOSTING_CREDS = credentials('creds-hosting-prod')
+            }
+            when {
+                branch "main" 
+            }
+            steps {
+                dir("terraform/ec2") {
+                    sh "terraform init"
+                    sh "terraform apply --auto-approve"
                 }
             }
         }
@@ -140,7 +152,7 @@ pipeline {
         //     }
         //     steps {
         //         script {
-        //             sshagent(['ssh-aws']) {
+        //             sshagent(['ssh-aws-juronja-jure']) {
         //                 echo "Deploying Docker container on EC2  ..."
         //                 sh "ssh -o StrictHostKeyChecking=no ec2-user@18.185.139.225 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose-e2c-commands.sh)\"'"
         //             }
