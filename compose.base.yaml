@@ -6,7 +6,7 @@ services:
   app:
     container_name: ub-app
     restart: unless-stopped
-    environment: # Add variables to this container
+    environment: # Add .env variables to this container
       MONGO_ADMIN_USER: ${MONGO_ADMIN_USER}
       MONGO_ADMIN_PASS: ${MONGO_ADMIN_PASS}
   db:
@@ -18,7 +18,7 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
-    environment: # Add variables to this container
+    environment: # Add .env variables to this container
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_PASS}
   db_ui:
