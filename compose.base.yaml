@@ -6,6 +6,10 @@ services:
   app:
     container_name: ub-app
     restart: unless-stopped
+    logging:
+      options:
+        max-size: "100m"
+        max-file: "3"
     environment: # Add .env variables to this container
       MONGO_ADMIN_USER: ${MONGO_ADMIN_USER}
       MONGO_ADMIN_PASS: ${MONGO_ADMIN_PASS}
@@ -18,6 +22,10 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
+    logging:
+      options:
+        max-size: "1000m"
+        max-file: "3"
     environment: # Add .env variables to this container
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_PASS}
@@ -25,6 +33,10 @@ services:
     image: mongo-express
     container_name: ub-mongo-express
     restart: unless-stopped
+    logging:
+      options:
+        max-size: "100m"
+        max-file: "3"
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ADMIN_USER}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ADMIN_PASS}
