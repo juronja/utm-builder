@@ -132,20 +132,20 @@ pipeline {
                 }
             }
         }
-        stage('Provision EC2') {
-            environment {
-                HOSTING_CREDS = credentials('creds-hosting-prod')
-            }
-            when {
-                branch "main" 
-            }
-            steps {
-                dir("terraform/ec2") {
-                    sh "terraform init"
-                    sh "terraform apply --auto-approve"
-                }
-            }
-        }
+        // stage('Provision EC2') {
+        //     environment {
+        //         HOSTING_CREDS = credentials('creds-hosting-prod')
+        //     }
+        //     when {
+        //         branch "main" 
+        //     }
+        //     steps {
+        //         dir("terraform/ec2") {
+        //             sh "terraform init"
+        //             sh "terraform apply --auto-approve"
+        //         }
+        //     }
+        // }
         // stage('Deploy PROD on EC2') {
         //     when {
         //         branch "main" 
