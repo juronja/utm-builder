@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     logging:
       options:
-        max-size: "100m"
+        max-size: "10m"
         max-file: "3"
     environment: # Add .env variables to this container
       MONGO_ADMIN_USER: ${MONGO_ADMIN_USER}
@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
     logging:
       options:
-        max-size: "100m"
+        max-size: "10m"
         max-file: "3"
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ADMIN_USER}
