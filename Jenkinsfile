@@ -118,46 +118,28 @@ pipeline {
         }
         stage('Deploy MAIN on HOSTING-PROD') {
             environment {
-                HOSTING_CREDS = credentials('creds-hosting-prod')
+                IP_HOSTING_PROD = credentials('ip-hosting-prod')
             }
             when {
                 branch "main" 
             }
             steps {
-                script { // sshagent must be in script block
-                    sshagent(['ssh-hosting-prod']) {
-                        echo "Deploying Docker container on HOSTING-PROD ..."
-                        sh "ssh -o StrictHostKeyChecking=no $HOSTING_CREDS_USR@$HOSTING_CREDS_PSW 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose-commands.sh)\"'"
+                script {
+                    echo "Deploying Docker container on HOSTING-PROD ..."
+                    
+                    def remote = [:]
+                    remote.name = "hosting-prod"
+                    remote.host = IP_HOSTING_PROD
+                    remote.allowAnyHosts = true
+
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ssh-hosting-prod', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
+                        remote.user = user
+                        remote.identityFile = keyfile
+
+                        sshScript remote: remote, script: "compose-commands.sh"
                     }
                 }
             }
         }
-        // stage('Provision EC2') {
-        //     environment {
-        //         HOSTING_CREDS = credentials('creds-hosting-prod')
-        //     }
-        //     when {
-        //         branch "main" 
-        //     }
-        //     steps {
-        //         dir("terraform/ec2") {
-        //             sh "terraform init"
-        //             sh "terraform apply --auto-approve"
-        //         }
-        //     }
-        // }
-        // stage('Deploy PROD on EC2') {
-        //     when {
-        //         branch "main" 
-        //     }
-        //     steps {
-        //         script {
-        //             sshagent(['ssh-aws-juronja-jure']) {
-        //                 echo "Deploying Docker container on EC2  ..."
-        //                 sh "ssh -o StrictHostKeyChecking=no ec2-user@18.185.139.225 'bash -c \"\$(wget -qLO - https://raw.githubusercontent.com/juronja/utm-builder/refs/heads/main/compose-e2c-commands.sh)\"'"
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
