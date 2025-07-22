@@ -7,10 +7,10 @@ pipeline {
         IMAGE_NAME = "utm-builder"
         PROJECT_NAME = "utm-builder"
         IMAGE_TAG_DEV = "dev-latest"
+        ANSIBLE_IP = credentials('ip-ansible')
         // Repositories
         DOCKERH_REPO = "juronja"
-        NEXUS_REPO = "192.168.84.20:8082"
-        ECR_REPO = "233207430299.dkr.ecr.eu-central-1.amazonaws.com"
+        // ECR_REPO = "233207430299.dkr.ecr.eu-central-1.amazonaws.com"
     }
     options { buildDiscarder(logRotator(numToKeepStr: '10')) } // keeping only n builds
     stages {
@@ -24,6 +24,7 @@ pipeline {
         stage('Build DEV for Nexus') {
             environment {
                 NEXUS_CREDS = credentials('nexus-creds')
+                NEXUS_REPO = "homelab.lan:8082"
             }
             when {
                 branch "dev"
