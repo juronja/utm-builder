@@ -12,15 +12,8 @@ pipeline {
         DOCKERH_REPO = "juronja"
         // ECR_REPO = "233207430299.dkr.ecr.eu-central-1.amazonaws.com"
     }
-    options { buildDiscarder(logRotator(numToKeepStr: '10')) } // keeping only n builds
+    options { buildDiscarder(logRotator(numToKeepStr: '10')) } // keeping only X number of builds
     stages {
-//        stage('Innit ext script') {
-//            steps {
-//                script {
-//                    xgs = load 'jenkins.groovy'
-//                }
-//            }
-//        }
         stage('Build DEV for Nexus') {
             environment {
                 NEXUS_CREDS = credentials('nexus-creds')
@@ -118,9 +111,6 @@ pipeline {
             }
         }
         stage('Deploy MAIN on HOSTING-PROD') {
-            environment {
-                IP_HOSTING_PROD = credentials('ip-hosting-prod')
-            }
             when {
                 branch "main" 
             }
@@ -130,7 +120,7 @@ pipeline {
                     
                     def remote = [:]
                     remote.name = "hosting-prod"
-                    remote.host = IP_HOSTING_PROD
+                    remote.host = "hosting-prod.lan"
                     remote.allowAnyHosts = true
 
                     withCredentials([sshUserPrivateKey(credentialsId: 'ssh-hosting-prod', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
