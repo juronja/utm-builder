@@ -1,0 +1,1 @@
+import{c as t,a as e,b as a,F as s,o as c,U as n,d as o}from"./index-BYqC2Th3.js";const d={class:"section-box"},r={class:"section-gap"},p={__name:"AdvancedView",setup(i){return(_,l)=>(c(),t(s,null,[e("div",d,[a(n,{title:"Advanced tagging"})]),e("div",r,[a(o)])],64))}};export{p as default};
